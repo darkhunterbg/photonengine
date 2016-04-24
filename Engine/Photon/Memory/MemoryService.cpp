@@ -3,7 +3,7 @@
 
 namespace photon
 {
-	namespace services
+	namespace memory
 	{
 		MemoryService* glMemoryService = nullptr;
 
@@ -19,12 +19,13 @@ namespace photon
 
 		MemoryService* MemoryService::Initialize()
 		{
-			MemoryService* service = new MemoryService();
-			return service;
+			glMemoryService = new MemoryService();
+			return glMemoryService;
 		}
-		void MemoryService::Uninitialize(MemoryService* service)
+		void MemoryService::Uninitialize()
 		{
-			delete service;
+			delete glMemoryService;
+			glMemoryService = nullptr;
 		}
 
 		void* MemoryService::AllocatePage(size_t size, bool persistent)

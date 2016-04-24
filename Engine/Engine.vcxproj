@@ -7,16 +7,21 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Photon\Graphics\GraphicsService.h" />
     <ClInclude Include="Photon\Memory\MemoryService.h" />
     <ClInclude Include="Photon\PE.h" />
     <ClInclude Include="Photon\Platform\Memory.h" />
+    <ClInclude Include="Photon\Platform\OpenGL.h" />
+    <ClInclude Include="Photon\Platform\Win32\Win32OpenGL.h" />
     <ClInclude Include="Photon\Platform\Win32\Win32Platform.h" />
-    <ClInclude Include="Photon\Services.h" />
+    <ClInclude Include="Photon\Platform\Win32\Win32Window.h" />
+    <ClInclude Include="Photon\Platform\Window.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Photon\Graphics\GraphicsService.cpp" />
     <ClCompile Include="Photon\Memory\MemoryService.cpp" />
     <ClCompile Include="Photon\Platform\Win32\Win32Memory.cpp" />
-    <ClCompile Include="Photon\Services.cpp" />
+    <ClCompile Include="Photon\Platform\Win32\Win32OpenGL.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{9B329521-8873-477D-AF72-3A0B9094EECD}</ProjectGuid>
@@ -61,7 +66,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>kernel32.lib</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;OpenGL32.lib;User32.lib;Gdi32.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

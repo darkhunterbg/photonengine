@@ -18,6 +18,7 @@
 
 #if defined(_WIN32)
 #define PLATFORM WINDOWS
+#define BUILD_PLATFORM
 #endif
 
 

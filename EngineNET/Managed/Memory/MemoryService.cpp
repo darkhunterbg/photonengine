@@ -5,7 +5,7 @@ namespace Photon
 {
 	namespace Memory
 	{
-		MemoryService::MemoryService(photon::services::MemoryService* native) :
+		MemoryService::MemoryService(photon::memory::MemoryService* native) :
 			native(native)
 		{
 

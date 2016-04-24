@@ -5,7 +5,7 @@
 
 namespace photon
 {
-	namespace services
+	namespace memory
 	{
 		class MemoryService;
 	}
@@ -23,9 +23,9 @@ namespace Photon
 		private:
 			static MemoryService^ instance;
 
-			photon::services::MemoryService* native;
+			photon::memory::MemoryService* native;
 		internal:
-			MemoryService(photon::services::MemoryService* native);
+			MemoryService(photon::memory::MemoryService* native);
 			~MemoryService();
 		public:
 

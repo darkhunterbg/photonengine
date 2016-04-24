@@ -1,17 +1,18 @@
 #include "ServiceProvider.h"
-#include <Photon/Services.h>
+#include <Photon/Memory/MemoryService.h>
 
 namespace Photon
 {
 	void ServiceProvider::InitializeServices()
 	{
-		photon::services::InitializeServices();
-		Photon::Memory::MemoryService::Instance = gcnew Photon::Memory::MemoryService(photon::services::glMemoryService);
+		auto nativeService = photon::memory::MemoryService::Initialize();
+		Photon::Memory::MemoryService::Instance = gcnew Photon::Memory::MemoryService(nativeService);
 	}
 
 	void ServiceProvider::UninitializeServices()
 	{
-		photon::services::UninitializeServices();
+		photon::memory::MemoryService::Uninitialize();
+		Photon::Memory::MemoryService::Instance = nullptr;
 	}
 
 	Photon::Memory::MemoryService^ ServiceProvider::MemoryService::get()

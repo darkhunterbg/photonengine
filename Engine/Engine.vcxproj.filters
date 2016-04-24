@@ -10,6 +10,9 @@
     <Filter Include="Memory">
       <UniqueIdentifier>{8644a304-c439-429f-821f-d9d98a3523d8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Graphics">
+      <UniqueIdentifier>{c454ba6f-4745-44aa-aca0-6a52e2885ece}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Photon\PE.h" />
@@ -19,18 +22,37 @@
     <ClInclude Include="Photon\Platform\Win32\Win32Platform.h">
       <Filter>Platform\Win32</Filter>
     </ClInclude>
-    <ClInclude Include="Photon\Services.h" />
     <ClInclude Include="Photon\Memory\MemoryService.h">
       <Filter>Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="Photon\Graphics\GraphicsService.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Photon\Platform\Window.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="Photon\Platform\OpenGL.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="Photon\Platform\Win32\Win32OpenGL.h">
+      <Filter>Platform\Win32</Filter>
+    </ClInclude>
+    <ClInclude Include="Photon\Platform\Win32\Win32Window.h">
+      <Filter>Platform\Win32</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Photon\Platform\Win32\Win32Memory.cpp">
       <Filter>Platform\Win32</Filter>
     </ClCompile>
-    <ClCompile Include="Photon\Services.cpp" />
     <ClCompile Include="Photon\Memory\MemoryService.cpp">
       <Filter>Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="Photon\Graphics\GraphicsService.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Photon\Platform\Win32\Win32OpenGL.cpp">
+      <Filter>Platform\Win32</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

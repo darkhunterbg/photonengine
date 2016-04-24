@@ -5,10 +5,9 @@
 
 namespace photon
 {
-	namespace services
+	namespace memory
 	{
-		ALIGN(8)
-			struct MemoryPage
+		ALIGN(8) struct MemoryPage
 		{
 			MemoryPage* next;
 			MemoryPage* prev;
@@ -27,7 +26,7 @@ namespace photon
 			~MemoryService();
 		public:
 			static MemoryService* Initialize();
-			static void Uninitialize(MemoryService* instance);
+			static void Uninitialize();
 
 			void* AllocatePage(size_t size, bool persistent = true);
 			size_t FreePage(void* pagePtr);
