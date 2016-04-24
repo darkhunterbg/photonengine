@@ -7,12 +7,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Managed\Services\MemoryService.cpp" />
-    <ClCompile Include="Managed\Services\ServiceProvider.cpp" />
+    <ClCompile Include="Managed\Memory\MemoryService.cpp" />
+    <ClCompile Include="Managed\ServiceProvider.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Managed\Services\MemoryService.h" />
-    <ClInclude Include="Managed\Services\ServiceProvider.h" />
+    <ClInclude Include="Managed\Memory\MemoryService.h" />
+    <ClInclude Include="Managed\ServiceProvider.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{98C79793-898A-4614-93F6-1831E319BEA0}</ProjectGuid>

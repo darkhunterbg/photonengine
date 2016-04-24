@@ -3,7 +3,7 @@
 
 #include <Windows.h>
 
-#include <Photon/Services/Services.h>
+#include <Photon/Services.h>
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {

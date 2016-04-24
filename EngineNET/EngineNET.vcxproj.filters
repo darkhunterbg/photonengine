@@ -1,24 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="Managed\Services\MemoryService.cpp">
-      <Filter>Services</Filter>
-    </ClCompile>
-    <ClCompile Include="Managed\Services\ServiceProvider.cpp">
-      <Filter>Services</Filter>
+    <ClCompile Include="Managed\ServiceProvider.cpp" />
+    <ClCompile Include="Managed\Memory\MemoryService.cpp">
+      <Filter>Memory</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Managed\Services\MemoryService.h">
-      <Filter>Services</Filter>
-    </ClInclude>
-    <ClInclude Include="Managed\Services\ServiceProvider.h">
-      <Filter>Services</Filter>
+    <ClInclude Include="Managed\ServiceProvider.h" />
+    <ClInclude Include="Managed\Memory\MemoryService.h">
+      <Filter>Memory</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="Services">
-      <UniqueIdentifier>{72573ff9-d185-4cb6-98cb-c95886cff829}</UniqueIdentifier>
+    <Filter Include="Memory">
+      <UniqueIdentifier>{da357ea6-7a8e-4de7-be04-c977ac731f09}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

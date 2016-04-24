@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../PE.h"
+#include "PE.h"
 
-#include "MemoryService.h"
+#include "Memory/MemoryService.h"
 
 namespace photon
 {

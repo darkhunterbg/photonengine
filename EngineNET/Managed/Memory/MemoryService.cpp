@@ -1,9 +1,9 @@
 #include "MemoryService.h"
-#include <Photon/Services/MemoryService.h>
+#include <Photon/Memory/MemoryService.h>
 
 namespace Photon
 {
-	namespace Services
+	namespace Memory
 	{
 		MemoryService::MemoryService(photon::services::MemoryService* native) :
 			native(native)

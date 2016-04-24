@@ -7,8 +7,8 @@
     <Filter Include="Platform\Win32">
       <UniqueIdentifier>{b50e7520-8e39-404b-bff0-8b6603b5930c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Services">
-      <UniqueIdentifier>{42ae5ad9-7b36-402c-a124-5bc7fa35029b}</UniqueIdentifier>
+    <Filter Include="Memory">
+      <UniqueIdentifier>{8644a304-c439-429f-821f-d9d98a3523d8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -19,22 +19,18 @@
     <ClInclude Include="Photon\Platform\Win32\Win32Platform.h">
       <Filter>Platform\Win32</Filter>
     </ClInclude>
-    <ClInclude Include="Photon\Services\MemoryService.h">
-      <Filter>Services</Filter>
-    </ClInclude>
-    <ClInclude Include="Photon\Services\Services.h">
-      <Filter>Services</Filter>
+    <ClInclude Include="Photon\Services.h" />
+    <ClInclude Include="Photon\Memory\MemoryService.h">
+      <Filter>Memory</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Photon\Platform\Win32\Win32Memory.cpp">
       <Filter>Platform\Win32</Filter>
     </ClCompile>
-    <ClCompile Include="Photon\Services\MemoryService.cpp">
-      <Filter>Services</Filter>
-    </ClCompile>
-    <ClCompile Include="Photon\Services\Services.cpp">
-      <Filter>Services</Filter>
+    <ClCompile Include="Photon\Services.cpp" />
+    <ClCompile Include="Photon\Memory\MemoryService.cpp">
+      <Filter>Memory</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

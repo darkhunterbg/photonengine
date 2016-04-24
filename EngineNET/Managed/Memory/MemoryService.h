@@ -13,7 +13,7 @@ namespace photon
 
 namespace Photon
 {
-	namespace Services
+	namespace Memory
 	{
 		///<summary>
 		/// Service for managing native  memory
