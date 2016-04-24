@@ -5,10 +5,29 @@ namespace photon
 {
 	namespace services
 	{
-		MemoryPage* memFirstPage = nullptr;
-		MemoryPage* memLastPage = nullptr;
+		MemoryService* glMemoryService = nullptr;
 
-		void* MemAllocatePage(size_t size, bool persistent)
+		MemoryService::MemoryService() :
+			firstPage(nullptr), lastPage(nullptr)
+		{
+
+		}
+		MemoryService::~MemoryService()
+		{
+
+		}
+
+		MemoryService* MemoryService::Initialize()
+		{
+			MemoryService* service = new MemoryService();
+			return service;
+		}
+		void MemoryService::Uninitialize(MemoryService* service)
+		{
+			delete service;
+		}
+
+		void* MemoryService::AllocatePage(size_t size, bool persistent)
 		{
 			if (size == 0)
 				return nullptr;
@@ -28,31 +47,32 @@ namespace photon
 			page->size = size;
 			page->persistent = persistent;
 
-			if (!memFirstPage)
-				memFirstPage = page;
+			if (!firstPage)
+				firstPage = page;
 
-			page->prev = memLastPage;
+			page->prev = lastPage;
 
-			if (memLastPage)
-				memLastPage->next = page;
+			if (lastPage)
+				lastPage->next = page;
 
-			memLastPage = page;
+			lastPage = page;
 
 			return page->memoryPtr;
 		}
 
-		bool MemFreePage(void* pagePtr)
+		size_t MemoryService::FreePage(void* pagePtr)
 		{
-			MemoryPage* page = memFirstPage;
+
+			MemoryPage* page = firstPage;
 			while (page)
 			{
 				if (page->memoryPtr == pagePtr)
 				{
-					if (page == memFirstPage)
-						memFirstPage = page->next;
+					if (page == firstPage)
+						firstPage = page->next;
 
-					if (page == memLastPage)
-						memLastPage = page->prev;
+					if (page == lastPage)
+						lastPage = page->prev;
 
 					if (page->prev)
 						page->prev->next = page->next;
@@ -60,31 +80,38 @@ namespace photon
 					if (page->next)
 						page->next->prev = page->prev;
 
-					return platform::DeallocateMemory(page, page->size);
+					size_t freed = page->size;
+
+					bool success = platform::DeallocateMemory(page, page->size);
+					return success ? freed : 0;
 				}
 
 				page = page->next;
 			}
-			return false;
+			return 0;
 		}
 
-		void MemFreeNonPersistent()
+		size_t MemoryService::FreeNonPersistent()
 		{
+			size_t freed = 0;
+
 			//TODO: better dealloc (without calling MemFreePage)
-			MemoryPage* page = memFirstPage;
+			MemoryPage* page = firstPage;
 			while (page)
 			{
 				if (!page->persistent)
 				{
 					void* memPtr = page->memoryPtr;
 					page = page->next;
-					MemFreePage(memPtr);
+					freed += FreePage(memPtr);
 				}
 				else
 				{
 					page = page->next;
 				}
 			}
+
+			return freed;
 		}
 	}
 }

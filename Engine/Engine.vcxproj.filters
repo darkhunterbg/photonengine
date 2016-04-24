@@ -22,12 +22,18 @@
     <ClInclude Include="Photon\Services\MemoryService.h">
       <Filter>Services</Filter>
     </ClInclude>
+    <ClInclude Include="Photon\Services\Services.h">
+      <Filter>Services</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Photon\Platform\Win32\Win32Memory.cpp">
       <Filter>Platform\Win32</Filter>
     </ClCompile>
     <ClCompile Include="Photon\Services\MemoryService.cpp">
+      <Filter>Services</Filter>
+    </ClCompile>
+    <ClCompile Include="Photon\Services\Services.cpp">
       <Filter>Services</Filter>
     </ClCompile>
   </ItemGroup>

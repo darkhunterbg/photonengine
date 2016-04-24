@@ -17,9 +17,25 @@ namespace photon
 			void* memoryPtr;
 		};
 
-		EXPORT void* MemAllocatePage(size_t size, bool persistent = true);
-		EXPORT bool MemFreePage(void* pagePtr);
-		EXPORT void MemFreeNonPersistent();
-	};
+		class EXPORT MemoryService
+		{
+		private:
+			MemoryPage* firstPage;
+			MemoryPage* lastPage;
 
+			MemoryService();
+			~MemoryService();
+		public:
+			static MemoryService* Initialize();
+			static void Uninitialize(MemoryService* instance);
+
+			void* AllocatePage(size_t size, bool persistent = true);
+			size_t FreePage(void* pagePtr);
+			size_t FreeNonPersistent();
+		};
+
+
+		EXPORT extern MemoryService* glMemoryService;
+
+	}
 }

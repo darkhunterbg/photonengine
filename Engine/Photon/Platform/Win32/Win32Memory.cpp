@@ -8,7 +8,7 @@
 
 void* photon::platform::AllocateMemory( size_t size, void* baseAddress)
 {
-	return VirtualAlloc(baseAddress, size, MEM_COMMIT, PAGE_READWRITE);
+	return VirtualAlloc(baseAddress, size, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
 }
 
 bool photon::platform::DeallocateMemory(void* address, size_t size)

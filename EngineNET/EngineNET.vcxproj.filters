@@ -4,9 +4,15 @@
     <ClCompile Include="Managed\Services\MemoryService.cpp">
       <Filter>Services</Filter>
     </ClCompile>
+    <ClCompile Include="Managed\Services\ServiceProvider.cpp">
+      <Filter>Services</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Managed\Services\MemoryService.h">
+      <Filter>Services</Filter>
+    </ClInclude>
+    <ClInclude Include="Managed\Services\ServiceProvider.h">
       <Filter>Services</Filter>
     </ClInclude>
   </ItemGroup>

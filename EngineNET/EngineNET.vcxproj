@@ -8,9 +8,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Managed\Services\MemoryService.cpp" />
+    <ClCompile Include="Managed\Services\ServiceProvider.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Managed\Services\MemoryService.h" />
+    <ClInclude Include="Managed\Services\ServiceProvider.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{98C79793-898A-4614-93F6-1831E319BEA0}</ProjectGuid>
@@ -51,6 +53,8 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;ENGINENET_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <GenerateXMLDocumentationFiles>true</GenerateXMLDocumentationFiles>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

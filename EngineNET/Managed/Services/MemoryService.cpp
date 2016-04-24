@@ -5,19 +5,39 @@ namespace Photon
 {
 	namespace Services
 	{
+		MemoryService::MemoryService(photon::services::MemoryService* native) :
+			native(native)
+		{
+
+		}
+		MemoryService::~MemoryService()
+		{
+
+		}
+
+		MemoryService^ MemoryService::Instance::get()
+		{
+			return instance;
+		}
+		void MemoryService::Instance::set(MemoryService^ value)
+		{
+			instance = value;
+		}
+
+
 		System::IntPtr MemoryService::Allocate(System::UInt32 size, bool persistent)
 		{
-			return System::IntPtr(photon::services::MemAllocatePage((size_t)size, persistent));
+			return System::IntPtr(native->AllocatePage((size_t)size, persistent));
 		}
 
-		bool MemoryService::Free(System::IntPtr pageHandle)
+		System::UInt32 MemoryService::Free(System::IntPtr pageHandle)
 		{
-			return photon::services::MemFreePage(pageHandle.ToPointer());
+			return System::UInt32(native->FreePage(pageHandle.ToPointer()));
 		}
 
-		void MemoryService::FreeNonPersistent()
+		System::UInt32 MemoryService::FreeNonPersistent()
 		{
-			photon::services::MemFreeNonPersistent();
+			return System::UInt32(native->FreeNonPersistent());
 		}
 	}
 }

@@ -11,10 +11,12 @@
     <ClInclude Include="Photon\Platform\Memory.h" />
     <ClInclude Include="Photon\Platform\Win32\Win32Platform.h" />
     <ClInclude Include="Photon\Services\MemoryService.h" />
+    <ClInclude Include="Photon\Services\Services.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Photon\Platform\Win32\Win32Memory.cpp" />
     <ClCompile Include="Photon\Services\MemoryService.cpp" />
+    <ClCompile Include="Photon\Services\Services.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{9B329521-8873-477D-AF72-3A0B9094EECD}</ProjectGuid>
@@ -52,6 +54,9 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;ENGINE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ExceptionHandling>false</ExceptionHandling>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

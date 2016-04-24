@@ -12,8 +12,17 @@ namespace DemoNET
     {
         static void Main(string[] args)
         {
-            var ptr = MemoryService.Allocate(1024, false);
-           bool result = MemoryService.Free(ptr);
+            ServiceProvider.InitializeServices();
+
+            var t0 = ServiceProvider.MemoryService.Allocate(1024, false);
+            var t1 = ServiceProvider.MemoryService.Allocate(1024 * 1024, false);
+            var t2 = ServiceProvider.MemoryService.Allocate(1024 * 1024 * 1024, false);
+
+            ServiceProvider.MemoryService.Free(t0);
+            ServiceProvider.MemoryService.Free(t1);
+            ServiceProvider.MemoryService.Free(t2);
+
+            ServiceProvider.UninitializeServices();
         }
     }
 }
