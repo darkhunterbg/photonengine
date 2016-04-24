@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Demo", "Demo\Demo.vcxproj", "{65F447B2-2687-4C7C-8515-9DE2FC07B148}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9B329521-8873-477D-AF72-3A0B9094EECD} = {9B329521-8873-477D-AF72-3A0B9094EECD}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Engine", "Engine\Engine.vcxproj", "{9B329521-8873-477D-AF72-3A0B9094EECD}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EngineNET", "EngineNET\EngineNET.vcxproj", "{98C79793-898A-4614-93F6-1831E319BEA0}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9B329521-8873-477D-AF72-3A0B9094EECD} = {9B329521-8873-477D-AF72-3A0B9094EECD}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoNET", "DemoNET\DemoNET.csproj", "{801241F0-0A3B-4A5A-8FF7-FE0501D0EE20}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9B329521-8873-477D-AF72-3A0B9094EECD} = {9B329521-8873-477D-AF72-3A0B9094EECD}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{65F447B2-2687-4C7C-8515-9DE2FC07B148}.Debug|x86.ActiveCfg = Debug|Win32
+		{65F447B2-2687-4C7C-8515-9DE2FC07B148}.Debug|x86.Build.0 = Debug|Win32
+		{9B329521-8873-477D-AF72-3A0B9094EECD}.Debug|x86.ActiveCfg = Debug|Win32
+		{9B329521-8873-477D-AF72-3A0B9094EECD}.Debug|x86.Build.0 = Debug|Win32
+		{98C79793-898A-4614-93F6-1831E319BEA0}.Debug|x86.ActiveCfg = Debug|Win32
+		{98C79793-898A-4614-93F6-1831E319BEA0}.Debug|x86.Build.0 = Debug|Win32
+		{801241F0-0A3B-4A5A-8FF7-FE0501D0EE20}.Debug|x86.ActiveCfg = Debug|x86
+		{801241F0-0A3B-4A5A-8FF7-FE0501D0EE20}.Debug|x86.Build.0 = Debug|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
