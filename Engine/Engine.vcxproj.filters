@@ -37,9 +37,6 @@
     <ClInclude Include="Photon\Platform\Win32\Win32OpenGL.h">
       <Filter>Platform\Win32</Filter>
     </ClInclude>
-    <ClInclude Include="Photon\Platform\Win32\Win32Window.h">
-      <Filter>Platform\Win32</Filter>
-    </ClInclude>
     <ClInclude Include="Photon\Memory\MemoryStack.h">
       <Filter>Memory</Filter>
     </ClInclude>

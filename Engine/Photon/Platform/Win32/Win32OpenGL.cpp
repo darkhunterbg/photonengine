@@ -28,15 +28,26 @@ namespace photon
 			SetPixelFormat(windowDC, pixelFormatIndex, &pfd);
 
 			OpenGLContext context;
+			context.dc = nullptr;
 			context.handle = wglCreateContext(windowDC);
 
 			ASSERT(context.handle);
 
 			return context;
 		}
-		bool DeleteOpenGLContext(OpenGLContext context)
+		bool DeleteOpenGLContext(OpenGLContext& context)
 		{
 			return wglDeleteContext(context.handle);
+		}
+		bool SetCurrentWindow(HWND windowHandle, OpenGLContext& context)
+		{
+			context.dc = GetWindowDC(windowHandle);
+			return wglMakeCurrent(context.dc, context.handle);
+		}
+
+		bool SwapOpenGLBuffers(OpenGLContext& context)
+		{
+			return  SwapBuffers(context.dc);
 		}
 	}
 }

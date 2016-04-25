@@ -17,7 +17,6 @@
     <ClInclude Include="Photon\Platform\OpenGL.h" />
     <ClInclude Include="Photon\Platform\Win32\Win32OpenGL.h" />
     <ClInclude Include="Photon\Platform\Win32\Win32Platform.h" />
-    <ClInclude Include="Photon\Platform\Win32\Win32Window.h" />
     <ClInclude Include="Photon\Platform\Window.h" />
   </ItemGroup>
   <ItemGroup>
