@@ -3,10 +3,10 @@
 
 namespace photon
 {
+	memory::MemoryService* glMemoryService = nullptr;
+
 	namespace memory
 	{
-		MemoryService* glMemoryService = nullptr;
-
 		MemoryService::MemoryService() :
 			firstPage(nullptr), lastPage(nullptr)
 		{
@@ -19,19 +19,22 @@ namespace photon
 
 		MemoryService* MemoryService::Initialize()
 		{
+			ASSERT(glMemoryService == nullptr);
+
 			glMemoryService = new MemoryService();
 			return glMemoryService;
 		}
 		void MemoryService::Uninitialize()
 		{
+			ASSERT(glMemoryService);
+
 			delete glMemoryService;
 			glMemoryService = nullptr;
 		}
 
 		void* MemoryService::AllocatePage(size_t size, bool persistent)
 		{
-			if (size == 0)
-				return nullptr;
+			ASSERT(size);
 
 			size += sizeof(MemoryPage);
 
@@ -63,7 +66,6 @@ namespace photon
 
 		size_t MemoryService::FreePage(void* pagePtr)
 		{
-
 			MemoryPage* page = firstPage;
 			while (page)
 			{

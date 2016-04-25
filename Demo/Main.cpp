@@ -5,6 +5,7 @@
 
 #include <Photon/Graphics/GraphicsService.h>
 #include <Photon/Memory/MemoryService.h>
+#include <Photon/Memory/MemoryStack.h>
 #include <Photon/Platform/Win32/Win32OpenGL.h>
 
 
@@ -51,15 +52,22 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	ShowWindow(handler, SW_SHOWNORMAL);
 
 
+	photon::memory::MemoryService::Initialize();
+
+	void* memory = photon::glMemoryService->AllocatePage(Megabytes(1));
+	auto memstack = photon::memory::MemoryStack::New(memory, Megabytes(1));
+
 	photon::platform::OpenGLContext context = photon::platform::CreateOpenGLContext(handler);
 
+	photon::graphics::GraphicsService::Initialize(&context, *memstack);
 
 
-	photon::memory::MemoryService::Initialize();
-	photon::graphics::GraphicsService::Initialize(&context);
+	photon::graphics::GraphicsService::Uninitialize();
 
+	DeleteOpenGLContext(context);
+	memstack->Clear();
+	photon::memory::MemoryService::Uninitialize();
 
-	//photon::memory::MemoryService::Uninitialize(nullptr);
 
 	return 0;
 }

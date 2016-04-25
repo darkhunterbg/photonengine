@@ -7,10 +7,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Managed\Graphics\GraphicsService.cpp" />
     <ClCompile Include="Managed\Memory\MemoryService.cpp" />
     <ClCompile Include="Managed\ServiceProvider.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Managed\Graphics\GraphicsService.h" />
     <ClInclude Include="Managed\Memory\MemoryService.h" />
     <ClInclude Include="Managed\ServiceProvider.h" />
   </ItemGroup>

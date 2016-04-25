@@ -5,16 +5,25 @@
     <ClCompile Include="Managed\Memory\MemoryService.cpp">
       <Filter>Memory</Filter>
     </ClCompile>
+    <ClCompile Include="Managed\Graphics\GraphicsService.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Managed\ServiceProvider.h" />
     <ClInclude Include="Managed\Memory\MemoryService.h">
       <Filter>Memory</Filter>
     </ClInclude>
+    <ClInclude Include="Managed\Graphics\GraphicsService.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Memory">
       <UniqueIdentifier>{da357ea6-7a8e-4de7-be04-c977ac731f09}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics">
+      <UniqueIdentifier>{1cec58f7-4934-48e7-84c7-e98fc4ad345d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

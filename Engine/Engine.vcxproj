@@ -8,7 +8,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Photon\Graphics\GraphicsService.h" />
+    <ClInclude Include="Photon\Macro.h" />
     <ClInclude Include="Photon\Memory\MemoryService.h" />
+    <ClInclude Include="Photon\Memory\MemoryStack.h" />
+    <ClInclude Include="Photon\New.h" />
     <ClInclude Include="Photon\PE.h" />
     <ClInclude Include="Photon\Platform\Memory.h" />
     <ClInclude Include="Photon\Platform\OpenGL.h" />
@@ -20,6 +23,7 @@
   <ItemGroup>
     <ClCompile Include="Photon\Graphics\GraphicsService.cpp" />
     <ClCompile Include="Photon\Memory\MemoryService.cpp" />
+    <ClCompile Include="Photon\Memory\MemoryStack.cpp" />
     <ClCompile Include="Photon\Platform\Win32\Win32Memory.cpp" />
     <ClCompile Include="Photon\Platform\Win32\Win32OpenGL.cpp" />
   </ItemGroup>

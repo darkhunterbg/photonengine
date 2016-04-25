@@ -1,22 +1,34 @@
 #include "GraphicsService.h"
-#include "../Platform/OpenGL.h"
+#include <stddef.h>
 
 namespace photon
 {
+	graphics::GraphicsService* glGraphicsService = nullptr;
+
 	namespace graphics
 	{
-		GraphicsService* glGraphicsService = nullptr;
 
-		GraphicsService* GraphicsService::Initialize(platform::OpenGLContext* context)
+
+		GraphicsService::GraphicsService(platform::OpenGLContext* context):
+			context(context)
 		{
-			GraphicsService* glGraphicsService = new GraphicsService();
-			glGraphicsService->context = context;
+			
+		}
+
+		GraphicsService* GraphicsService::Initialize(platform::OpenGLContext* context, memory::MemoryStack& stack)
+		{
+			ASSERT(glGraphicsService == nullptr);
+
+			void* ptr = stack.Allocate(sizeof(GraphicsService));
+			glGraphicsService = new(ptr) GraphicsService(context);
 
 			return glGraphicsService;
 		}
 		void GraphicsService::Uninitialize()
 		{
-			delete glGraphicsService;
+			ASSERT(glGraphicsService);
+
+			glGraphicsService->~GraphicsService();
 			glGraphicsService = nullptr;
 		}
 

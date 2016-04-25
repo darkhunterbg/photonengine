@@ -18,6 +18,8 @@ namespace photon
 
 		class EXPORT MemoryService
 		{
+			DISABLE_COPY(MemoryService);
+
 		private:
 			MemoryPage* firstPage;
 			MemoryPage* lastPage;
@@ -32,9 +34,8 @@ namespace photon
 			size_t FreePage(void* pagePtr);
 			size_t FreeNonPersistent();
 		};
-
-
-		EXPORT extern MemoryService* glMemoryService;
-
 	}
+
+	EXPORT extern memory::MemoryService* glMemoryService;
+
 }

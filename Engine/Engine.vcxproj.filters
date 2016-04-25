@@ -40,6 +40,11 @@
     <ClInclude Include="Photon\Platform\Win32\Win32Window.h">
       <Filter>Platform\Win32</Filter>
     </ClInclude>
+    <ClInclude Include="Photon\Memory\MemoryStack.h">
+      <Filter>Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="Photon\New.h" />
+    <ClInclude Include="Photon\Macro.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Photon\Platform\Win32\Win32Memory.cpp">
@@ -53,6 +58,9 @@
     </ClCompile>
     <ClCompile Include="Photon\Platform\Win32\Win32OpenGL.cpp">
       <Filter>Platform\Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="Photon\Memory\MemoryStack.cpp">
+      <Filter>Memory</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

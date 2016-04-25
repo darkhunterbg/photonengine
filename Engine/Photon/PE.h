@@ -1,5 +1,8 @@
 #pragma once
 
+#include "New.h"
+#include "Macro.h"
+
 //============================ Microsoft Visual C =========================
 
 #if defined(_MSC_VER)
@@ -27,6 +30,3 @@
 #endif
 
 
-#define Kilobytes(val) val * 1024
-#define Megabytes(val) val * 1024 * 1024
-#define Gigabytes(val) val * 1024 * 1024 * 1024

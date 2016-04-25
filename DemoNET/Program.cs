@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace DemoNET
 {
@@ -11,17 +12,21 @@ namespace DemoNET
     {
         static void Main(string[] args)
         {
-            ServiceProvider.InitializeServices();
+            using (Form form = new Form()
+            {
+                Width = 1280,
+                Height = 720
 
-            var t0 = ServiceProvider.MemoryService.Allocate(1024, false);
-            var t1 = ServiceProvider.MemoryService.Allocate(1024 * 1024, false);
-            var t2 = ServiceProvider.MemoryService.Allocate(1024 * 1024 * 1024, false);
+            })
+            {
+                form.Show();
 
-            ServiceProvider.MemoryService.Free(t0);
-            ServiceProvider.MemoryService.Free(t1);
-            ServiceProvider.MemoryService.Free(t2);
+                ServiceProvider.InitializeServices(form.Handle);
 
-            ServiceProvider.UninitializeServices();
+        
+
+                ServiceProvider.UninitializeServices();
+            }
         }
     }
 }
