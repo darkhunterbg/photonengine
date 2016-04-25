@@ -238,3 +238,9 @@ _Pvt_Extensions
 # Other
 Tmp
 *.VC.db
+.build-debug
+*.db
+*.mk
+Makefile
+DemoLinux.txt
+Engine.txt
