@@ -7,7 +7,7 @@ namespace photon
 {
 	namespace memory
 	{
-		ALIGN(8) struct MemoryPage
+		struct MemoryPage
 		{
 			MemoryPage* next;
 			MemoryPage* prev;

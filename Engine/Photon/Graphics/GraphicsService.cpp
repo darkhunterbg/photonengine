@@ -34,7 +34,7 @@ namespace photon
 
 	/*	void GraphicsService::SetCurrentWindow(photon::platform::Window window)
 		{
-
+e
 		}*/
 	}
 }

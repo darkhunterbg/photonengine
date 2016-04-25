@@ -5,6 +5,11 @@
 
 //============================ Microsoft Visual C =========================
 
+#if defined(__GNUG__)
+#define EXPORT
+#define ALIGN(alignment) __attribute__ ((aligned ( alignment ) ))
+#endif
+
 #if defined(_MSC_VER)
 
 #if defined(ENGINE_EXPORTS)
@@ -24,6 +29,9 @@
 #define BUILD_PLATFORM
 #endif
 
+#if defined(__linux__)
+#define PLATFORM LINUX
+#endif
 
 #if !defined(PLATFORM)
 #error Unknown build platform!
