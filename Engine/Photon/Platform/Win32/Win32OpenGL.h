@@ -21,7 +21,7 @@ namespace photon
 
 		EXPORT OpenGLContext CreateOpenGLContext(HWND windowHandle);
 		EXPORT bool DeleteOpenGLContext(OpenGLContext& context);
-		EXPORT bool SetCurrentWindow(HWND windowHandle, OpenGLContext& context);
+		EXPORT bool SetCurrentOpenGLWindow(HWND windowHandle, OpenGLContext& context);
 	
 		EXPORT bool SwapOpenGLBuffers(OpenGLContext& context);
 	}

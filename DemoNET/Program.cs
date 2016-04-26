@@ -8,10 +8,13 @@ using System.Windows.Forms;
 
 namespace DemoNET
 {
+
     class Program
     {
+
         static void Main(string[] args)
         {
+
             using (Form form = new Form()
             {
                 Width = 1280,
@@ -23,10 +26,18 @@ namespace DemoNET
 
                 ServiceProvider.InitializeServices(form.Handle);
 
-        
+                while(form.Visible)
+                {
+                    Application.DoEvents();
+                    ServiceProvider.SwapBackBuffer();
+                }
 
                 ServiceProvider.UninitializeServices();
             }
+
         }
+
     }
+
+
 }

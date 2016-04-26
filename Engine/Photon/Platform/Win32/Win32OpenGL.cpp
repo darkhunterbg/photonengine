@@ -39,7 +39,7 @@ namespace photon
 		{
 			return wglDeleteContext(context.handle);
 		}
-		bool SetCurrentWindow(HWND windowHandle, OpenGLContext& context)
+		bool SetCurrentOpenGLWindow(HWND windowHandle, OpenGLContext& context)
 		{
 			context.dc = GetWindowDC(windowHandle);
 			return wglMakeCurrent(context.dc, context.handle);

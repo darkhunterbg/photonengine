@@ -42,6 +42,10 @@ namespace Photon
 		{
 			Photon::Graphics::GraphicsService^ get();
 		}
+
+		static void SetCurrentWindow(System::IntPtr winHandle);
+
+		static void SwapBackBuffer();
 	};
 
 }

@@ -19,9 +19,10 @@ namespace Photon
 
 
 		openGLContext = photon::platform::CreateOpenGLContext((HWND)winHandle.ToPointer());
-		auto nativeGraphics = photon::graphics::GraphicsService::Initialize(&openGLContext, *memstack);
+		auto nativeGraphics = photon::graphics::GraphicsService::Initialize( *memstack);
 
 		Photon::Graphics::GraphicsService::Instance = gcnew Photon::Graphics::GraphicsService(nativeGraphics);
+		SetCurrentWindow(winHandle);
 
 	}
 
@@ -45,6 +46,16 @@ namespace Photon
 	Photon::Graphics::GraphicsService^ ServiceProvider::GraphicsService::get()
 	{
 		return Photon::Graphics::GraphicsService::Instance;
+	}
+
+	void ServiceProvider::SetCurrentWindow(System::IntPtr winHandle)
+	{
+		photon::platform::SetCurrentOpenGLWindow((HWND)winHandle.ToPointer(), openGLContext);
+	}
+
+	void ServiceProvider::SwapBackBuffer()
+	{
+		photon::platform::SwapOpenGLBuffers(openGLContext);
 	}
 
 }

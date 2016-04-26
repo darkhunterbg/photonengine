@@ -8,6 +8,61 @@
 #include <Photon/Memory/MemoryStack.h>
 #include <Photon/Platform/Win32/Win32OpenGL.h>
 
+HWND CreateAndShowWindow(HINSTANCE hInstance);
+
+
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+{
+	auto handler = CreateAndShowWindow(hInstance);
+
+	//================== INIT ============================
+	photon::memory::MemoryService::Initialize();
+
+	void* memory = photon::glMemoryService->AllocatePage(Megabytes(1));
+	auto memstack = photon::memory::MemoryStack::New(memory, Megabytes(1));
+
+	photon::platform::OpenGLContext context = photon::platform::CreateOpenGLContext(handler);
+	bool s = photon::platform::SetCurrentOpenGLWindow(handler, context);
+
+	photon::graphics::GraphicsService::Initialize(*memstack);
+	//======================================================
+
+	MSG msg;
+
+	while (true)
+	{
+		while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+		{
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
+		}
+
+
+		if (msg.message == WM_QUIT)
+			break;
+
+		//================ GAME LOOP ============================
+		photon::platform::SwapOpenGLBuffers(context);
+		//======================================================
+
+	}
+
+	//================ UNINIT ===============================
+	photon::graphics::GraphicsService::Uninitialize();
+
+	photon::platform::SetCurrentOpenGLWindow(nullptr, context);
+	photon::platform::DeleteOpenGLContext(context);
+
+
+	memstack->Clear();
+	photon::memory::MemoryService::Uninitialize();
+	//======================================================
+
+
+	return 0;
+}
+
+
 
 LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -55,55 +110,4 @@ HWND CreateAndShowWindow(HINSTANCE hInstance)
 	ShowWindow(handler, SW_SHOWNORMAL);
 
 	return handler;
-}
-
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
-{
-	auto handler = CreateAndShowWindow(hInstance);
-
-	//================== INIT ============================
-	photon::memory::MemoryService::Initialize();
-
-	void* memory = photon::glMemoryService->AllocatePage(Megabytes(1));
-	auto memstack = photon::memory::MemoryStack::New(memory, Megabytes(1));
-
-	photon::platform::OpenGLContext context = photon::platform::CreateOpenGLContext(handler);
-	bool s = photon::platform::SetCurrentWindow(handler, context);
-
-	photon::graphics::GraphicsService::Initialize(&context, *memstack);
-	//======================================================
-
-	MSG msg;
-
-	while (true)
-	{
-		while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
-		{
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
-		}
-
-
-		if (msg.message == WM_QUIT)
-			break;
-
-		//================ GAME LOOP ============================
-		photon::platform::SwapOpenGLBuffers(context);
-		//======================================================
-
-	}
-
-	//================ UNINIT ===============================
-	photon::graphics::GraphicsService::Uninitialize();
-
-	photon::platform::SetCurrentWindow(nullptr, context);
-	photon::platform::DeleteOpenGLContext(context);
-
-
-	memstack->Clear();
-	photon::memory::MemoryService::Uninitialize();
-	//======================================================
-
-
-	return 0;
 }

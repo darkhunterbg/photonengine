@@ -9,18 +9,17 @@ namespace photon
 	{
 
 
-		GraphicsService::GraphicsService(platform::OpenGLContext* context):
-			context(context)
+		GraphicsService::GraphicsService()
 		{
 			
 		}
 
-		GraphicsService* GraphicsService::Initialize(platform::OpenGLContext* context, memory::MemoryStack& stack)
+		GraphicsService* GraphicsService::Initialize(memory::MemoryStack& stack)
 		{
 			ASSERT(glGraphicsService == nullptr);
 
 			void* ptr = stack.Allocate(sizeof(GraphicsService));
-			glGraphicsService = new(ptr) GraphicsService(context);
+			glGraphicsService = new(ptr) GraphicsService();
 
 			return glGraphicsService;
 		}

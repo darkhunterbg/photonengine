@@ -5,10 +5,6 @@
 
 namespace photon
 {
-	namespace platform
-	{
-		struct OpenGLContext;
-	}
 
 	namespace graphics
 	{
@@ -19,13 +15,11 @@ namespace photon
 			DISABLE_COPY(GraphicsService);
 
 		private:
-			GraphicsService(platform::OpenGLContext* context);
+			GraphicsService();
 			~GraphicsService() = default;
 
-
-			platform::OpenGLContext* context;
 		public:
-			static GraphicsService* Initialize(platform::OpenGLContext* context, memory::MemoryStack& stack);
+			static GraphicsService* Initialize( memory::MemoryStack& stack);
 			static void Uninitialize();
 
 			//void SetCurrentWindow(photon::platform::Window window);
