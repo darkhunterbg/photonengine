@@ -13,6 +13,9 @@
     <Filter Include="Graphics">
       <UniqueIdentifier>{c454ba6f-4745-44aa-aca0-6a52e2885ece}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{2a03c0da-d003-44e4-b525-de177e77ecb2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Photon\PE.h" />
@@ -28,9 +31,6 @@
     <ClInclude Include="Photon\Graphics\GraphicsService.h">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Photon\Platform\Window.h">
-      <Filter>Platform</Filter>
-    </ClInclude>
     <ClInclude Include="Photon\Platform\OpenGL.h">
       <Filter>Platform</Filter>
     </ClInclude>
@@ -42,6 +42,12 @@
     </ClInclude>
     <ClInclude Include="Photon\New.h" />
     <ClInclude Include="Photon\Macro.h" />
+    <ClInclude Include="Photon\Platform\Time.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="Photon\Platform\Win32\Win32Time.h">
+      <Filter>Platform\Win32</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Photon\Platform\Win32\Win32Memory.cpp">
@@ -58,6 +64,9 @@
     </ClCompile>
     <ClCompile Include="Photon\Memory\MemoryStack.cpp">
       <Filter>Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="Photon\Platform\Win32\Win32Time.cpp">
+      <Filter>Platform\Win32</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

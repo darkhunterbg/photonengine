@@ -7,6 +7,7 @@
 #include <Photon/Memory/MemoryService.h>
 #include <Photon/Memory/MemoryStack.h>
 #include <Photon/Platform/Win32/Win32OpenGL.h>
+#include <Photon/Platform/Win32/Win32Time.h>
 
 HWND CreateAndShowWindow(HINSTANCE hInstance);
 
@@ -29,6 +30,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	MSG msg;
 
+	photon::platform::TimeMeasure deltaTime = { 0 };
+	photon::platform::TimeMeasure time;
+	photon::platform::MeasureTime(time);
+
 	while (true)
 	{
 		while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
@@ -41,9 +46,20 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		if (msg.message == WM_QUIT)
 			break;
 
-		//================ GAME LOOP ============================
-		photon::platform::SwapOpenGLBuffers(context);
-		//======================================================
+		photon::platform::TimeMeasure time1;
+		photon::platform::MeasureTime(time1);
+		auto delta = photon::platform::SubstractTime(time1, time);
+		time = time1;
+		deltaTime = photon::platform::SumTime(deltaTime, delta);
+
+		if (photon::platform::TimeToMS(deltaTime) >= 16)
+		{
+			//================ GAME LOOP ============================
+			photon::platform::SwapOpenGLBuffers(context);
+			//======================================================
+			glClear(GL_COLOR_BUFFER_BIT);
+			deltaTime = { 0 };
+		}
 
 	}
 

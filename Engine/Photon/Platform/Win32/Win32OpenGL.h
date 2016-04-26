@@ -7,6 +7,7 @@
 #if (PLATFORM == WINDOWS)
 
 #include "Win32Platform.h"
+#include <gl\GL.h>
 
 
 namespace photon
