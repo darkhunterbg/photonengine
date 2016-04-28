@@ -3,7 +3,7 @@
 
 namespace photon
 {
-	graphics::GraphicsService* glGraphicsService = nullptr;
+	graphics::GraphicsService* gl_GraphicsService = nullptr;
 
 	namespace graphics
 	{
@@ -16,19 +16,19 @@ namespace photon
 
 		GraphicsService* GraphicsService::Initialize(memory::MemoryStack& stack)
 		{
-			ASSERT(glGraphicsService == nullptr);
+			ASSERT(gl_GraphicsService == nullptr);
 
 			void* ptr = stack.Allocate(sizeof(GraphicsService));
-			glGraphicsService = new(ptr) GraphicsService();
+			gl_GraphicsService = new(ptr) GraphicsService();
 
-			return glGraphicsService;
+			return gl_GraphicsService;
 		}
 		void GraphicsService::Uninitialize()
 		{
-			ASSERT(glGraphicsService);
+			ASSERT(gl_GraphicsService);
 
-			glGraphicsService->~GraphicsService();
-			glGraphicsService = nullptr;
+			gl_GraphicsService->~GraphicsService();
+			gl_GraphicsService = nullptr;
 		}
 
 	/*	void GraphicsService::SetCurrentWindow(photon::platform::Window window)

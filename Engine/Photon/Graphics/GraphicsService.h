@@ -16,7 +16,6 @@ namespace photon
 
 		private:
 			GraphicsService();
-			~GraphicsService() = default;
 
 		public:
 			static GraphicsService* Initialize( memory::MemoryStack& stack);
@@ -26,5 +25,5 @@ namespace photon
 		};
 	}
 
-	EXPORT extern graphics::GraphicsService* glGraphicsService;
+	EXPORT extern graphics::GraphicsService* gl_GraphicsService;
 }

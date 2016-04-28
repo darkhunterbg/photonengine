@@ -1,9 +1,10 @@
 #include "MemoryService.h"
-#include "../Platform/Memory.h"
+
+#include "../Platform.h"
 
 namespace photon
 {
-	memory::MemoryService* glMemoryService = nullptr;
+	memory::MemoryService* gl_MemoryService = nullptr;
 
 	namespace memory
 	{
@@ -19,17 +20,17 @@ namespace photon
 
 		MemoryService* MemoryService::Initialize()
 		{
-			ASSERT(glMemoryService == nullptr);
+			ASSERT(gl_MemoryService == nullptr);
 
-			glMemoryService = new MemoryService();
-			return glMemoryService;
+			gl_MemoryService = new MemoryService();
+			return gl_MemoryService;
 		}
 		void MemoryService::Uninitialize()
 		{
-			ASSERT(glMemoryService);
+			ASSERT(gl_MemoryService);
 
-			delete glMemoryService;
-			glMemoryService = nullptr;
+			delete gl_MemoryService;
+			gl_MemoryService = nullptr;
 		}
 
 		void* MemoryService::AllocatePage(size_t size, bool persistent)
@@ -41,7 +42,7 @@ namespace photon
 			//TODO: Apply aligment  based on platform page size
 			//Check  https://msdn.microsoft.com/en-us/library/windows/desktop/ms724958(v=vs.85).aspx
 
-			MemoryPage* page = (MemoryPage*)platform::AllocateMemory(size);
+			MemoryPage* page = (MemoryPage*)gl_Platform->MemoryAlloc(size);
 
 			if (page == nullptr)
 				return nullptr;
@@ -85,7 +86,7 @@ namespace photon
 
 					size_t freed = page->size;
 
-					bool success = platform::DeallocateMemory(page, page->size);
+					bool success = gl_Platform->MemoryFree(page, page->size);
 					return success ? freed : 0;
 				}
 

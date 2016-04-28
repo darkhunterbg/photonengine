@@ -13,20 +13,14 @@
     <ClInclude Include="Photon\Memory\MemoryStack.h" />
     <ClInclude Include="Photon\New.h" />
     <ClInclude Include="Photon\PE.h" />
-    <ClInclude Include="Photon\Platform\Memory.h" />
-    <ClInclude Include="Photon\Platform\OpenGL.h" />
-    <ClInclude Include="Photon\Platform\Time.h" />
-    <ClInclude Include="Photon\Platform\Win32\Win32OpenGL.h" />
-    <ClInclude Include="Photon\Platform\Win32\Win32Platform.h" />
-    <ClInclude Include="Photon\Platform\Win32\Win32Time.h" />
+    <ClInclude Include="Photon\Platform.h" />
+    <ClInclude Include="Photon\Platform\Win32Platform.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Photon\Graphics\GraphicsService.cpp" />
     <ClCompile Include="Photon\Memory\MemoryService.cpp" />
     <ClCompile Include="Photon\Memory\MemoryStack.cpp" />
-    <ClCompile Include="Photon\Platform\Win32\Win32Memory.cpp" />
-    <ClCompile Include="Photon\Platform\Win32\Win32OpenGL.cpp" />
-    <ClCompile Include="Photon\Platform\Win32\Win32Time.cpp" />
+    <ClCompile Include="Photon\Platform\Win32Platform.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{9B329521-8873-477D-AF72-3A0B9094EECD}</ProjectGuid>

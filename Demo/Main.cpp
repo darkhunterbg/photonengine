@@ -1,16 +1,20 @@
 #define WIN32_LEAN_AND_MEAN
 
+#include <Windows.h>
 
-#include <Photon/Platform/Win32/Win32Platform.h>
 
 #include <Photon/Graphics/GraphicsService.h>
 #include <Photon/Memory/MemoryService.h>
 #include <Photon/Memory/MemoryStack.h>
-#include <Photon/Platform/Win32/Win32OpenGL.h>
-#include <Photon/Platform/Win32/Win32Time.h>
+#include <Photon/Platform/Win32Platform.h>
+
+
+#include <gl\GL.h>
+
 
 HWND CreateAndShowWindow(HINSTANCE hInstance);
 
+HGLRC CreateOpenGLContext(HWND window);
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
@@ -19,20 +23,23 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	//================== INIT ============================
 	photon::memory::MemoryService::Initialize();
 
-	void* memory = photon::glMemoryService->AllocatePage(Megabytes(1));
+	void* memory = photon::gl_MemoryService->AllocatePage(Megabytes(1));
 	auto memstack = photon::memory::MemoryStack::New(memory, Megabytes(1));
 
-	photon::platform::OpenGLContext context = photon::platform::CreateOpenGLContext(handler);
-	bool s = photon::platform::SetCurrentOpenGLWindow(handler, context);
+	HGLRC context = CreateOpenGLContext(handler);
+	HDC dc = GetWindowDC(handler);
+	wglMakeCurrent(dc, context);
 
 	photon::graphics::GraphicsService::Initialize(*memstack);
 	//======================================================
 
 	MSG msg;
 
-	photon::platform::TimeMeasure deltaTime = { 0 };
-	photon::platform::TimeMeasure time;
-	photon::platform::MeasureTime(time);
+	LONGLONG deltaTime = 0;
+	LARGE_INTEGER time;
+	QueryPerformanceCounter(&time);
+	LARGE_INTEGER freq;
+	QueryPerformanceFrequency(&freq);
 
 	while (true)
 	{
@@ -46,16 +53,17 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		if (msg.message == WM_QUIT)
 			break;
 
-		photon::platform::TimeMeasure time1;
-		photon::platform::MeasureTime(time1);
-		auto delta = photon::platform::SubstractTime(time1, time);
+		LARGE_INTEGER time1;
+		QueryPerformanceCounter(&time1);
+		LONGLONG delta = time1.QuadPart - time.QuadPart;
 		time = time1;
-		deltaTime = photon::platform::SumTime(deltaTime, delta);
+		deltaTime += delta;
 
-		if (photon::platform::TimeToMS(deltaTime) >= 16)
+		LONGLONG  deltaMS = (1000 * time.QuadPart / freq.QuadPart);
+		if (deltaMS >= 16)
 		{
 			//================ GAME LOOP ============================
-			photon::platform::SwapOpenGLBuffers(context);
+			SwapBuffers(dc);
 			//======================================================
 			glClear(GL_COLOR_BUFFER_BIT);
 			deltaTime = { 0 };
@@ -66,9 +74,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	//================ UNINIT ===============================
 	photon::graphics::GraphicsService::Uninitialize();
 
-	photon::platform::SetCurrentOpenGLWindow(nullptr, context);
-	photon::platform::DeleteOpenGLContext(context);
-
+	wglMakeCurrent(nullptr, context);
+	wglDeleteContext(context);
 
 	memstack->Clear();
 	photon::memory::MemoryService::Uninitialize();
@@ -92,6 +99,26 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 	}
 }
 
+
+HGLRC CreateOpenGLContext(HWND window)
+{
+	PIXELFORMATDESCRIPTOR pfd = {};
+	pfd.nSize = sizeof(PIXELFORMATDESCRIPTOR);
+	pfd.nVersion = 1;
+	pfd.dwFlags = PFD_DOUBLEBUFFER | PFD_SUPPORT_OPENGL | PFD_DRAW_TO_WINDOW;
+	pfd.iPixelType = PFD_TYPE_RGBA;
+	pfd.cColorBits = 32;
+	pfd.cDepthBits = 24;
+	pfd.cAlphaBits = 8;
+	pfd.iLayerType = PFD_MAIN_PLANE;
+
+	HDC windowDC = GetWindowDC(window);
+
+	int pixelFormatIndex = ChoosePixelFormat(windowDC, &pfd);
+	SetPixelFormat(windowDC, pixelFormatIndex, &pfd);
+
+	return wglCreateContext(windowDC);
+}
 
 HWND CreateAndShowWindow(HINSTANCE hInstance)
 {

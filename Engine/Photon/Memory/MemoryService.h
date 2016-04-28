@@ -1,7 +1,8 @@
 #pragma once
 
 #include "../PE.h"
-#include <stddef.h>
+
+#include <stddef.h>	
 
 namespace photon
 {
@@ -36,6 +37,6 @@ namespace photon
 		};
 	}
 
-	EXPORT extern memory::MemoryService* glMemoryService;
+	EXPORT extern memory::MemoryService* gl_MemoryService;
 
 }

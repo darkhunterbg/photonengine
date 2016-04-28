@@ -4,9 +4,6 @@
     <Filter Include="Platform">
       <UniqueIdentifier>{c0b2aa93-6505-465d-8574-17713ab609b3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Platform\Win32">
-      <UniqueIdentifier>{b50e7520-8e39-404b-bff0-8b6603b5930c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Memory">
       <UniqueIdentifier>{8644a304-c439-429f-821f-d9d98a3523d8}</UniqueIdentifier>
     </Filter>
@@ -19,54 +16,34 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Photon\PE.h" />
-    <ClInclude Include="Photon\Platform\Memory.h">
-      <Filter>Platform</Filter>
-    </ClInclude>
-    <ClInclude Include="Photon\Platform\Win32\Win32Platform.h">
-      <Filter>Platform\Win32</Filter>
-    </ClInclude>
     <ClInclude Include="Photon\Memory\MemoryService.h">
       <Filter>Memory</Filter>
     </ClInclude>
     <ClInclude Include="Photon\Graphics\GraphicsService.h">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Photon\Platform\OpenGL.h">
-      <Filter>Platform</Filter>
-    </ClInclude>
-    <ClInclude Include="Photon\Platform\Win32\Win32OpenGL.h">
-      <Filter>Platform\Win32</Filter>
-    </ClInclude>
     <ClInclude Include="Photon\Memory\MemoryStack.h">
       <Filter>Memory</Filter>
     </ClInclude>
     <ClInclude Include="Photon\New.h" />
     <ClInclude Include="Photon\Macro.h" />
-    <ClInclude Include="Photon\Platform\Time.h">
+    <ClInclude Include="Photon\Platform.h" />
+    <ClInclude Include="Photon\Platform\Win32Platform.h">
       <Filter>Platform</Filter>
-    </ClInclude>
-    <ClInclude Include="Photon\Platform\Win32\Win32Time.h">
-      <Filter>Platform\Win32</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Photon\Platform\Win32\Win32Memory.cpp">
-      <Filter>Platform\Win32</Filter>
-    </ClCompile>
     <ClCompile Include="Photon\Memory\MemoryService.cpp">
       <Filter>Memory</Filter>
     </ClCompile>
     <ClCompile Include="Photon\Graphics\GraphicsService.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Photon\Platform\Win32\Win32OpenGL.cpp">
-      <Filter>Platform\Win32</Filter>
-    </ClCompile>
     <ClCompile Include="Photon\Memory\MemoryStack.cpp">
       <Filter>Memory</Filter>
     </ClCompile>
-    <ClCompile Include="Photon\Platform\Win32\Win32Time.cpp">
-      <Filter>Platform\Win32</Filter>
+    <ClCompile Include="Photon\Platform\Win32Platform.cpp">
+      <Filter>Platform</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
