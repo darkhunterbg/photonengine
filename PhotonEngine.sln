@@ -30,9 +30,7 @@ Global
 		{9B329521-8873-477D-AF72-3A0B9094EECD}.Debug|x86.ActiveCfg = Debug|Win32
 		{9B329521-8873-477D-AF72-3A0B9094EECD}.Debug|x86.Build.0 = Debug|Win32
 		{98C79793-898A-4614-93F6-1831E319BEA0}.Debug|x86.ActiveCfg = Debug|Win32
-		{98C79793-898A-4614-93F6-1831E319BEA0}.Debug|x86.Build.0 = Debug|Win32
 		{801241F0-0A3B-4A5A-8FF7-FE0501D0EE20}.Debug|x86.ActiveCfg = Debug|x86
-		{801241F0-0A3B-4A5A-8FF7-FE0501D0EE20}.Debug|x86.Build.0 = Debug|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

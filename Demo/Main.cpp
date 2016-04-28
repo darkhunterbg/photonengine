@@ -59,14 +59,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		time = time1;
 		deltaTime += delta;
 
-		LONGLONG  deltaMS = (1000 * time.QuadPart / freq.QuadPart);
-		if (deltaMS >= 16)
+		LONGLONG  deltaMcS = (( 1000 * 1000 * deltaTime) / freq.QuadPart);
+		if  (deltaMcS >= 16'666)
 		{
 			//================ GAME LOOP ============================
 			SwapBuffers(dc);
 			//======================================================
 			glClear(GL_COLOR_BUFFER_BIT);
-			deltaTime = { 0 };
+			deltaTime -= ((freq.QuadPart * 16'666) / (1000 * 1000));
 		}
 
 	}
