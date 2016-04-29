@@ -116,7 +116,7 @@ namespace photon
 
 
 			hWindow = CreateWindowEx(0,
-				TEXT("WindowClass1"),    // name of the window class
+				TEXT("GameWindowClass"),    // name of the window class
 				TEXT("Demo"),   // title of the window
 				WS_OVERLAPPEDWINDOW,    // window style
 				100,    // x-position of the window
@@ -128,7 +128,7 @@ namespace photon
 				hInstance,    // application handle
 				nullptr);    // used with multiple windows, NULL
 
-			ShowWindow(hWindow, SW_SHOW);
+			ShowWindow(hWindow, SW_SHOWNORMAL);
 		}
 		void Win32Game::CreateAndSetOpenGLContext()
 		{
