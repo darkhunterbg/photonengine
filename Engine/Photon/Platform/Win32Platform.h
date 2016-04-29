@@ -11,12 +11,16 @@ namespace photon
 	{
 		class EXPORT Win32Platfrom
 		{
-			DISABLE_NEW_DELETE(Win32Platfrom);
 			DISABLE_COPY(Win32Platfrom);
-
+		private:
+			Win32Platfrom() = default;
+			~Win32Platfrom() = default;
 		public:
 			void* MemoryAlloc(size_t size);
 			bool MemoryFree(void* address, size_t size);
+
+			static Win32Platfrom* Initialize();
+			static void Uninitialize();
 		};
 	}
 

@@ -31,6 +31,9 @@
     <ClInclude Include="Photon\Platform\Win32Platform.h">
       <Filter>Platform</Filter>
     </ClInclude>
+    <ClInclude Include="Photon\Platform\Win32Game.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Photon\Memory\MemoryService.cpp">
@@ -43,6 +46,9 @@
       <Filter>Memory</Filter>
     </ClCompile>
     <ClCompile Include="Photon\Platform\Win32Platform.cpp">
+      <Filter>Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="Photon\Platform\Win32Game.cpp">
       <Filter>Platform</Filter>
     </ClCompile>
   </ItemGroup>
