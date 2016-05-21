@@ -60,7 +60,6 @@ namespace photon
 		}
 		int Win32Platfrom::ThreadInterlockedIncrement(int& var)
 		{
-			MemoryBarrier();
 			return InterlockedIncrement((unsigned long*)&var);
 		}
 	}

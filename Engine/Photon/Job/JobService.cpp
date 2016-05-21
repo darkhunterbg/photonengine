@@ -61,6 +61,7 @@ namespace photon
 			{
 				gl_Platform->ThreadWaitLock(gl_JobService->lock);
 				gl_JobService->ProcessJob(gl_JobService->job);
+
 				gl_Platform->ThreadInterlockedIncrement(gl_JobService->completedThreadsCount);
 			}
 		}
@@ -83,10 +84,11 @@ namespace photon
 			int count = job.workCount;
 
 			int workIndex = gl_Platform->ThreadInterlockedIncrement(job.completedWork);
-			while (workIndex < job.workCount)
+			while (workIndex < count)
 			{
 				Work work = job.work[workIndex];
 				work.action(work.param);
+
 				workIndex = gl_Platform->ThreadInterlockedIncrement(job.completedWork);
 			}
 
