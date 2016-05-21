@@ -20,6 +20,8 @@ namespace photon
 {
 	namespace platform
 	{
+		void Test();
+
 		Win32Game::Win32Game(HINSTANCE hInstance)
 		{
 			this->hInstance = hInstance;
@@ -62,6 +64,7 @@ namespace photon
 				LONGLONG  deltaMcS = ((1000 * 1000 * deltaTime) / freq.QuadPart);
 				if (deltaMcS >= 16'666)
 				{
+					Test();
 					//================ GAME LOOP ============================
 					SwapBuffers(hDeviceContext);
 					//======================================================
@@ -70,6 +73,24 @@ namespace photon
 				}
 
 			}
+		}
+
+		void Test()
+		{
+			job::Job& job = photon::gl_JobService->NewJob();
+
+			for (int i = 0; i < 1000; ++i)
+			{
+				job.AddWork([](void* param) {
+
+					int a = 0;
+					for (int j = 0; j < 50000; ++j)
+						++a;
+
+				}, nullptr);
+			}
+
+			photon::gl_JobService->CompleteJob(job);
 		}
 
 		void Win32Game::Win32Init()
@@ -83,9 +104,12 @@ namespace photon
 			void* memory = photon::gl_MemoryService->AllocatePage(Megabytes(1));
 			memStack = photon::memory::MemoryStack::New(memory, Megabytes(1));
 
-			HANDLE thread = CreateThread(nullptr, 0, Win32Game::ThreadProc, this, CREATE_SUSPENDED, nullptr);
-			photon::job::JobService::Initialize(*memStack, 1);
-			ResumeThread(thread);
+			HANDLE threads[7];
+			for (int i = 0; i < 7; ++i)
+				threads[i] = CreateThread(nullptr, 0, Win32Game::ThreadProc, this, CREATE_SUSPENDED, nullptr);
+			photon::job::JobService::Initialize(*memStack, 3);
+			for (int i = 0; i < 7; ++i)
+				ResumeThread(threads[i]);
 
 			photon::graphics::GraphicsService::Initialize(*memStack);
 		}
@@ -134,6 +158,7 @@ namespace photon
 				nullptr);    // used with multiple windows, NULL
 
 			ShowWindow(hWindow, SW_SHOWNORMAL);
+			SetFocus(hWindow);
 		}
 		void Win32Game::CreateAndSetOpenGLContext()
 		{

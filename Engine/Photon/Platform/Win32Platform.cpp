@@ -47,7 +47,7 @@ namespace photon
 		}
 		void Win32Platfrom::ThreadWaitLock(ThreadLock& lock)
 		{
-			WaitForSingleObject(lock.semaphore, 0);
+			WaitForSingleObject(lock.semaphore, INFINITE);
 		}
 
 		void Win32Platfrom::ThreadCreateLock(int threadsCount, ThreadLock* outLock)
@@ -57,6 +57,11 @@ namespace photon
 		void Win32Platfrom::ThreadDestroyLock(ThreadLock* lock)
 		{
 			CloseHandle(lock->semaphore);
+		}
+		int Win32Platfrom::ThreadInterlockedIncrement(int& var)
+		{
+			MemoryBarrier();
+			return InterlockedIncrement((unsigned long*)&var);
 		}
 	}
 

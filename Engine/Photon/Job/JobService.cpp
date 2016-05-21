@@ -10,6 +10,25 @@ namespace photon
 
 	namespace job
 	{
+		Job::Job()
+		{
+			Reset();
+		}
+		void Job::AddWork(WorkAction action, void* param)
+		{
+			ASSERT(workCount < 1000);
+			work[workCount].action = action;
+			work[workCount].param = param;
+			++workCount;
+		}
+		void Job::Reset()
+		{
+			workCount = 0;
+			completedWork = 0;
+		}
+
+
+		//==================================================================================
 
 		JobService::JobService(int threadsCount)
 		{
@@ -36,14 +55,41 @@ namespace photon
 			gl_JobService->~JobService();
 			gl_JobService = nullptr;
 		}
-
 		void JobService::ThreadWork()
 		{
 			while (true)
 			{
-
 				gl_Platform->ThreadWaitLock(gl_JobService->lock);
+				gl_JobService->ProcessJob(gl_JobService->job);
+				gl_Platform->ThreadInterlockedIncrement(gl_JobService->completedThreadsCount);
 			}
+		}
+
+		Job& JobService::NewJob()
+		{
+			job.Reset();
+			return job;
+		}
+		void JobService::CompleteJob(Job& job)
+		{
+			completedThreadsCount = 0;
+			gl_Platform->ThreadReleaseLock(threadsCount, lock);
+			ProcessJob(job);
+
+			while (completedThreadsCount< threadsCount);
+		}
+		void JobService::ProcessJob(Job& job)
+		{
+			int count = job.workCount;
+
+			int workIndex = gl_Platform->ThreadInterlockedIncrement(job.completedWork);
+			while (workIndex < job.workCount)
+			{
+				Work work = job.work[workIndex];
+				work.action(work.param);
+				workIndex = gl_Platform->ThreadInterlockedIncrement(job.completedWork);
+			}
+
 		}
 	}
 }

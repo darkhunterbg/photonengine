@@ -28,6 +28,7 @@ namespace photon
 			void ThreadWaitLock(ThreadLock& lock);
 			void ThreadCreateLock(int threadsCount, ThreadLock* outLock);
 			void ThreadDestroyLock(ThreadLock* lock);
+			int ThreadInterlockedIncrement(int& var);
 
 			static Win32Platfrom* Initialize();
 			static void Uninitialize();
