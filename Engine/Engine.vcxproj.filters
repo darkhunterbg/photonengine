@@ -13,6 +13,9 @@
     <Filter Include="Utils">
       <UniqueIdentifier>{2a03c0da-d003-44e4-b525-de177e77ecb2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Job">
+      <UniqueIdentifier>{74ef56d8-2f62-44d0-82be-9ee782c61e9b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Photon\PE.h" />
@@ -34,6 +37,9 @@
     <ClInclude Include="Photon\Platform\Win32Game.h">
       <Filter>Platform</Filter>
     </ClInclude>
+    <ClInclude Include="Photon\Job\JobService.h">
+      <Filter>Job</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Photon\Memory\MemoryService.cpp">
@@ -50,6 +56,9 @@
     </ClCompile>
     <ClCompile Include="Photon\Platform\Win32Game.cpp">
       <Filter>Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="Photon\Job\JobService.cpp">
+      <Filter>Job</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -8,6 +8,7 @@
 
 #include "../Graphics/GraphicsService.h"
 #include "../Memory/MemoryService.h"
+#include "../Job/JobService.h"
 
 #include "../Platform/Win32Platform.h"
 
@@ -79,16 +80,20 @@ namespace photon
 			photon::platform::Win32Platfrom::Initialize();
 
 			photon::memory::MemoryService::Initialize();
-
 			void* memory = photon::gl_MemoryService->AllocatePage(Megabytes(1));
 			memStack = photon::memory::MemoryStack::New(memory, Megabytes(1));
 
+			HANDLE thread = CreateThread(nullptr, 0, Win32Game::ThreadProc, this, CREATE_SUSPENDED, nullptr);
+			photon::job::JobService::Initialize(*memStack, 1);
+			ResumeThread(thread);
 
 			photon::graphics::GraphicsService::Initialize(*memStack);
 		}
 		void Win32Game::Win32Uninit()
 		{
 			photon::graphics::GraphicsService::Uninitialize();
+			photon::job::JobService::Uninitialize();
+
 			memStack->Clear();
 			photon::memory::MemoryService::Uninitialize();
 			photon::platform::Win32Platfrom::Uninitialize();
@@ -161,6 +166,14 @@ namespace photon
 			default:
 				return DefWindowProc(hWnd, message, wParam, lParam);
 			}
+		}
+		DWORD WINAPI Win32Game::ThreadProc(LPVOID lpParameter)
+		{
+			Win32Game* game = static_cast<Win32Game*>(lpParameter);
+
+			photon::job::JobService::ThreadWork();
+
+			return 0;
 		}
 	}
 }

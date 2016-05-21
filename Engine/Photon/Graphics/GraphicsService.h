@@ -16,7 +16,6 @@ namespace photon
 
 		private:
 			GraphicsService();
-
 		public:
 			static GraphicsService* Initialize( memory::MemoryStack& stack);
 			static void Uninitialize();

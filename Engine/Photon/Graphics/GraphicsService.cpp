@@ -7,8 +7,6 @@ namespace photon
 
 	namespace graphics
 	{
-
-
 		GraphicsService::GraphicsService()
 		{
 			

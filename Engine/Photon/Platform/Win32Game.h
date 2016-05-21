@@ -23,11 +23,14 @@ namespace photon
 			HDC hDeviceContext;
 			memory::MemoryStack* memStack;
 
+			bool startThreads = false;
+
 			void Win32Init();
 			void Win32Uninit();
 			void CreateAndShowWindow();
 			void CreateAndSetOpenGLContext();
 
+			static DWORD WINAPI ThreadProc(LPVOID lpParameter);
 			static LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 		public:
 			Win32Game(HINSTANCE hInstnace);

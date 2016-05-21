@@ -9,6 +9,11 @@ namespace photon
 {
 	namespace platform
 	{
+		struct ThreadLock
+		{
+			void* semaphore;
+		} typedef Win32ThreadLock;
+
 		class EXPORT Win32Platfrom
 		{
 			DISABLE_COPY(Win32Platfrom);
@@ -18,6 +23,11 @@ namespace photon
 		public:
 			void* MemoryAlloc(size_t size);
 			bool MemoryFree(void* address, size_t size);
+
+			void ThreadReleaseLock(int threadsCount, ThreadLock& lock);
+			void ThreadWaitLock(ThreadLock& lock);
+			void ThreadCreateLock(int threadsCount, ThreadLock* outLock);
+			void ThreadDestroyLock(ThreadLock* lock);
 
 			static Win32Platfrom* Initialize();
 			static void Uninitialize();

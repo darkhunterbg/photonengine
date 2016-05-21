@@ -40,6 +40,24 @@ namespace photon
 		{
 			return VirtualFree(address, size, MEM_RELEASE) == 0;
 		}
+
+		void Win32Platfrom::ThreadReleaseLock(int threadsCount, ThreadLock& lock)
+		{
+			ReleaseSemaphore(lock.semaphore, threadsCount, nullptr);
+		}
+		void Win32Platfrom::ThreadWaitLock(ThreadLock& lock)
+		{
+			WaitForSingleObject(lock.semaphore, 0);
+		}
+
+		void Win32Platfrom::ThreadCreateLock(int threadsCount, ThreadLock* outLock)
+		{
+			outLock->semaphore = CreateSemaphoreEx(nullptr, 0, 8, nullptr, 0, SEMAPHORE_ALL_ACCESS);
+		}
+		void Win32Platfrom::ThreadDestroyLock(ThreadLock* lock)
+		{
+			CloseHandle(lock->semaphore);
+		}
 	}
 
 }

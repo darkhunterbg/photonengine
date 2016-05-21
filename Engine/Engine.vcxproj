@@ -8,6 +8,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Photon\Graphics\GraphicsService.h" />
+    <ClInclude Include="Photon\Job\JobService.h" />
     <ClInclude Include="Photon\Macro.h" />
     <ClInclude Include="Photon\Memory\MemoryService.h" />
     <ClInclude Include="Photon\Memory\MemoryStack.h" />
@@ -19,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Photon\Graphics\GraphicsService.cpp" />
+    <ClCompile Include="Photon\Job\JobService.cpp" />
     <ClCompile Include="Photon\Memory\MemoryService.cpp" />
     <ClCompile Include="Photon\Memory\MemoryStack.cpp" />
     <ClCompile Include="Photon\Platform\Win32Game.cpp" />
@@ -63,6 +65,7 @@
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

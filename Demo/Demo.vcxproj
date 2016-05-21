@@ -48,6 +48,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SolutionDir)Engine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ExceptionHandling>false</ExceptionHandling>
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
