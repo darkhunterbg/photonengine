@@ -1,9 +1,43 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="photon\photon.cpp" />
+    <ClInclude Include="photon\PE.h" />
+    <ClInclude Include="photon\New.h" />
+    <ClInclude Include="photon\Macro.h" />
+    <ClInclude Include="photon\Platform\Win32Platform.h">
+      <Filter>Platform\Win32</Filter>
+    </ClInclude>
+    <ClInclude Include="photon\Platform.h" />
+    <ClInclude Include="photon\Services\MemoryService.h">
+      <Filter>Services\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="photon\Services\MemoryStack.h">
+      <Filter>Services\Memory</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="photon\photon.h" />
+    <Filter Include="Platform">
+      <UniqueIdentifier>{cd8233e3-55e9-467f-8c77-a738d371fe87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Services">
+      <UniqueIdentifier>{08da02b4-0b0e-4d00-acfb-9468dbd6d72b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\Win32">
+      <UniqueIdentifier>{6345547a-5052-4d64-a9d6-f361f6f030a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Services\Memory">
+      <UniqueIdentifier>{5383fdf1-052e-49a6-b3dc-aef32d8c5ccb}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="photon\Platform\Win32Platform.cpp">
+      <Filter>Platform\Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="photon\Services\MemoryService.cpp">
+      <Filter>Services\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="photon\Services\MemoryStack.cpp">
+      <Filter>Services\Memory</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
