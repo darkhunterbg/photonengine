@@ -4,9 +4,6 @@
 
 #if defined( WINDOWS)
 
-#define WIN32_LEAN_AND_MEAN
-#include <Windows.h>
-
 #include "../Services/MemoryStack.h"
 
 namespace photon
@@ -15,10 +12,8 @@ namespace photon
 	{
 		DISABLE_COPY(Win32Game);
 	private:
-		HINSTANCE hInstance;
-		HWND hWindow;
-		HGLRC hGlContext;
-		HDC hDeviceContext;
+		void* hInstance;
+		void* hWindow;
 		MemoryStack* memStack;
 
 		bool startThreads = false;
@@ -26,12 +21,9 @@ namespace photon
 		void Win32Init();
 		void Win32Uninit();
 		void CreateAndShowWindow();
-		void CreateAndSetOpenGLContext();
 
-		static DWORD WINAPI ThreadProc(LPVOID lpParameter);
-		static LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 	public:
-		Win32Game(HINSTANCE hInstnace);
+		Win32Game(void* hInstnace);
 		virtual ~Win32Game() = 0;
 
 		void Run();

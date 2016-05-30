@@ -3,8 +3,11 @@
 #include "../PE.h"
 
 #if defined(WINDOWS)
+#include "Win32GL.h"
+
 namespace photon
 {
+
 	class EXPORT Win32Platfrom
 	{
 	private:
@@ -18,6 +21,10 @@ namespace photon
 
 		static void Initialize();
 		static void Uninitialize();
+
+		static GLContext GLCreateContext(GLCreateParam param);
+		static void GLDestroyContext(GLContext context);
+		static void GLSwapBuffers(GLContext context);
 
 	} typedef Platform;
 }

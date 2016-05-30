@@ -27,17 +27,25 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="photon\GraphicsAPI\DXGraphicsAPI.h" />
+    <ClInclude Include="photon\GraphicsAPI\GLGraphicsAPI.h" />
+    <ClInclude Include="photon\GraphicsAPI\GraphicsAPI.h" />
     <ClInclude Include="photon\Macro.h" />
     <ClInclude Include="photon\New.h" />
+    <ClInclude Include="photon\OpenGL.h" />
     <ClInclude Include="photon\PE.h" />
     <ClInclude Include="photon\Platform.h" />
     <ClInclude Include="photon\Platform\Win32Game.h" />
+    <ClInclude Include="photon\Platform\Win32GL.h" />
     <ClInclude Include="photon\Platform\Win32Platform.h" />
     <ClInclude Include="photon\Services\GraphicsService.h" />
     <ClInclude Include="photon\Services\MemoryService.h" />
     <ClInclude Include="photon\Services\MemoryStack.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="photon\GraphicsAPI\DXGraphicsAPI.cpp" />
+    <ClCompile Include="photon\GraphicsAPI\GLGraphicsAPI.cpp" />
+    <ClCompile Include="photon\GraphicsAPI\GraphicsAPI.cpp" />
     <ClCompile Include="photon\Platform\Win32Game.cpp" />
     <ClCompile Include="photon\Platform\Win32Platform.cpp" />
     <ClCompile Include="photon\Services\GraphicsService.cpp" />
@@ -155,7 +163,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WINDOWS;PE_EXPORT;PE_DEBUG=2</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WINDOWS;PE_EXPORT;DIRECTX=10;OPENGL=3;PE_DEBUG=2</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <ExceptionHandling>false</ExceptionHandling>
       <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
@@ -179,7 +187,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WINDOWS;PE_EXPORT;PE_DEBUG=1</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WINDOWS;PE_EXPORT;PE_DEBUG=1;DIRECTX=10;OPENGL=3</PreprocessorDefinitions>
       <SDLCheck>false</SDLCheck>
       <ExceptionHandling>false</ExceptionHandling>
       <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
@@ -203,7 +211,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WINDOWS;PE_EXPORT;PE_DEBUG=2</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WINDOWS;PE_EXPORT;DIRECTX=10;OPENGL=3;PE_DEBUG=2</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <ExceptionHandling>false</ExceptionHandling>
       <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
@@ -228,7 +236,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WINDOWS;PE_EXPORT;PE_DEBUG=1</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WINDOWS;PE_EXPORT;PE_DEBUG=1;DIRECTX=10;OPENGL=3</PreprocessorDefinitions>
       <SDLCheck>false</SDLCheck>
       <ExceptionHandling>false</ExceptionHandling>
       <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
@@ -255,7 +263,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WINDOWS;PE_EXPORT</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WINDOWS;PE_EXPORT;DIRECTX=10;OPENGL=3</PreprocessorDefinitions>
       <SDLCheck>false</SDLCheck>
       <ExceptionHandling>false</ExceptionHandling>
       <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
@@ -286,7 +294,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WINDOWS;PE_EXPORT</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WINDOWS;PE_EXPORT;DIRECTX=10;OPENGL=3</PreprocessorDefinitions>
       <SDLCheck>false</SDLCheck>
       <ExceptionHandling>false</ExceptionHandling>
       <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>

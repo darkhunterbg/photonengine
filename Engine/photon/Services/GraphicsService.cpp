@@ -3,35 +3,35 @@
 
 namespace photon
 {
-	graphics::GraphicsService* gl_GraphicsService = nullptr;
+	GraphicsService* gl_GraphicsService = nullptr;
 
-	namespace graphics
+	GraphicsService::GraphicsService(GraphicsAPI* api):
+		api(api)
 	{
-		GraphicsService::GraphicsService()
-		{
-			
-		}
 
-		GraphicsService* GraphicsService::Initialize(MemoryStack& stack)
-		{
-			ASSERT(gl_GraphicsService == nullptr);
+	}
 
-			void* ptr = stack.Allocate(sizeof(GraphicsService));
-			gl_GraphicsService = new(ptr) GraphicsService();
+	GraphicsService* GraphicsService::Initialize(GraphicsAPIType apiType,const  void* apiParam, MemoryStack& stack)
+	{
+		ASSERT(gl_GraphicsService == nullptr);
 
-			return gl_GraphicsService;
-		}
-		void GraphicsService::Uninitialize()
-		{
-			ASSERT(gl_GraphicsService);
+		GraphicsAPI* api = GraphicsAPI::CreateAPI(apiType, apiParam, stack);
 
-			gl_GraphicsService->~GraphicsService();
-			gl_GraphicsService = nullptr;
-		}
+		void* ptr = stack.Allocate(sizeof(GraphicsService));
+		gl_GraphicsService = new(ptr) GraphicsService(api);
 
-	/*	void GraphicsService::SetCurrentWindow(photon::platform::Window window)
-		{
-e
-		}*/
+		return gl_GraphicsService;
+	}
+	void GraphicsService::Uninitialize()
+	{
+		ASSERT(gl_GraphicsService);
+
+		gl_GraphicsService->~GraphicsService();
+		gl_GraphicsService = nullptr;
+	}
+
+	void GraphicsService::PresentFrame()
+	{
+		api->SwapBuffers();
 	}
 }

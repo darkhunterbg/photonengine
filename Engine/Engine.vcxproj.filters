@@ -20,6 +20,19 @@
     <ClInclude Include="photon\Platform\Win32Game.h">
       <Filter>Platform\Win32</Filter>
     </ClInclude>
+    <ClInclude Include="photon\Platform\Win32GL.h">
+      <Filter>Platform\Win32</Filter>
+    </ClInclude>
+    <ClInclude Include="photon\GraphicsAPI\GraphicsAPI.h">
+      <Filter>GraphicsAPI</Filter>
+    </ClInclude>
+    <ClInclude Include="photon\GraphicsAPI\GLGraphicsAPI.h">
+      <Filter>GraphicsAPI\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="photon\OpenGL.h" />
+    <ClInclude Include="photon\GraphicsAPI\DXGraphicsAPI.h">
+      <Filter>GraphicsAPI\DirectX</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Platform">
@@ -37,6 +50,15 @@
     <Filter Include="Services\Graphics">
       <UniqueIdentifier>{2731e1f1-33eb-43c9-9fb6-e2f78820a33d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GraphicsAPI">
+      <UniqueIdentifier>{683908c7-edad-4cd4-9942-479f2ecc8246}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GraphicsAPI\OpenGL">
+      <UniqueIdentifier>{e2eb9776-ce1b-482a-a52e-8493b05b920f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GraphicsAPI\DirectX">
+      <UniqueIdentifier>{2d842c0b-5e4d-4b04-aeb1-d8d4fe4e9f54}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="photon\Platform\Win32Platform.cpp">
@@ -53,6 +75,15 @@
     </ClCompile>
     <ClCompile Include="photon\Platform\Win32Game.cpp">
       <Filter>Platform\Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="photon\GraphicsAPI\GraphicsAPI.cpp">
+      <Filter>GraphicsAPI</Filter>
+    </ClCompile>
+    <ClCompile Include="photon\GraphicsAPI\GLGraphicsAPI.cpp">
+      <Filter>GraphicsAPI\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="photon\GraphicsAPI\DXGraphicsAPI.cpp">
+      <Filter>GraphicsAPI\DirectX</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
