@@ -10,23 +10,17 @@ namespace photon
 {
 	class EXPORT Win32Game
 	{
-		DISABLE_COPY(Win32Game);
 	private:
-		void* hInstance;
-		void* hWindow;
-		MemoryStack* memStack;
+		static void CreateAndShowWindow();
 
-		bool startThreads = false;
-
-		void Win32Init();
-		void Win32Uninit();
-		void CreateAndShowWindow();
-
+		Win32Game() = delete;
+		~Win32Game() = delete;
 	public:
-		Win32Game(void* hInstnace);
-		virtual ~Win32Game() = 0;
+		static void Initialize(void* hInstnace);
+		static void Uninitialize();
 
-		void Run();
+
+		static void Run();
 	};
 }
 #endif

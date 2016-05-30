@@ -20,6 +20,13 @@ namespace photon
 	{
 		ASSERT(size < memorySize - allocated);
 
+		//Align by ptr size
+
+		static const size_t ptrSize = sizeof(void*);
+		size_t remain = size % ptrSize;
+		if(remain)
+			size = (size / ptrSize) + ptrSize;
+
 		void* result = (void*)((size_t)memoryPtr + allocated);
 		allocated += size;
 

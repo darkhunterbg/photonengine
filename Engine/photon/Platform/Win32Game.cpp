@@ -17,22 +17,14 @@
 
 #include <gl\GL.h>
 
-
-
 namespace photon
 {
+	void* hInstance;
+	void* hWindow;
+	MemoryStack* memStack;
+
+
 	LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
-
-	Win32Game::Win32Game(void* hInstance)
-	{
-		this->hInstance = hInstance;
-		Win32Init();
-	}
-
-	Win32Game::~Win32Game()
-	{
-		Win32Uninit();
-	}
 
 	void Win32Game::Run()
 	{
@@ -75,8 +67,10 @@ namespace photon
 		}
 	}
 
-	void Win32Game::Win32Init()
+	void Win32Game::Initialize(void* instance)
 	{
+		hInstance = instance;
+
 		CreateAndShowWindow();
 
 		photon::Win32Platfrom::Initialize();
@@ -88,7 +82,7 @@ namespace photon
 		//Will be based on config at some point
 		photon::GraphicsService::Initialize(GraphicsAPIType::OpenGL, (void*)&hWindow, *memStack);
 	}
-	void Win32Game::Win32Uninit()
+	void Win32Game::Uninitialize()
 	{
 		photon::GraphicsService::Uninitialize();
 
@@ -131,7 +125,6 @@ namespace photon
 		ShowWindow((HWND)hWindow, SW_SHOWNORMAL);
 		SetFocus((HWND)hWindow);
 	}
-
 
 	LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	{
