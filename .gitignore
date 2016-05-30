@@ -244,3 +244,7 @@ Tmp
 Makefile
 DemoLinux.txt
 Engine.txt
+
+#Photon Engine Related
+Build/
+Lib/
