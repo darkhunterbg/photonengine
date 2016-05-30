@@ -14,6 +14,12 @@
     <ClInclude Include="photon\Services\MemoryStack.h">
       <Filter>Services\Memory</Filter>
     </ClInclude>
+    <ClInclude Include="photon\Services\GraphicsService.h">
+      <Filter>Services\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="photon\Platform\Win32Game.h">
+      <Filter>Platform\Win32</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Platform">
@@ -28,6 +34,9 @@
     <Filter Include="Services\Memory">
       <UniqueIdentifier>{5383fdf1-052e-49a6-b3dc-aef32d8c5ccb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Services\Graphics">
+      <UniqueIdentifier>{2731e1f1-33eb-43c9-9fb6-e2f78820a33d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="photon\Platform\Win32Platform.cpp">
@@ -38,6 +47,12 @@
     </ClCompile>
     <ClCompile Include="photon\Services\MemoryStack.cpp">
       <Filter>Services\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="photon\Services\GraphicsService.cpp">
+      <Filter>Services\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="photon\Platform\Win32Game.cpp">
+      <Filter>Platform\Win32</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

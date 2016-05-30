@@ -31,12 +31,16 @@
     <ClInclude Include="photon\New.h" />
     <ClInclude Include="photon\PE.h" />
     <ClInclude Include="photon\Platform.h" />
+    <ClInclude Include="photon\Platform\Win32Game.h" />
     <ClInclude Include="photon\Platform\Win32Platform.h" />
+    <ClInclude Include="photon\Services\GraphicsService.h" />
     <ClInclude Include="photon\Services\MemoryService.h" />
     <ClInclude Include="photon\Services\MemoryStack.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="photon\Platform\Win32Game.cpp" />
     <ClCompile Include="photon\Platform\Win32Platform.cpp" />
+    <ClCompile Include="photon\Services\GraphicsService.cpp" />
     <ClCompile Include="photon\Services\MemoryService.cpp" />
     <ClCompile Include="photon\Services\MemoryStack.cpp" />
   </ItemGroup>
@@ -163,7 +167,7 @@
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <AdditionalDependencies />
+      <AdditionalDependencies>gdi32.lib;kernel32.lib;user32.lib;opengl32.lib</AdditionalDependencies>
       <ImportLibrary>$(SolutionDir)Lib\Engine\$(Configuration)\$(TargetName).lib</ImportLibrary>
       <GenerateDebugInformation>Debug</GenerateDebugInformation>
       <LinkTimeCodeGeneration>Default</LinkTimeCodeGeneration>
@@ -189,8 +193,7 @@
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <AdditionalDependencies>
-      </AdditionalDependencies>
+      <AdditionalDependencies>gdi32.lib;kernel32.lib;user32.lib;opengl32.lib</AdditionalDependencies>
       <ImportLibrary>$(SolutionDir)Lib\Engine\$(Configuration)\$(TargetName).lib</ImportLibrary>
     </Link>
   </ItemDefinitionGroup>
@@ -213,7 +216,7 @@
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <AdditionalDependencies />
+      <AdditionalDependencies>gdi32.lib;kernel32.lib;user32.lib;opengl32.lib</AdditionalDependencies>
       <ImportLibrary>$(SolutionDir)Lib\Engine\$(Configuration)\$(TargetName).lib</ImportLibrary>
       <GenerateDebugInformation>Debug</GenerateDebugInformation>
       <LinkTimeCodeGeneration>Default</LinkTimeCodeGeneration>
@@ -240,8 +243,7 @@
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <AdditionalDependencies>
-      </AdditionalDependencies>
+      <AdditionalDependencies>gdi32.lib;kernel32.lib;user32.lib;opengl32.lib</AdditionalDependencies>
       <ImportLibrary>$(SolutionDir)Lib\Engine\$(Configuration)\$(TargetName).lib</ImportLibrary>
     </Link>
   </ItemDefinitionGroup>
@@ -270,7 +272,7 @@
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies />
+      <AdditionalDependencies>gdi32.lib;kernel32.lib;user32.lib;opengl32.lib</AdditionalDependencies>
       <ImportLibrary>$(SolutionDir)Lib\Engine\$(Configuration)\$(TargetName).lib</ImportLibrary>
       <GenerateDebugInformation>No</GenerateDebugInformation>
       <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
@@ -301,7 +303,7 @@
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies />
+      <AdditionalDependencies>gdi32.lib;kernel32.lib;user32.lib;opengl32.lib</AdditionalDependencies>
       <ImportLibrary>$(SolutionDir)Lib\Engine\$(Configuration)\$(TargetName).lib</ImportLibrary>
       <GenerateDebugInformation>No</GenerateDebugInformation>
       <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
