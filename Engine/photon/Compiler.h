@@ -5,6 +5,10 @@
 
 #if defined(_MSC_VER)
 
+#include <intrin.h>
+
+#define BREAKPOINT() __halt()
+
 #if defined(DLL_EXPORT)
 #define EXPORT _declspec(dllexport)
 #else

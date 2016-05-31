@@ -8,7 +8,7 @@ namespace photon
 	class EXPORT MemoryStack
 	{
 	private:
-		DISABLE_COPY(MemoryStack);
+		//(MemoryStack);
 		DISABLE_NEW_DELETE(MemoryStack);
 
 		void* memoryPtr;
@@ -16,12 +16,12 @@ namespace photon
 		size_t allocated;
 
 		MemoryStack(void* memory, size_t memorySize);
-		~MemoryStack() = delete;
 	public:
 		static MemoryStack* New(void* memory, size_t memorySize);
 		static void Delete(MemoryStack* stack);
 
 		void* Allocate(size_t size);
+
 		void Clear();
 	};
 }

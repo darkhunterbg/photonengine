@@ -37,3 +37,16 @@ namespace photon
 
 	EXPORT extern MemoryService* gl_MemoryService;
 }
+
+template <class ALLOCATOR>
+inline void* operator new(size_t size, ALLOCATOR& allocator, const char* file, int line)
+{
+	return allocator.Allocate(size);
+}
+
+template <class ALLOCATOR>
+inline void operator delete(void* ptr, ALLOCATOR& allocator, const char* file, int line)
+{
+	return allocator.Free(ptr);
+}
+

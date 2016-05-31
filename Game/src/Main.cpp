@@ -3,6 +3,8 @@
 #include <photon\Platform\Win32Game.h>
 #include <Windows.h>
 
+#include <photon\Macro.h>
+
 constexpr int GetValue()
 {
 	return 0;

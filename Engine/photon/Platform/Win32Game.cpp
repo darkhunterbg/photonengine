@@ -68,6 +68,11 @@ namespace photon
 		}
 	}
 
+	class test
+	{
+
+	};
+
 	void Win32Game::Initialize(void* instance)
 	{
 		hInstance = instance;
@@ -79,6 +84,9 @@ namespace photon
 		photon::MemoryService::Initialize();
 		void* memory = photon::gl_MemoryService->AllocatePage(Megabytes(1));
 		memStack = photon::MemoryStack::New(memory, Megabytes(1));
+
+		test* i = new(*memStack, __FILE__, __LINE__) test();
+
 
 		GraphicsAPIParam param = {};
 #if GRAPHICS_API == DIRECTX

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "New.h"
 #include "Compiler.h"
+#include  <stddef.h>
 
 #define DEBUG_NONE 0
 #define DEBUG_DEV 1
@@ -24,7 +24,8 @@ T& operator=(const T&) = delete;
 
 
 #if (DEBUG > DEBUG_NONE)
-#define ASSERT(expr) if(!(expr)) { int* __assert = nullptr; *(__assert) = 0; }
+#define ASSERT(expr) if(!(expr)) { BREAKPOINT();}
 #else
 #define ASSERT(expr) ((expr))
 #endif
+
