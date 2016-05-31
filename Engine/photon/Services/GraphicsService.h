@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../PE.h"
+#include "../Macro.h"
 #include "MemoryStack.h"
 #include "../GraphicsAPI/GraphicsAPI.h"
 
@@ -20,7 +20,7 @@ namespace photon
 	
 
 	public:
-		static GraphicsService* Initialize(GraphicsAPIType apiType,const void* apiParam, MemoryStack& stack);
+		static GraphicsService* Initialize(GraphicsAPI* api, MemoryStack& stack);
 		static void Uninitialize();
 
 		void PresentFrame();

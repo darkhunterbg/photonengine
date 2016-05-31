@@ -1,5 +1,6 @@
 #pragma once
 
+
 #include <stddef.h>
 
 //Use only placements

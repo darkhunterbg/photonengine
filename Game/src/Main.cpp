@@ -1,5 +1,5 @@
 
-#include <photon\PE.h>
+
 #include <photon\Platform\Win32Game.h>
 #include <Windows.h>
 

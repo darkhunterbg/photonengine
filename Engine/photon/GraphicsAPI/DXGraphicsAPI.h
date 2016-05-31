@@ -1,9 +1,10 @@
 #pragma once
 
-#include "../PE.h"
+#include "../Macro.h"
 
-#if defined(DIRECTX)
 #include "GraphicsAPI.h"
+
+#if  GRAPHICS_API == DIRECTX
 
 #pragma comment (lib,"d3d11.lib")
 
@@ -14,14 +15,18 @@ struct ID3D11Debug;
 
 namespace photon
 {
+	struct MemoryStack;
+
 	struct EXPORT DXAPIParam
 	{
 		void* hWindow;
-	};
+	} typedef GraphicsAPIParam;
 
-	class DXGraphicsAPI : public GraphicsAPI
+	class EXPORT DXGraphicsAPI
 	{
-		friend class GraphicsAPI;
+		DISABLE_COPY(DXGraphicsAPI);
+		DISABLE_NEW_DELETE(DXGraphicsAPI);
+
 	private:
 		ID3D11Device* device = nullptr;
 		ID3D11DeviceContext* deviceContext = nullptr;
@@ -29,14 +34,14 @@ namespace photon
 
 		ID3D11Debug* d3d11Debug = nullptr;
 
-	protected:
-		DXGraphicsAPI(const DXAPIParam* apiParam);
+		DXGraphicsAPI(DXAPIParam apiParam);
 	public:
-		virtual ~DXGraphicsAPI() override;
+		static DXGraphicsAPI* InitializeAPI(MemoryStack& stack, GraphicsAPIParam apiParam);
+		static void UninitializeAPI(DXGraphicsAPI* api);
 
 
-		virtual void SwapBuffers() override;
-	};
+		void SwapBuffers();
+	} typedef GraphicsAPI;
 }
 
 #endif

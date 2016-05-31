@@ -1,9 +1,9 @@
 #pragma once
 
-#include "../PE.h"
+#include "../Macro.h"
+#include "../Platform/Platform.h"
 
-#if (PE_PLATFORM == WINDOWS)
-
+#if PLATFORM == WINDOWS
 
 #include "Win32Game.h"
 
@@ -22,6 +22,7 @@ namespace photon
 	void* hInstance;
 	void* hWindow;
 	MemoryStack* memStack;
+	GraphicsAPI* api;
 
 
 	LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
@@ -79,12 +80,20 @@ namespace photon
 		void* memory = photon::gl_MemoryService->AllocatePage(Megabytes(1));
 		memStack = photon::MemoryStack::New(memory, Megabytes(1));
 
-		//Will be based on config at some point
-		photon::GraphicsService::Initialize(GraphicsAPIType::OpenGL, (void*)&hWindow, *memStack);
+		GraphicsAPIParam param = {};
+#if GRAPHICS_API == DIRECTX
+		param.hWindow = hWindow;
+#endif
+#if GRAPHICS_API == OPENGL
+		param.createParam.hwindow = hWindow;
+#endif
+		api = photon::GraphicsAPI::InitializeAPI(*memStack, param);
+		photon::GraphicsService::Initialize(api, *memStack);
 	}
 	void Win32Game::Uninitialize()
 	{
 		photon::GraphicsService::Uninitialize();
+		photon::GraphicsAPI::UninitializeAPI(api);
 
 		memStack->Clear();
 		photon::MemoryService::Uninitialize();

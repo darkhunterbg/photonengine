@@ -1,6 +1,6 @@
 #include "MemoryService.h"
 
-#include "../Platform.h"
+#include "../Platform/Platform.h"
 
 namespace photon
 {

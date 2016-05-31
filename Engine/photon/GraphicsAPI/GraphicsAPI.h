@@ -1,37 +1,24 @@
 #pragma once
 
-#include "../PE.h"
+#include "../Platform/Platform.h"
 
-
-namespace photon
-{
-	class MemoryStack;
-
-	enum class GraphicsAPIType
-	{
-#if defined(DIRECTX)
-		DirectX = 1,
-#endif
 #if defined(OPENGL)
-		OpenGL = 2,
+
+#define GRAPHICS_API  OPENGL
+
+#include "GLGraphicsAPI.h"
+
 #endif
-	};
 
-	class GraphicsAPI
-	{
-		DISABLE_COPY(GraphicsAPI);
-		
-	private:
-		GraphicsAPIType type;
+#if defined(DIRECTX)
 
-	protected:
-		GraphicsAPI(GraphicsAPIType type);
-	public:
-		virtual ~GraphicsAPI() = 0 {};
+#define GRAPHICS_API DIRECTX
 
-		virtual void SwapBuffers() = 0;
+#include "DXGraphicsAPI.h"
 
-		static GraphicsAPI* CreateAPI(GraphicsAPIType type,const  void* apiParam, MemoryStack& stack);
-	};
+#endif
 
-}
+
+#if !defined(GRAPHICS_API)
+#error Unknown graphics api!
+#endif

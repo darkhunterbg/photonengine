@@ -1,13 +1,14 @@
 #pragma once
 
-#include "../PE.h"
+#include "../Macro.h"
+#include "../Platform/Platform.h"
 
-#if defined(WINDOWS)
+#if PLATFORM == WINDOWS
+
 #include "Win32GL.h"
 
 namespace photon
 {
-
 	class EXPORT Win32Platfrom
 	{
 	private:

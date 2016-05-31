@@ -11,11 +11,10 @@ namespace photon
 
 	}
 
-	GraphicsService* GraphicsService::Initialize(GraphicsAPIType apiType,const  void* apiParam, MemoryStack& stack)
+	GraphicsService* GraphicsService::Initialize(GraphicsAPI* api, MemoryStack& stack)
 	{
 		ASSERT(gl_GraphicsService == nullptr);
-
-		GraphicsAPI* api = GraphicsAPI::CreateAPI(apiType, apiParam, stack);
+		ASSERT(api);
 
 		void* ptr = stack.Allocate(sizeof(GraphicsService));
 		gl_GraphicsService = new(ptr) GraphicsService(api);

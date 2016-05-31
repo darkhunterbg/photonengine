@@ -1,13 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClInclude Include="photon\PE.h" />
     <ClInclude Include="photon\New.h" />
     <ClInclude Include="photon\Macro.h" />
     <ClInclude Include="photon\Platform\Win32Platform.h">
       <Filter>Platform\Win32</Filter>
     </ClInclude>
-    <ClInclude Include="photon\Platform.h" />
     <ClInclude Include="photon\Services\MemoryService.h">
       <Filter>Services\Memory</Filter>
     </ClInclude>
@@ -29,9 +27,15 @@
     <ClInclude Include="photon\GraphicsAPI\GLGraphicsAPI.h">
       <Filter>GraphicsAPI\OpenGL</Filter>
     </ClInclude>
-    <ClInclude Include="photon\OpenGL.h" />
     <ClInclude Include="photon\GraphicsAPI\DXGraphicsAPI.h">
       <Filter>GraphicsAPI\DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="photon\Compiler.h" />
+    <ClInclude Include="photon\Platform\Platform.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="photon\Platform\PlatformGL.h">
+      <Filter>Platform</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -75,9 +79,6 @@
     </ClCompile>
     <ClCompile Include="photon\Platform\Win32Game.cpp">
       <Filter>Platform\Win32</Filter>
-    </ClCompile>
-    <ClCompile Include="photon\GraphicsAPI\GraphicsAPI.cpp">
-      <Filter>GraphicsAPI</Filter>
     </ClCompile>
     <ClCompile Include="photon\GraphicsAPI\GLGraphicsAPI.cpp">
       <Filter>GraphicsAPI\OpenGL</Filter>

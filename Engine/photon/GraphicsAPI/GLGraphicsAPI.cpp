@@ -1,20 +1,27 @@
 #include "GLGraphicsAPI.h"
 
-#include "../Platform.h"
+#include "../Platform/Platform.h"
 
-#if defined (OPENGL)
+#if GRAPHICS_API == OPENGL
+
+#include "../Services/MemoryStack.h"
+
 
 namespace photon
 {
-	GLGraphicsAPI::GLGraphicsAPI(const GLAPIParam* apiParam)
-		:GraphicsAPI(GraphicsAPIType::OpenGL)
+	GLGraphicsAPI::GLGraphicsAPI(GLAPIParam apiParam)
 	{
-		this->context = Platform::GLCreateContext(apiParam->createParam);
+		this->context = Platform::GLCreateContext(apiParam.createParam);
 	}
 
-	GLGraphicsAPI::~GLGraphicsAPI()
+	GLGraphicsAPI* GLGraphicsAPI::InitializeAPI(MemoryStack& stack, GraphicsAPIParam apiParam)
 	{
-		Platform::GLDestroyContext(context);
+		void* ptr = stack.Allocate(sizeof(GLGraphicsAPI));
+		return new(ptr) GLGraphicsAPI(apiParam);
+	}
+	void GLGraphicsAPI::UninitializeAPI(GLGraphicsAPI* api)
+	{
+		Platform::GLDestroyContext(api->context);
 	}
 
 	void GLGraphicsAPI::SwapBuffers()

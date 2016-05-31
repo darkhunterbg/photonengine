@@ -1,31 +1,36 @@
 #pragma once
 
-#include "../PE.h"
+#include "../Macro.h"
 
-#if defined(OPENGL)
 #include "GraphicsAPI.h"
 
-#include "../OpenGL.h"
+#if GRAPHICS_API == OPENGL
+
+#include "../Platform/PlatformGL.h"
 
 namespace photon
 {
+	class MemoryStack;
+
 	struct EXPORT GLAPIParam
 	{
 		GLCreateParam createParam;
-	};
+	} typedef GraphicsAPIParam;
 
-	class GLGraphicsAPI : public GraphicsAPI
+	class EXPORT GLGraphicsAPI 
 	{
-		friend class GraphicsAPI;
-	protected:
+		DISABLE_COPY(GLGraphicsAPI);
+		DISABLE_NEW_DELETE(GLGraphicsAPI);
+
+	private:
 		GLContext context;
-		GLGraphicsAPI(const GLAPIParam* apiParam);
+		GLGraphicsAPI(GLAPIParam apiParam);
 	public:
-		virtual ~GLGraphicsAPI() override;
+		static GLGraphicsAPI* InitializeAPI(MemoryStack& stack, GraphicsAPIParam apiParam);
+		static void UninitializeAPI(GLGraphicsAPI* api);
 
-
-		virtual void SwapBuffers() override;
-	};
+		void SwapBuffers();
+	} typedef GraphicsAPI;
 }
 
 #endif
