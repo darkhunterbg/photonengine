@@ -20,11 +20,11 @@ namespace photon
 	class EXPORT GLGraphicsAPI 
 	{
 		DISABLE_COPY(GLGraphicsAPI);
-		DISABLE_NEW_DELETE(GLGraphicsAPI);
 
 	private:
 		GLContext context;
 		GLGraphicsAPI(GLAPIParam apiParam);
+		~GLGraphicsAPI();
 	public:
 		static GLGraphicsAPI* InitializeAPI(MemoryStack& stack, GraphicsAPIParam apiParam);
 		static void UninitializeAPI(GLGraphicsAPI* api);

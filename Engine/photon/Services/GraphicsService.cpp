@@ -5,8 +5,12 @@ namespace photon
 {
 	GraphicsService* gl_GraphicsService = nullptr;
 
-	GraphicsService::GraphicsService(GraphicsAPI* api):
+	GraphicsService::GraphicsService(GraphicsAPI* api) :
 		api(api)
+	{
+
+	}
+	GraphicsService::~GraphicsService()
 	{
 
 	}
@@ -16,8 +20,7 @@ namespace photon
 		ASSERT(gl_GraphicsService == nullptr);
 		ASSERT(api);
 
-		void* ptr = stack.Allocate(sizeof(GraphicsService));
-		gl_GraphicsService = new(ptr) GraphicsService(api);
+		gl_GraphicsService = MEM_NEW(stack, GraphicsService)(api);
 
 		return gl_GraphicsService;
 	}

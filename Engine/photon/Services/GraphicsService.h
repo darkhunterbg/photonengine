@@ -10,14 +10,13 @@ namespace photon
 
 	class EXPORT GraphicsService
 	{
-		DISABLE_NEW_DELETE(GraphicsService);
 		DISABLE_COPY(GraphicsService);
 
 	private:
 		GraphicsAPI* api;
 
 		GraphicsService(GraphicsAPI* api);
-	
+		~GraphicsService();
 
 	public:
 		static GraphicsService* Initialize(GraphicsAPI* api, MemoryStack& stack);

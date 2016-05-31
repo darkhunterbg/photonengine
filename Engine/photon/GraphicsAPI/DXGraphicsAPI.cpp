@@ -35,6 +35,18 @@ namespace photon
 		device->QueryInterface(IID_PPV_ARGS(&d3d11Debug));
 #endif
 	}
+	DXGraphicsAPI::~DXGraphicsAPI()
+	{
+		if (d3d11Debug)
+			d3d11Debug->Release();
+
+		deviceContext->Release();
+
+		swapChain->SetFullscreenState(false, nullptr);
+		swapChain->Release();
+
+		device->Release();
+	}
 
 	DXGraphicsAPI* DXGraphicsAPI::InitializeAPI(MemoryStack& stack, GraphicsAPIParam apiParam)
 	{
@@ -44,15 +56,7 @@ namespace photon
 
 	void DXGraphicsAPI::UninitializeAPI(DXGraphicsAPI* api)
 	{
-		if (api->d3d11Debug)
-			api->d3d11Debug->Release();
-
-		api->deviceContext->Release();
-
-		api->swapChain->SetFullscreenState(false, nullptr);
-		api->swapChain->Release();
-
-		api->device->Release();
+		api->~DXGraphicsAPI();
 	}
 
 

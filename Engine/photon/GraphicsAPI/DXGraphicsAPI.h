@@ -25,8 +25,6 @@ namespace photon
 	class EXPORT DXGraphicsAPI
 	{
 		DISABLE_COPY(DXGraphicsAPI);
-		DISABLE_NEW_DELETE(DXGraphicsAPI);
-
 	private:
 		ID3D11Device* device = nullptr;
 		ID3D11DeviceContext* deviceContext = nullptr;
@@ -35,6 +33,7 @@ namespace photon
 		ID3D11Debug* d3d11Debug = nullptr;
 
 		DXGraphicsAPI(DXAPIParam apiParam);
+		~DXGraphicsAPI();
 	public:
 		static DXGraphicsAPI* InitializeAPI(MemoryStack& stack, GraphicsAPIParam apiParam);
 		static void UninitializeAPI(DXGraphicsAPI* api);

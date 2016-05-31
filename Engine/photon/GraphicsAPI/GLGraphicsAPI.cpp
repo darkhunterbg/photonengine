@@ -13,15 +13,19 @@ namespace photon
 	{
 		this->context = Platform::GLCreateContext(apiParam.createParam);
 	}
+	GLGraphicsAPI::~GLGraphicsAPI()
+	{
+		Platform::GLDestroyContext(context);
+	}
 
 	GLGraphicsAPI* GLGraphicsAPI::InitializeAPI(MemoryStack& stack, GraphicsAPIParam apiParam)
 	{
-		void* ptr = stack.Allocate(sizeof(GLGraphicsAPI));
-		return new(ptr) GLGraphicsAPI(apiParam);
+		return  MEM_NEW(stack, GLGraphicsAPI)(apiParam);
+
 	}
 	void GLGraphicsAPI::UninitializeAPI(GLGraphicsAPI* api)
 	{
-		Platform::GLDestroyContext(api->context);
+		api->~GLGraphicsAPI();
 	}
 
 	void GLGraphicsAPI::SwapBuffers()
