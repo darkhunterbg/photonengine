@@ -1,6 +1,8 @@
 #include "GraphicsService.h"
 #include <stddef.h>
 
+#include "../Math/Vector.h"
+
 namespace photon
 {
 	GraphicsService* gl_GraphicsService = nullptr;
@@ -34,6 +36,7 @@ namespace photon
 
 	void GraphicsService::PresentFrame()
 	{
+		api->ClearBuffer({ 0,0,0,1 });
 		api->SwapBuffers();
 	}
 }

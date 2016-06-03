@@ -36,6 +36,12 @@
     <ClInclude Include="photon\Platform\PlatformGL.h">
       <Filter>Platform</Filter>
     </ClInclude>
+    <ClInclude Include="photon\GraphicsAPI\OpenGL.h">
+      <Filter>GraphicsAPI\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="photon\Math\Vector.h">
+      <Filter>Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Platform">
@@ -61,6 +67,9 @@
     </Filter>
     <Filter Include="GraphicsAPI\DirectX">
       <UniqueIdentifier>{2d842c0b-5e4d-4b04-aeb1-d8d4fe4e9f54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Math">
+      <UniqueIdentifier>{b7ef1ff4-db39-4391-9afe-5c6015fe02c2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

@@ -30,8 +30,10 @@
     <ClInclude Include="photon\GraphicsAPI\DXGraphicsAPI.h" />
     <ClInclude Include="photon\GraphicsAPI\GLGraphicsAPI.h" />
     <ClInclude Include="photon\GraphicsAPI\GraphicsAPI.h" />
+    <ClInclude Include="photon\GraphicsAPI\OpenGL.h" />
     <ClInclude Include="photon\Macro.h" />
     <ClInclude Include="photon\Compiler.h" />
+    <ClInclude Include="photon\Math\Vector.h" />
     <ClInclude Include="photon\Platform\Platform.h" />
     <ClInclude Include="photon\Platform\PlatformGL.h" />
     <ClInclude Include="photon\Platform\Win32Game.h" />

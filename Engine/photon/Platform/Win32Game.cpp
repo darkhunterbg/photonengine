@@ -15,8 +15,6 @@
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 
-#include <gl\GL.h>
-
 namespace photon
 {
 	void* hInstance;
@@ -59,9 +57,10 @@ namespace photon
 			if (deltaMcS >= 16'666)
 			{
 				//================ GAME LOOP ============================
+
 				gl_GraphicsService->PresentFrame();
 				//======================================================
-				glClear(GL_COLOR_BUFFER_BIT);
+				
 				deltaTime -= ((freq.QuadPart * 16'666) / (1000 * 1000));
 			}
 

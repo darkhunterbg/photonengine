@@ -8,9 +8,12 @@
 
 #include "../Platform/PlatformGL.h"
 
+
+
 namespace photon
 {
 	class MemoryStack;
+	struct Vector;
 
 	struct EXPORT GLAPIParam
 	{
@@ -30,6 +33,7 @@ namespace photon
 		static void UninitializeAPI(GLGraphicsAPI* api);
 
 		void SwapBuffers();
+		void ClearBuffer(const Vector&);
 	} typedef GraphicsAPI;
 }
 

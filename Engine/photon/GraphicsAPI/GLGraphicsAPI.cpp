@@ -6,6 +6,8 @@
 
 #include "../Services/MemoryStack.h"
 
+#include "OpenGL.h"
+#include "../Math/Vector.h"
 
 namespace photon
 {
@@ -31,6 +33,11 @@ namespace photon
 	void GLGraphicsAPI::SwapBuffers()
 	{
 		Platform::GLSwapBuffers(this->context);
+	}
+	void GLGraphicsAPI::ClearBuffer(const Vector& color)
+	{
+		glClearColor(color.x, color.y, color.z, color.w);
+		glClear(GL_COLOR_BUFFER_BIT);
 	}
 }
 
