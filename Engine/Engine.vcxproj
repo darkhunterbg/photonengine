@@ -126,36 +126,48 @@
     <TargetName>photon</TargetName>
     <IntDir>$(SolutionDir)Tmp\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(SolutionDir)Include\GLEW;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Lib\GLEW\$(Platform);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Development|Win32'">
     <OutDir>$(SolutionDir)Build\$(Configuration)\</OutDir>
     <TargetName>photon</TargetName>
     <IntDir>$(SolutionDir)Tmp\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(SolutionDir)Include\GLEW;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Lib\GLEW\$(Platform);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)Build\$(Configuration)\</OutDir>
     <TargetName>photon</TargetName>
     <IntDir>$(SolutionDir)Tmp\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(SolutionDir)Include\GLEW;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Lib\GLEW\$(Platform);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(SolutionDir)Build\$(Configuration)\</OutDir>
     <TargetName>photon64</TargetName>
     <IntDir>$(SolutionDir)Tmp\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(SolutionDir)Include\GLEW;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Lib\GLEW\$(Platform);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Development|x64'">
     <OutDir>$(SolutionDir)Build\$(Configuration)\</OutDir>
     <TargetName>photon64</TargetName>
     <IntDir>$(SolutionDir)Tmp\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(SolutionDir)Include\GLEW;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Lib\GLEW\$(Platform);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)Build\$(Configuration)\</OutDir>
     <TargetName>photon64</TargetName>
     <IntDir>$(SolutionDir)Tmp\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(SolutionDir)Include\GLEW;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Lib\GLEW\$(Platform);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -175,7 +187,7 @@
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <AdditionalDependencies>gdi32.lib;kernel32.lib;user32.lib;opengl32.lib</AdditionalDependencies>
+      <AdditionalDependencies>gdi32.lib;kernel32.lib;user32.lib;opengl32.lib;glew32.lib;glew32s.lib</AdditionalDependencies>
       <ImportLibrary>$(SolutionDir)Lib\Engine\$(Configuration)\$(TargetName).lib</ImportLibrary>
       <GenerateDebugInformation>Debug</GenerateDebugInformation>
       <LinkTimeCodeGeneration>Default</LinkTimeCodeGeneration>
@@ -201,7 +213,7 @@
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <AdditionalDependencies>gdi32.lib;kernel32.lib;user32.lib;opengl32.lib</AdditionalDependencies>
+      <AdditionalDependencies>gdi32.lib;kernel32.lib;user32.lib;opengl32.lib;glew32.lib;glew32s.lib</AdditionalDependencies>
       <ImportLibrary>$(SolutionDir)Lib\Engine\$(Configuration)\$(TargetName).lib</ImportLibrary>
     </Link>
   </ItemDefinitionGroup>
@@ -224,7 +236,7 @@
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <AdditionalDependencies>gdi32.lib;kernel32.lib;user32.lib;opengl32.lib</AdditionalDependencies>
+      <AdditionalDependencies>gdi32.lib;kernel32.lib;user32.lib;opengl32.lib;glew32.lib;glew32s.lib</AdditionalDependencies>
       <ImportLibrary>$(SolutionDir)Lib\Engine\$(Configuration)\$(TargetName).lib</ImportLibrary>
       <GenerateDebugInformation>Debug</GenerateDebugInformation>
       <LinkTimeCodeGeneration>Default</LinkTimeCodeGeneration>
@@ -251,7 +263,7 @@
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <AdditionalDependencies>gdi32.lib;kernel32.lib;user32.lib;opengl32.lib</AdditionalDependencies>
+      <AdditionalDependencies>gdi32.lib;kernel32.lib;user32.lib;opengl32.lib;glew32.lib;glew32s.lib</AdditionalDependencies>
       <ImportLibrary>$(SolutionDir)Lib\Engine\$(Configuration)\$(TargetName).lib</ImportLibrary>
     </Link>
   </ItemDefinitionGroup>
@@ -280,7 +292,7 @@
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>gdi32.lib;kernel32.lib;user32.lib;opengl32.lib</AdditionalDependencies>
+      <AdditionalDependencies>gdi32.lib;kernel32.lib;user32.lib;opengl32.lib;glew32.lib;glew32s.lib</AdditionalDependencies>
       <ImportLibrary>$(SolutionDir)Lib\Engine\$(Configuration)\$(TargetName).lib</ImportLibrary>
       <GenerateDebugInformation>No</GenerateDebugInformation>
       <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
@@ -311,7 +323,7 @@
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>gdi32.lib;kernel32.lib;user32.lib;opengl32.lib</AdditionalDependencies>
+      <AdditionalDependencies>gdi32.lib;kernel32.lib;user32.lib;opengl32.lib;glew32.lib;glew32s.lib</AdditionalDependencies>
       <ImportLibrary>$(SolutionDir)Lib\Engine\$(Configuration)\$(TargetName).lib</ImportLibrary>
       <GenerateDebugInformation>No</GenerateDebugInformation>
       <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>

@@ -7,7 +7,9 @@
 
 #if PLATFORM == WINDOWS
 #include <Windows.h>
+#include <GL\glew.h>
 #include <gl\GL.h>
+
 #endif
 
 
