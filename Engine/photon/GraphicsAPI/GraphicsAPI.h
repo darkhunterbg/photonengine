@@ -20,5 +20,5 @@
 
 
 #if !defined(GRAPHICS_API)
-#error Unknown graphics api!
+#error Unknown graphics API!
 #endif

@@ -54,6 +54,12 @@
     <ClInclude Include="photon\Text.h" />
     <ClInclude Include="photon\Types.h" />
     <ClInclude Include="photon\Alloc.h" />
+    <ClInclude Include="photon\GraphicsAPI\GLGraphicsAPITypes.h">
+      <Filter>GraphicsAPI\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="photon\GraphicsAPI\GraphicsAPITypes.h">
+      <Filter>GraphicsAPI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Platform">

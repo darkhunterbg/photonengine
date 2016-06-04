@@ -7,7 +7,7 @@
 #if GRAPHICS_API == OPENGL
 
 #include "../Platform/PlatformGL.h"
-
+#include "GraphicsAPITypes.h"
 
 
 namespace photon
@@ -34,6 +34,11 @@ namespace photon
 
 		void SwapBuffers();
 		void ClearBuffer(const Vector&);
+		ShaderHandler CreateShader(ShaderType type, const char* code);
+		void DestroyShader(ShaderHandler shader);
+		ShaderProgramHandler CreateShaderProgram(ShaderHandler* shaders, int count);
+		void DestoryShaderProgram(ShaderProgramHandler shaderProgram);
+
 	} typedef GraphicsAPI;
 }
 
