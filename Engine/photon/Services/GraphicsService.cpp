@@ -2,6 +2,7 @@
 #include <stddef.h>
 
 #include "../Math/Vector.h"
+#include "../Alloc.h"
 
 namespace photon
 {

@@ -1,5 +1,7 @@
 #include "AssetsService.h"
 #include "MemoryService.h"
+#include "../Text.h"
+#include "../Alloc.h"
 
 namespace photon
 {
@@ -30,5 +32,10 @@ namespace photon
 
 		gl_AssetsService->~AssetsService();
 		gl_AssetsService = nullptr;
+	}
+
+	void AssetsService::SetRoot(const TCHAR* path)
+	{
+		text::Copy(path, root);
 	}
 }

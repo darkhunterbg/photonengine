@@ -1,5 +1,6 @@
 #include "SceneService.h"
 #include "Scene.h"
+#include "../Alloc.h"
 
 namespace photon
 {

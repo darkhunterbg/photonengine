@@ -5,6 +5,7 @@
 #if GRAPHICS_API == OPENGL
 
 #include "../Services/MemoryStack.h"
+#include "../Alloc.h"
 
 #include "OpenGL.h"
 #include "../Math/Vector.h"

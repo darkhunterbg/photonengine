@@ -51,6 +51,9 @@
     <ClInclude Include="photon\Services\AssetsService.h">
       <Filter>Services\Assets</Filter>
     </ClInclude>
+    <ClInclude Include="photon\Text.h" />
+    <ClInclude Include="photon\Types.h" />
+    <ClInclude Include="photon\Alloc.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Platform">

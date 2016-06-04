@@ -5,10 +5,16 @@
 
 #if PLATFORM == WINDOWS
 
+#include "../Types.h"
 #include "Win32GL.h"
 
 namespace photon
 {
+	struct EXPORT FileHandler
+	{
+		void* handle;
+	};
+
 	class EXPORT Win32Platfrom
 	{
 	private:
@@ -26,6 +32,10 @@ namespace photon
 		static GLContext GLCreateContext(GLCreateParam param);
 		static void GLDestroyContext(GLContext context);
 		static void GLSwapBuffers(GLContext context);
+
+		static FileHandler FileOpen(const wchar_t* path);
+		static void FileClose(FileHandler file);
+		static size_t ReadFromFile(FileHandler file, void* buffer, size_t bufferSize);
 
 	} typedef Platform;
 }

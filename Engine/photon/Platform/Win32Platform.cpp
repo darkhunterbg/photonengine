@@ -7,6 +7,7 @@
 #include <Windows.h>
 
 #include "Win32Platform.h"
+#include "../Types.h"
 
 namespace photon
 {
@@ -70,10 +71,34 @@ namespace photon
 		wglMakeCurrent(nullptr, (HGLRC)context.hgldc);
 		wglDeleteContext((HGLRC)context.hgldc);
 	}
-
 	void Win32Platfrom::GLSwapBuffers(GLContext context)
 	{
 		SwapBuffers((HDC)context.hdc);
+	}
+
+	FileHandler Win32Platfrom::FileOpen(const TCHAR* path)
+	{
+		HANDLE file = CreateFile(path, GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+
+		auto error = GetLastError();
+		ASSERT(error == 0);
+
+		return{ file };
+	}
+	void Win32Platfrom::FileClose(FileHandler file)
+	{
+		ASSERT(file.handle != INVALID_HANDLE_VALUE);
+
+		CloseHandle(file.handle);
+	}
+
+	size_t Win32Platfrom::ReadFromFile(FileHandler file, void* buffer, size_t bufferSize)
+	{
+		ASSERT(file.handle != INVALID_HANDLE_VALUE);
+		DWORD totalReadBytes = -1;
+		BOOL result = ReadFile(file.handle, buffer, bufferSize, &totalReadBytes, nullptr);
+
+		return (result) ? (size_t)totalReadBytes : -1;
 	}
 }
 

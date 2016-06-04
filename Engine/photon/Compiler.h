@@ -5,6 +5,8 @@
 
 #if defined(_MSC_VER)
 
+#define _ALLOW_RTCc_IN_STL
+
 #include <intrin.h>
 
 #define BREAKPOINT() __halt()
