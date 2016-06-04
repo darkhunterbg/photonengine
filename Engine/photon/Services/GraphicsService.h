@@ -6,8 +6,6 @@
 
 namespace photon
 {
-
-
 	class EXPORT GraphicsService
 	{
 		DISABLE_COPY(GraphicsService);

@@ -14,7 +14,11 @@ namespace photon
 
 		return new(mem) MemoryStack(freeMem, memSize - sizeof(MemoryStack));
 	}
-
+	void MemoryStack::Delete(MemoryStack* stack)
+	{
+		ASSERT(stack);
+		stack->~MemoryStack();
+	}
 
 	void* MemoryStack::Allocate(size_t size)
 	{

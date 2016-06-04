@@ -10,8 +10,9 @@
 #include "../Services/GraphicsService.h"
 #include "../Services/MemoryService.h"
 #include "../Services/SceneService.h"
-#include "../Platform/Win32Platform.h"
+#include "../Services/AssetsService.h"
 
+#include "../Platform/Win32Platform.h"
 
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
@@ -89,19 +90,23 @@ namespace photon
 #endif
 		api = photon::GraphicsAPI::InitializeAPI(*memStack, param);
 		photon::GraphicsService::Initialize(api, *memStack);
+		photon::AssetsService::Initialize(Megabytes(4), *memStack);
 		photon::SceneService::Initialize(*memStack);
 	}
 	void Win32Game::Uninitialize()
 	{
+#if DEBUG >= DEBUG_FULL
 		photon::SceneService::Uninitialize();
+		photon::AssetsService::Uninitialize();
 		photon::GraphicsService::Uninitialize();
 		photon::GraphicsAPI::UninitializeAPI(api);
 
-		memStack->Clear();
+		photon::MemoryStack::Delete(memStack);
 		photon::MemoryService::Uninitialize();
 		photon::Win32Platfrom::Uninitialize();
 
 		DestroyWindow((HWND)hWindow);
+#endif
 	}
 	void Win32Game::CreateAndShowWindow()
 	{

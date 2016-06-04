@@ -48,6 +48,9 @@
     <ClInclude Include="photon\Services\SceneService.h">
       <Filter>Services\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="photon\Services\AssetsService.h">
+      <Filter>Services\Assets</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Platform">
@@ -80,6 +83,9 @@
     <Filter Include="Services\Scene">
       <UniqueIdentifier>{2b918d82-39e7-4920-b978-8d6427547575}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Services\Assets">
+      <UniqueIdentifier>{67822647-39b5-4966-b616-133994630aa9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="photon\Platform\Win32Platform.cpp">
@@ -108,6 +114,9 @@
     </ClCompile>
     <ClCompile Include="photon\Services\SceneService.cpp">
       <Filter>Services\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="photon\Services\AssetsService.cpp">
+      <Filter>Services\Assets</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
