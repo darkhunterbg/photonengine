@@ -9,6 +9,7 @@
 
 #include "../Services/GraphicsService.h"
 #include "../Services/MemoryService.h"
+#include "../Services/SceneService.h"
 #include "../Platform/Win32Platform.h"
 
 
@@ -57,7 +58,7 @@ namespace photon
 			if (deltaMcS >= 16'666)
 			{
 				//================ GAME LOOP ============================
-
+				gl_SceneService->Update();
 				gl_GraphicsService->PresentFrame();
 				//======================================================
 				
@@ -66,21 +67,6 @@ namespace photon
 
 		}
 	}
-
-
-	class test
-	{
-		int x = 3;
-	public:
-		test()
-		{
-			x = 1;
-		}
-		~test()
-		{
-			x = 3;
-		}
-	};
 
 	void Win32Game::Initialize(void* instance)
 	{
@@ -94,9 +80,6 @@ namespace photon
 		void* memory = photon::gl_MemoryService->AllocatePage(Megabytes(1));
 		memStack = photon::MemoryStack::New(memory, Megabytes(1));
 
-		test* a = MEM_NEW_ARRAY(*memStack, test, 10);// newArray<test>(*memStack, 10, __FILE__, __LINE__);
-		MEM_DEL_ARRAY(*memStack, test, a);
-
 		GraphicsAPIParam param = {};
 #if GRAPHICS_API == DIRECTX
 		param.hWindow = hWindow;
@@ -106,9 +89,11 @@ namespace photon
 #endif
 		api = photon::GraphicsAPI::InitializeAPI(*memStack, param);
 		photon::GraphicsService::Initialize(api, *memStack);
+		photon::SceneService::Initialize(*memStack);
 	}
 	void Win32Game::Uninitialize()
 	{
+		photon::SceneService::Uninitialize();
 		photon::GraphicsService::Uninitialize();
 		photon::GraphicsAPI::UninitializeAPI(api);
 

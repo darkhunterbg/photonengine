@@ -42,6 +42,12 @@
     <ClInclude Include="photon\Math\Vector.h">
       <Filter>Math</Filter>
     </ClInclude>
+    <ClInclude Include="photon\Services\Scene.h">
+      <Filter>Services\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="photon\Services\SceneService.h">
+      <Filter>Services\Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Platform">
@@ -71,6 +77,9 @@
     <Filter Include="Math">
       <UniqueIdentifier>{b7ef1ff4-db39-4391-9afe-5c6015fe02c2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Services\Scene">
+      <UniqueIdentifier>{2b918d82-39e7-4920-b978-8d6427547575}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="photon\Platform\Win32Platform.cpp">
@@ -93,6 +102,12 @@
     </ClCompile>
     <ClCompile Include="photon\GraphicsAPI\DXGraphicsAPI.cpp">
       <Filter>GraphicsAPI\DirectX</Filter>
+    </ClCompile>
+    <ClCompile Include="photon\Services\Scene.cpp">
+      <Filter>Services\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="photon\Services\SceneService.cpp">
+      <Filter>Services\Scene</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

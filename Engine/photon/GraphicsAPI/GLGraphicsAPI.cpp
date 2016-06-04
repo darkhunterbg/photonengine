@@ -14,7 +14,8 @@ namespace photon
 	GLGraphicsAPI::GLGraphicsAPI(GLAPIParam apiParam)
 	{
 		this->context = Platform::GLCreateContext(apiParam.createParam);
-		glewInit();
+		auto result = glewInit();
+		ASSERT(result == 0);
 	}
 	GLGraphicsAPI::~GLGraphicsAPI()
 	{

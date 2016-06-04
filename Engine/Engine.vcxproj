@@ -42,6 +42,8 @@
     <ClInclude Include="photon\Services\GraphicsService.h" />
     <ClInclude Include="photon\Services\MemoryService.h" />
     <ClInclude Include="photon\Services\MemoryStack.h" />
+    <ClInclude Include="photon\Services\Scene.h" />
+    <ClInclude Include="photon\Services\SceneService.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="photon\GraphicsAPI\DXGraphicsAPI.cpp" />
@@ -51,6 +53,8 @@
     <ClCompile Include="photon\Services\GraphicsService.cpp" />
     <ClCompile Include="photon\Services\MemoryService.cpp" />
     <ClCompile Include="photon\Services\MemoryStack.cpp" />
+    <ClCompile Include="photon\Services\Scene.cpp" />
+    <ClCompile Include="photon\Services\SceneService.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{7B86C26B-F611-41EB-8B75-318789FD9104}</ProjectGuid>
