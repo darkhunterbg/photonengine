@@ -4,6 +4,8 @@
 #include "../Math/Vector.h"
 #include "../Alloc.h"
 
+#include "AssetsService.h"
+
 namespace photon
 {
 	GraphicsService* gl_GraphicsService = nullptr;
@@ -11,9 +13,7 @@ namespace photon
 	GraphicsService::GraphicsService(GraphicsAPI* api) :
 		api(api)
 	{
-		/*ShaderHandler vs = api->CreateShader(ShaderType::VERTEX_SHADER, "void main(){ vec4 a = gl_Vertex; a.x = a.x * 0.5; a.y = a.y * 0.5; gl_Position = gl_ModelViewProjectionMatrix * a;}");
-
-		api->CreateShaderProgram(&vs, 1);*/
+		
 	}
 	GraphicsService::~GraphicsService()
 	{
@@ -26,6 +26,7 @@ namespace photon
 		ASSERT(api);
 
 		gl_GraphicsService = MEM_NEW(stack, GraphicsService)(api);
+		gl_GraphicsService->InitializeTechniques();
 
 		return gl_GraphicsService;
 	}
@@ -45,6 +46,19 @@ namespace photon
 
 	void GraphicsService::InitializeTechniques()
 	{
+		TextAsset vsText = gl_AssetsService->GetTextAsset("shader.v");
+		TextAsset fsText = gl_AssetsService->GetTextAsset("shader.f");
 
+		ShaderHandler vs = api->CreateShader(ShaderType::VERTEX_SHADER, vsText.text);
+		ShaderHandler fs = api->CreateShader(ShaderType::FRAGMENT_SHADER, fsText.text);
+		ShaderHandler shaders[] = { vs,fs };
+
+		Technique technique = {};
+
+		technique.program = api->CreateShaderProgram(shaders, 2);
+		technique.hasVS = true;
+		technique.hasFS = true;
+
+		techniques[++techniquesCount] = technique;
 	}
 }

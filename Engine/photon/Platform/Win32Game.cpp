@@ -69,7 +69,7 @@ namespace photon
 		}
 	}
 
-	void Win32Game::Initialize(void* instance)
+	void Win32Game::Initialize(void* instance, const TCHAR* assetsPath)
 	{
 		hInstance = instance;
 
@@ -82,6 +82,7 @@ namespace photon
 		memStack = photon::MemoryStack::New(memory, Megabytes(1));
 
 		photon::AssetsService::Initialize(Megabytes(4), *memStack);
+		gl_AssetsService->SetRoot(assetsPath);
 
 		GraphicsAPIParam param = {};
 #if GRAPHICS_API == DIRECTX

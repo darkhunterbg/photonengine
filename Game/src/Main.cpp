@@ -23,15 +23,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 {
 	setlocale(LC_ALL, "");
 
-	TestScene scene;
 
-	photon::Win32Game::Initialize(hInstance);
-	
 	static const int BUFFER_SIZE = _MAX_PATH * 4;
 	TCHAR buffer[_MAX_PATH * 4];
 	GetFullPathName(TEXT("..\\..\\Assets\\"), BUFFER_SIZE, buffer, nullptr);
 
-	photon::gl_AssetsService->SetRoot(buffer);
+	TestScene scene;
+
+	photon::Win32Game::Initialize(hInstance, buffer);
+
 	photon::gl_SceneService->PushScene(&scene);
 
 	photon::Win32Game::Run();
