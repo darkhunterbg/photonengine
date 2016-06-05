@@ -35,6 +35,7 @@ namespace photon
 
 		static FileHandler FileOpen(const wchar_t* path);
 		static void FileClose(FileHandler file);
+		static size_t GetFileSize(FileHandler file);
 		static size_t ReadFromFile(FileHandler file, void* buffer, size_t bufferSize);
 
 	} typedef Platform;

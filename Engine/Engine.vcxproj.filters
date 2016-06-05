@@ -60,6 +60,9 @@
     <ClInclude Include="photon\GraphicsAPI\GraphicsAPITypes.h">
       <Filter>GraphicsAPI</Filter>
     </ClInclude>
+    <ClInclude Include="photon\Services\Assets.h">
+      <Filter>Services\Assets</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Platform">

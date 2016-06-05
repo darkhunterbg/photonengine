@@ -11,9 +11,9 @@ namespace photon
 	GraphicsService::GraphicsService(GraphicsAPI* api) :
 		api(api)
 	{
-		ShaderHandler vs = api->CreateShader(ShaderType::VERTEX_SHADER, "void main(){ vec4 a = gl_Vertex; a.x = a.x * 0.5; a.y = a.y * 0.5; gl_Position = gl_ModelViewProjectionMatrix * a;}");
+		/*ShaderHandler vs = api->CreateShader(ShaderType::VERTEX_SHADER, "void main(){ vec4 a = gl_Vertex; a.x = a.x * 0.5; a.y = a.y * 0.5; gl_Position = gl_ModelViewProjectionMatrix * a;}");
 
-		api->CreateShaderProgram(&vs, 1);
+		api->CreateShaderProgram(&vs, 1);*/
 	}
 	GraphicsService::~GraphicsService()
 	{
@@ -41,5 +41,10 @@ namespace photon
 	{
 		api->ClearBuffer({ 0,0,0,1 });
 		api->SwapBuffers();
+	}
+
+	void GraphicsService::InitializeTechniques()
+	{
+
 	}
 }

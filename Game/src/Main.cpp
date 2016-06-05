@@ -12,6 +12,8 @@
 
 #include "TestScene.cpp"
 
+#include <locale.h>
+
 constexpr int GetValue()
 {
 	return 0;
@@ -19,20 +21,15 @@ constexpr int GetValue()
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
+	setlocale(LC_ALL, "");
+
 	TestScene scene;
 
 	photon::Win32Game::Initialize(hInstance);
 	
 	static const int BUFFER_SIZE = _MAX_PATH * 4;
 	TCHAR buffer[_MAX_PATH * 4];
-	GetFullPathName(TEXT("..\\Assets\\"), BUFFER_SIZE, buffer, nullptr);
-
-	photon::FileHandler file=  photon::Platform::FileOpen(TEXT("..\\Assets\\test.txt"));
-
-	char b[1024];
-	photon::Platform::ReadFromFile(file, b, 1024);
-
-	photon::Platform::FileClose(file);
+	GetFullPathName(TEXT("..\\..\\Assets\\"), BUFFER_SIZE, buffer, nullptr);
 
 	photon::gl_AssetsService->SetRoot(buffer);
 	photon::gl_SceneService->PushScene(&scene);

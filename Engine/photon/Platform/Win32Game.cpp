@@ -81,6 +81,8 @@ namespace photon
 		void* memory = photon::gl_MemoryService->AllocatePage(Megabytes(1));
 		memStack = photon::MemoryStack::New(memory, Megabytes(1));
 
+		photon::AssetsService::Initialize(Megabytes(4), *memStack);
+
 		GraphicsAPIParam param = {};
 #if GRAPHICS_API == DIRECTX
 		param.hWindow = hWindow;
@@ -90,16 +92,16 @@ namespace photon
 #endif
 		api = photon::GraphicsAPI::InitializeAPI(*memStack, param);
 		photon::GraphicsService::Initialize(api, *memStack);
-		photon::AssetsService::Initialize(Megabytes(4), *memStack);
+		
 		photon::SceneService::Initialize(*memStack);
 	}
 	void Win32Game::Uninitialize()
 	{
 #if DEBUG >= DEBUG_FULL
 		photon::SceneService::Uninitialize();
-		photon::AssetsService::Uninitialize();
 		photon::GraphicsService::Uninitialize();
 		photon::GraphicsAPI::UninitializeAPI(api);
+		photon::AssetsService::Uninitialize();
 
 		photon::MemoryStack::Delete(memStack);
 		photon::MemoryService::Uninitialize();

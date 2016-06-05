@@ -91,7 +91,12 @@ namespace photon
 
 		CloseHandle(file.handle);
 	}
-
+	size_t Win32Platfrom::GetFileSize(FileHandler file)
+	{
+		LARGE_INTEGER result;
+		GetFileSizeEx(file.handle, &result);
+		return (size_t)result.QuadPart;
+	}
 	size_t Win32Platfrom::ReadFromFile(FileHandler file, void* buffer, size_t bufferSize)
 	{
 		ASSERT(file.handle != INVALID_HANDLE_VALUE);
