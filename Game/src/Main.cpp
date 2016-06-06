@@ -26,7 +26,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	static const int BUFFER_SIZE = _MAX_PATH * 4;
 	TCHAR buffer[_MAX_PATH * 4];
-	GetFullPathName(TEXT("..\\..\\Assets\\"), BUFFER_SIZE, buffer, nullptr);
+	GetFullPathName(TEXT("..\\Assets\\"), BUFFER_SIZE, buffer, nullptr);
 
 	TestScene scene;
 

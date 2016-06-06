@@ -38,6 +38,9 @@ namespace photon
 		void DestroyShader(ShaderHandler shader);
 		ShaderProgramHandler CreateShaderProgram(ShaderHandler* shaders, int count);
 		void DestoryShaderProgram(ShaderProgramHandler shaderProgram);
+		VertexBufferHandler CreateVertexBuffer(const void* vertices, size_t verticesCount, int sizeOfVertex);
+		void Draw(VertexBufferHandler vb, int primitvesCount);
+		void SetProgram(ShaderProgramHandler program);
 
 	} typedef GraphicsAPI;
 }

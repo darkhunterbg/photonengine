@@ -10,10 +10,18 @@ namespace photon
 {
 	GraphicsService* gl_GraphicsService = nullptr;
 
+	Vector vertices[] = {
+		{-0.5f, -0.5f, 0.0f , 1.0f},
+		{0.5f, -0.5f, 0.0f, 1.0f },
+		{0.0f,  0.5f, 0.0f, 1.0f },
+	};
+
+	VertexBufferHandler vb;
+
 	GraphicsService::GraphicsService(GraphicsAPI* api) :
 		api(api)
 	{
-		
+
 	}
 	GraphicsService::~GraphicsService()
 	{
@@ -28,6 +36,8 @@ namespace photon
 		gl_GraphicsService = MEM_NEW(stack, GraphicsService)(api);
 		gl_GraphicsService->InitializeTechniques();
 
+		vb = gl_GraphicsService->api->CreateVertexBuffer(vertices, 3, sizeof(Vector));
+
 		return gl_GraphicsService;
 	}
 	void GraphicsService::Uninitialize()
@@ -40,9 +50,14 @@ namespace photon
 
 	void GraphicsService::PresentFrame()
 	{
-		api->ClearBuffer({ 0,0,0,1 });
+
+		api->ClearBuffer({ 0,0,0.4f,0 });
+		api->SetProgram(techniques[0].program);
+		api->Draw(vb, 1);
 		api->SwapBuffers();
 	}
+
+
 
 	void GraphicsService::InitializeTechniques()
 	{
@@ -59,6 +74,8 @@ namespace photon
 		technique.hasVS = true;
 		technique.hasFS = true;
 
-		techniques[++techniquesCount] = technique;
+		techniques[techniquesCount++] = technique;
+
+
 	}
 }

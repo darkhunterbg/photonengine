@@ -15,4 +15,10 @@ namespace photon
 	{
 		uint32_t program;
 	};
+
+	struct VertexBufferHandler
+	{
+		uint32_t vao;
+		uint32_t vb;
+	};
 }
