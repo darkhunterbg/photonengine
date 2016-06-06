@@ -10,6 +10,8 @@ namespace photon
 	struct Technique
 	{
 		ShaderProgramHandler program;
+		ShaderHandler vs;
+		ShaderHandler fs;
 		bool hasVS : 1;
 		bool hasFS : 1;
 	};

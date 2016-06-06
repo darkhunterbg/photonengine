@@ -11,11 +11,12 @@ namespace photon
 	GraphicsService* gl_GraphicsService = nullptr;
 
 	Vector vertices[] = {
-		{-0.5f, -0.5f, 0.0f , 1.0f},
+		{-0.5f, -0.5f, 0.0f, 1.0f},
 		{0.5f, -0.5f, 0.0f, 1.0f },
 		{0.0f,  0.5f, 0.0f, 1.0f },
 	};
 
+	VertexBufferBindingHandler vbb;
 	VertexBufferHandler vb;
 
 	GraphicsService::GraphicsService(GraphicsAPI* api) :
@@ -25,7 +26,18 @@ namespace photon
 	}
 	GraphicsService::~GraphicsService()
 	{
+		for (int i = 0; i < techniquesCount; ++i)
+		{
+			Technique& technique = techniques[i];
 
+			if (technique.hasVS)
+				api->DestroyShader(technique.vs);
+
+			if (technique.hasFS)
+				api->DestroyShader(technique.fs);
+
+			api->DestoryShaderProgram(technique.program);
+		}
 	}
 
 	GraphicsService* GraphicsService::Initialize(GraphicsAPI* api, MemoryStack& stack)
@@ -37,6 +49,11 @@ namespace photon
 		gl_GraphicsService->InitializeTechniques();
 
 		vb = gl_GraphicsService->api->CreateVertexBuffer(vertices, 3, sizeof(Vector));
+		VertexBufferLayout layout = {};
+		layout.attributesCount = 1;
+		VertexAttribute attr[] = { { 0, VertexParamType::FLOAT4 } };
+		layout.attributes = attr;
+		vbb = gl_GraphicsService->api->CreateVertexBufferBinding(&vb, &layout, 1);
 
 		return gl_GraphicsService;
 	}
@@ -44,38 +61,36 @@ namespace photon
 	{
 		ASSERT(gl_GraphicsService);
 
+		gl_GraphicsService->api->DestroyVertexBuffer(vb);
+		gl_GraphicsService->api->DestroyVertexBufferBinding(vbb);
+
 		gl_GraphicsService->~GraphicsService();
 		gl_GraphicsService = nullptr;
 	}
 
 	void GraphicsService::PresentFrame()
 	{
-
 		api->ClearBuffer({ 0,0,0.4f,0 });
-		api->SetProgram(techniques[0].program);
-		api->Draw(vb, 1);
+		api->UseShaderProgram(techniques[0].program);
+		api->Draw(PrimitiveType::TRIANGLE_LIST, vbb, 3);
 		api->SwapBuffers();
 	}
-
-
 
 	void GraphicsService::InitializeTechniques()
 	{
 		TextAsset vsText = gl_AssetsService->GetTextAsset("shader.v");
 		TextAsset fsText = gl_AssetsService->GetTextAsset("shader.f");
 
-		ShaderHandler vs = api->CreateShader(ShaderType::VERTEX_SHADER, vsText.text);
-		ShaderHandler fs = api->CreateShader(ShaderType::FRAGMENT_SHADER, fsText.text);
-		ShaderHandler shaders[] = { vs,fs };
-
 		Technique technique = {};
+
+		technique.vs = api->CreateShader(ShaderType::VERTEX_SHADER, vsText.text);
+		technique.fs = api->CreateShader(ShaderType::FRAGMENT_SHADER, fsText.text);
+		ShaderHandler shaders[] = { technique.vs,technique.fs };
 
 		technique.program = api->CreateShaderProgram(shaders, 2);
 		technique.hasVS = true;
 		technique.hasFS = true;
 
 		techniques[techniquesCount++] = technique;
-
-
 	}
 }

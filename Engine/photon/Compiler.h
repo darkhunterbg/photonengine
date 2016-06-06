@@ -19,6 +19,7 @@
 
 #define ALIGN(alignment) _declspec( align( alignment ) )
 
+
 #endif
 
 

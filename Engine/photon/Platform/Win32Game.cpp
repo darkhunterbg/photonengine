@@ -65,6 +65,7 @@ namespace photon
 				
 				deltaTime -= ((freq.QuadPart * 16'666) / (1000 * 1000));
 			}
+			Sleep(1);
 
 		}
 	}

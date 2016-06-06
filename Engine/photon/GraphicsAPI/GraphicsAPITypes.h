@@ -16,4 +16,25 @@ namespace photon
 		VERTEX_SHADER,
 		FRAGMENT_SHADER,
 	};
+
+	enum  class VertexParamType 
+	{
+		FLOAT,
+		FLOAT2,
+		FLOAT3,
+		FLOAT4
+	};
+
+	struct VertexAttribute
+	{
+		int location;
+		VertexParamType type;
+	
+	};
+
+	struct VertexBufferLayout
+	{
+		VertexAttribute* attributes;
+		int attributesCount;
+	};
 }

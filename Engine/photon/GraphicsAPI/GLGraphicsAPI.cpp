@@ -92,7 +92,7 @@ namespace photon
 			glGetProgramInfoLog(handler.program, 4096, nullptr, error);
 			ASSERT(false);
 		}
-		
+
 		for (int i = 0; i < count; ++i)
 			glDetachShader(handler.program, shaders[i].shader);
 
@@ -106,42 +106,75 @@ namespace photon
 	{
 		VertexBufferHandler handler;
 
-		glGenVertexArrays(1, &handler.vao);
-		glBindVertexArray(handler.vao);
-
 		glGenBuffers(1, &handler.vb);
 		glBindBuffer(GL_ARRAY_BUFFER, handler.vb);
 
-		GLenum err = glGetError();
-
 		glBufferData(GL_ARRAY_BUFFER, sizeOfVertex * verticesCount, vertices, GL_STATIC_DRAW);
-		err = glGetError();
-
-
-		glEnableVertexAttribArray(0);
-		err = glGetError();
-
-		glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, nullptr);
-		err = glGetError();
-
-
-		glBindVertexArray(GL_NONE);
-		glDisableVertexAttribArray(0);
 
 		return handler;
 	}
-	void GLGraphicsAPI::Draw(VertexBufferHandler vb, int primitvesCount)
+	void GLGraphicsAPI::DestroyVertexBuffer(VertexBufferHandler vb)
 	{
-		glBindVertexArray(vb.vao);
-		GLenum err = glGetError();
-
-		glDrawArrays(GL_TRIANGLES, 0, primitvesCount * 3);
-		err = glGetError();
+		glDeleteBuffers(1, &vb.vb);
 	}
-	void GLGraphicsAPI::SetProgram(ShaderProgramHandler program)
+	VertexBufferBindingHandler GLGraphicsAPI::CreateVertexBufferBinding(const VertexBufferHandler* vertexBuffers, const VertexBufferLayout* layots, int buffersCount)
+	{
+		VertexBufferBindingHandler handler;
+
+		glGenVertexArrays(1, &handler.vao);
+		glBindVertexArray(handler.vao);
+
+		for (int i = 0; i < buffersCount; ++i)
+		{
+			glBindBuffer(GL_ARRAY_BUFFER, vertexBuffers[i].vb);
+			glEnableVertexAttribArray(i);
+
+			int attrCount = layots[i].attributesCount;
+			int offset = 0;
+
+
+			for (int j = 0; j < attrCount; ++j)
+			{
+				VertexAttribute attr = layots[i].attributes[j];
+
+				switch (attr.type)
+				{
+				case VertexParamType::FLOAT:
+					glVertexAttribPointer(attr.location, 1, GL_FLOAT, GL_FALSE, sizeof(float), nullptr);
+					break;
+				case VertexParamType::FLOAT2:
+					glVertexAttribPointer(attr.location, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, nullptr);
+					break;
+				case VertexParamType::FLOAT3:
+					glVertexAttribPointer(attr.location, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, nullptr);
+					break;
+				case VertexParamType::FLOAT4:
+					glVertexAttribPointer(attr.location, 4, GL_FLOAT, GL_FALSE, sizeof(float) * 4, nullptr);
+					break;
+				default:
+					break;
+				}
+			}
+		}
+
+		glBindVertexArray(GL_NONE);
+		for (int i = 0; i < buffersCount; ++i)
+			glDisableVertexAttribArray(i);
+
+		return handler;
+	}
+	void GLGraphicsAPI::DestroyVertexBufferBinding(VertexBufferBindingHandler vbb)
+	{
+		glDeleteVertexArrays(1, &vbb.vao);
+	}
+	void GLGraphicsAPI::Draw(PrimitiveType type, VertexBufferBindingHandler binding, int indices)
+	{
+		glBindVertexArray(binding.vao);
+		glDrawArrays((uint32_t)type, 0, indices);
+	}
+	void GLGraphicsAPI::UseShaderProgram(ShaderProgramHandler program)
 	{
 		glUseProgram(program.program);
-		GLenum err = glGetError();
 	}
 }
 
