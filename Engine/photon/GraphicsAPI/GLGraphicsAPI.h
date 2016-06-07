@@ -42,6 +42,12 @@ namespace photon
 		void DestroyVertexBuffer(VertexBufferHandler vb);
 		VertexBufferBindingHandler CreateVertexBufferBinding(const VertexBufferHandler* vertexBuffers, const VertexBufferLayout* layots, int buffersCount);
 		void DestroyVertexBufferBinding(VertexBufferBindingHandler vbb);
+		
+		ProgramBlockHandler CreateProgramBlock(ShaderProgramHandler handler,const char* blockName,size_t bufferSize, void* bufferValue);
+		void DestroyProgramBlock(ProgramBlockHandler block);
+		void* StartUpdateProgramBlock(ProgramBlockHandler block);
+		void EndUpdateProgramBlock();
+
 		void Draw(PrimitiveType type, int indices);
 		void UseShaderProgram(ShaderProgramHandler program);
 		void SetShaderProgramParam(uint32_t location,const Vector& val);

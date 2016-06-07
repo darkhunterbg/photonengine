@@ -5,7 +5,7 @@
 #extension GL_ARB_separate_shader_objects : enable
 
 //outputs to frame buffer 0
-layout(location = 0) out vec4 output;
+layout(location = 0) out vec4 colorBuffer;
 
 //structure, aligned by vec4, starts at location 0
 layout( location = 0, std140 ) uniform Block
@@ -15,5 +15,5 @@ layout( location = 0, std140 ) uniform Block
 
 void main()
 {
-  output = color;
+  colorBuffer = color;
 }

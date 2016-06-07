@@ -18,13 +18,18 @@ namespace photon
 
 	struct VertexBufferHandler
 	{
-	
 		uint32_t vb;
 	};
 
 	struct VertexBufferBindingHandler
 	{
 		uint32_t vao;
+	};
+	
+	struct ProgramBlockHandler
+	{
+		uint32_t ub;
+		uint32_t index;
 	};
 
 	enum class PrimitiveType : uint32_t

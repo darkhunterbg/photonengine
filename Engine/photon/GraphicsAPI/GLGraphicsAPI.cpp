@@ -108,8 +108,8 @@ namespace photon
 
 		glGenBuffers(1, &handler.vb);
 		glBindBuffer(GL_ARRAY_BUFFER, handler.vb);
-
 		glBufferData(GL_ARRAY_BUFFER, sizeOfVertex * verticesCount, vertices, GL_STATIC_DRAW);
+		glBindBuffer(GL_ARRAY_BUFFER, GL_NONE);
 
 		return handler;
 	}
@@ -167,7 +167,7 @@ namespace photon
 	{
 		glDeleteVertexArrays(1, &vbb.vao);
 	}
-	void GLGraphicsAPI::Draw(PrimitiveType type,  int indices)
+	void GLGraphicsAPI::Draw(PrimitiveType type, int indices)
 	{
 		glDrawArrays((uint32_t)type, 0, indices);
 	}
@@ -187,6 +187,41 @@ namespace photon
 	{
 		glBindVertexArray(GL_NONE);
 	}
+	void* GLGraphicsAPI::StartUpdateProgramBlock(ProgramBlockHandler block)
+	{
+		glBindBuffer(GL_UNIFORM_BUFFER, block.ub);
+		void* ptr =glMapBuffer(GL_UNIFORM_BUFFER, GL_WRITE_ONLY);
+		return ptr;
+	}
+	void GLGraphicsAPI::EndUpdateProgramBlock()
+	{
+		glUnmapBuffer(GL_UNIFORM_BUFFER);
+	}
+
+	ProgramBlockHandler GLGraphicsAPI::CreateProgramBlock(ShaderProgramHandler program, const char* blockName, size_t bufferSize, void* bufferValue)
+	{
+		ProgramBlockHandler handler;
+
+		handler.index = glGetUniformBlockIndex(program.program, blockName);
+		uint32_t bindPoint = handler.index;
+
+		glUniformBlockBinding(program.program, handler.index, bindPoint);
+
+		glGenBuffers(1, &handler.ub);
+		glBindBuffer(GL_UNIFORM_BUFFER, handler.ub);
+		glBufferData(GL_UNIFORM_BUFFER, bufferSize, bufferValue, GL_DYNAMIC_DRAW);
+
+		glBindBufferBase(GL_UNIFORM_BUFFER, bindPoint, handler.ub);
+
+		glBindBuffer(GL_UNIFORM_BUFFER, GL_NONE);
+		return handler;
+	}
+	void GLGraphicsAPI::DestroyProgramBlock(ProgramBlockHandler block)
+	{
+		glBindBuffer(GL_UNIFORM_BUFFER, GL_NONE);
+		glDeleteBuffers(1, &block.ub);
+	}
+
 }
 
 #endif
