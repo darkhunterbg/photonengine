@@ -167,14 +167,25 @@ namespace photon
 	{
 		glDeleteVertexArrays(1, &vbb.vao);
 	}
-	void GLGraphicsAPI::Draw(PrimitiveType type, VertexBufferBindingHandler binding, int indices)
+	void GLGraphicsAPI::Draw(PrimitiveType type,  int indices)
 	{
-		glBindVertexArray(binding.vao);
 		glDrawArrays((uint32_t)type, 0, indices);
 	}
 	void GLGraphicsAPI::UseShaderProgram(ShaderProgramHandler program)
 	{
 		glUseProgram(program.program);
+	}
+	void GLGraphicsAPI::SetShaderProgramParam(uint32_t location, const Vector& val)
+	{
+		glUniform4fv(location, 1, &val.x);
+	}
+	void GLGraphicsAPI::UseVertexBufferBinding(VertexBufferBindingHandler vbb)
+	{
+		glBindVertexArray(vbb.vao);
+	}
+	void GLGraphicsAPI::ClearVertexBufferBinding()
+	{
+		glBindVertexArray(GL_NONE);
 	}
 }
 

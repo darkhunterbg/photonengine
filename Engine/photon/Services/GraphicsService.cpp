@@ -72,7 +72,10 @@ namespace photon
 	{
 		api->ClearBuffer({ 0,0,0.4f,0 });
 		api->UseShaderProgram(techniques[0].program);
-		api->Draw(PrimitiveType::TRIANGLE_LIST, vbb, 3);
+		api->SetShaderProgramParam(0, { 1.0f,1.0f,0.0f,1.0f });
+		api->UseVertexBufferBinding(vbb);
+		api->Draw(PrimitiveType::TRIANGLE_LIST, 3);
+		api->ClearVertexBufferBinding();
 		api->SwapBuffers();
 	}
 

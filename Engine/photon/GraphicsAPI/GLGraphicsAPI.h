@@ -20,7 +20,7 @@ namespace photon
 		GLCreateParam createParam;
 	} typedef GraphicsAPIParam;
 
-	class EXPORT GLGraphicsAPI 
+	class EXPORT GLGraphicsAPI
 	{
 		DISABLE_COPY(GLGraphicsAPI);
 
@@ -42,8 +42,11 @@ namespace photon
 		void DestroyVertexBuffer(VertexBufferHandler vb);
 		VertexBufferBindingHandler CreateVertexBufferBinding(const VertexBufferHandler* vertexBuffers, const VertexBufferLayout* layots, int buffersCount);
 		void DestroyVertexBufferBinding(VertexBufferBindingHandler vbb);
-		void Draw(PrimitiveType type, VertexBufferBindingHandler binding, int indices);
+		void Draw(PrimitiveType type, int indices);
 		void UseShaderProgram(ShaderProgramHandler program);
+		void SetShaderProgramParam(uint32_t location,const Vector& val);
+		void UseVertexBufferBinding(VertexBufferBindingHandler vbb);
+		void ClearVertexBufferBinding();
 
 	} typedef GraphicsAPI;
 }

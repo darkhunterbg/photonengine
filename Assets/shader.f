@@ -1,7 +1,10 @@
 #version 330 core
 
-out vec3 color;
+out vec4 output;
 
-void main(){
-  color = vec3(1,0,0);
+uniform vec4 color;
+
+void main()
+{
+  output = color;
 }
