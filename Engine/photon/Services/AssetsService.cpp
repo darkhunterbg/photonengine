@@ -14,11 +14,9 @@ namespace photon
 	}
 	AssetsService::~AssetsService()
 	{
-		int assetsCount = assets.GetCount();
+		int assetsCount = texts.GetCount();
 		for (int i = 0; i < assetsCount; ++i)
-		{
-			gl_MemoryService->FreePage(assets[i].memory);
-		}
+			gl_MemoryService->FreePage(texts[i].memory);
 
 		MemoryStack::Delete(scratchMemory);
 	}
@@ -44,50 +42,65 @@ namespace photon
 	{
 		text::Copy(path, root);
 	}
-	AssetsHandler AssetsService::GetExistingAsset(const char* assetPath)
+
+	TextAsset& AssetsService::GetTextAsset(const char* assetPath)
 	{
-		ASSERT(text::Length(assetPath) < ASSET_PATH_SIZE);
+		TextAsset* asset = GetExistingAsset(assetPath, texts);
 
-		int assetsCount = assets.GetCount(); 
-		for (int i = 0; i < assetsCount; ++i)
+		if (!asset)
 		{
-			if (text::Compare(assets[i].path, assetPath) == 0)
-				return (AssetsHandler)i;
+			AssetsHandler handler = NewAsset(assetPath, texts);
+			asset = &texts[handler].asset;
+			asset->handler = handler;
+			asset->text = (char*)texts[handler].memory;
+			asset->textLength = (size_t)texts[handler].memorySize;
 		}
+	
+		return *asset;
 
-		return (AssetsHandler)-1;
 	}
-	TextAsset AssetsService::GetTextAsset(const char* assetPath)
+	TextureAsset& AssetsService::GetTextureAsset(const char* assetPath)
 	{
-		AssetsHandler handler = GetExistingAsset(assetPath);
+		TextureAsset* asset = GetExistingAsset(assetPath, textures);
 
-		if (handler < 0)
+		if (!asset)
 		{
-			handler = assets.GetCount();
-			AssetEntry& asset = assets.New();
-		
-			text::Copy(assetPath, asset.path);
+			AssetsHandler handler = NewAsset(assetPath, textures);
+			asset = &textures[handler].asset;
+			asset->handler = handler;
 
-#pragma message("Fix this code for cross-platforming")
-			TCHAR fullPath[FILE_PATH_CHAR_SIZE];
-			text::Copy(root, fullPath);
-			text::Append(fullPath, assetPath);
+			char* filecode =(char*)textures[handler].memory;
+			ASSERT(text::Compare(filecode, "DDS "));
 
-			FileHandler file = Platform::FileOpen(fullPath);
-			size_t fileSize = Platform::GetFileSize(file);
-#pragma message("Need better allocation")
-			void* ptr = gl_MemoryService->AllocatePage(fileSize);
-			Platform::ReadFromFile(file, ptr, fileSize);
-			asset.memory = ptr;
-			asset.memorySize = fileSize;
-			Platform::FileClose(file);
+			DDSHeader& header = *(DDSHeader*)((BYTE*)textures[handler].memory + 4);
+
+			uint32_t blockSize = (header.fourCC == FourCCType::FOURCC_DXT1) ? 8 : 16;
+			int numblocks = ((header.width + 3) / 4) * ((header.height + 3) / 4);
+
+			uint32_t bufsize;
+			if (header.linearSize != 0)
+				bufsize = header.mipMapCount > 1 ? header.linearSize * 2 : header.linearSize;
+			else
+				bufsize = blockSize * numblocks;
+
+			if (header.mipMapCount < 1)
+				header.mipMapCount = 1;
+
+			BYTE* buffer = (BYTE*)textures[handler].memory + sizeof(DDSHeader);
+
+			TextureFormat format;
+
+			switch (header.fourCC)
+			{
+			case FourCCType::FOURCC_DXT1: format = TextureFormat::DXT1; break;
+			case FourCCType::FOURCC_DXT3: format = TextureFormat::DXT3; break;
+			case FourCCType::FOURCC_DXT5: format = TextureFormat::DXT5; break;
+			default:
+				ASSERT(false);
+			}
+
+			asset->texture = gl_GraphicsService->CreateTexture(buffer, format, header.width, header.height, blockSize, header.mipMapCount);
 		}
-
-		TextAsset asset;
-		asset.handler = handler;
-		asset.text = (char*)assets[handler].memory;
-		asset.textLength = assets[handler].memorySize;
-		return asset;
-
+		return *asset;
 	}
 }

@@ -21,6 +21,7 @@ namespace photon
 		static const int MAX_VERTEX_BUFFER_BINDINGS = 128;
 		static const int MAX_UNIFORM_BUFFERS = 128;
 		static const int MAX_INDEX_BUFFERS = 128;
+		static const int MAX_TEXTURES = 128;
 
 		GraphicsAPI* api;
 
@@ -30,6 +31,7 @@ namespace photon
 		Array<VertexBufferBindingHandler, MAX_VERTEX_BUFFER_BINDINGS> vertexBufferBindings;
 		Array<UniformBufferHandler, MAX_UNIFORM_BUFFERS> uniformBuffers;
 		Array<IndexBufferHandler, MAX_INDEX_BUFFERS> indexBuffers;
+		Array<TextureHandler, MAX_TEXTURES> textures;
 
 		GraphicsService(GraphicsAPI* api);
 		~GraphicsService();
@@ -40,8 +42,9 @@ namespace photon
 		static GraphicsService* Initialize(GraphicsAPI* api, MemoryStack& stack);
 		static void Uninitialize();
 
-
 		void PresentFrame();
+
+		TextureHandler CreateTexture(void* data, TextureFormat format, uint32_t width, uint32_t height, size_t blockSize, uint32_t mipsCount);
 	};
 
 	EXPORT extern GraphicsService* gl_GraphicsService;

@@ -6,37 +6,36 @@
 
 namespace photon
 {
-
 	struct ShaderHandler
 	{
 		uint32_t shader;
 	};
-
 	struct ShaderProgramHandler
 	{
 		uint32_t program;
 	};
-
 	struct VertexBufferHandler
 	{
 		uint32_t vb;
 	};
-
 	struct VertexBufferBindingHandler
 	{
 		uint32_t vao;
 	};
-
 	struct UniformBufferHandler
 	{
 		uint32_t ub;
 	};
-
 	struct IndexBufferHandler
 	{
 		uint32_t ib;
 
 		static const IndexBufferHandler Empty;
+	};
+
+	struct TextureHandler
+	{
+		uint32_t texture;
 	};
 
 	//Taken directly from OpenGL header
@@ -50,5 +49,11 @@ namespace photon
 	{
 		USHORT = 0x1403,
 		UINT = 0x1405,
+	};
+	enum class TextureFormat : uint32_t
+	{
+		DXT1= 0x83F1,
+		DXT3= 0x83F2,
+		DXT5= 0x83F3
 	};
 }
