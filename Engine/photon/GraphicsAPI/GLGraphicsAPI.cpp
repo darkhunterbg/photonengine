@@ -117,12 +117,14 @@ namespace photon
 	{
 		glDeleteBuffers(1, &vb.vb);
 	}
-	VertexBufferBindingHandler GLGraphicsAPI::CreateVertexBufferBinding(const VertexBufferHandler* vertexBuffers, const VertexBufferLayout* layots, int buffersCount)
+	VertexBufferBindingHandler GLGraphicsAPI::CreateVertexBufferBinding(const VertexBufferHandler* vertexBuffers, const VertexBufferLayout* layots, int buffersCount, IndexBufferHandler indexBuffer)
 	{
 		VertexBufferBindingHandler handler;
 
 		glGenVertexArrays(1, &handler.vao);
 		glBindVertexArray(handler.vao);
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer.ib);
 
 		for (int i = 0; i < buffersCount; ++i)
 		{
@@ -158,6 +160,10 @@ namespace photon
 		}
 
 		glBindVertexArray(GL_NONE);
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, GL_NONE);
+		glBindBuffer(GL_ARRAY_BUFFER, GL_NONE);
+
 		for (int i = 0; i < buffersCount; ++i)
 			glDisableVertexAttribArray(i);
 
@@ -167,9 +173,13 @@ namespace photon
 	{
 		glDeleteVertexArrays(1, &vbb.vao);
 	}
-	void GLGraphicsAPI::Draw(PrimitiveType type, int indices)
+	void GLGraphicsAPI::Draw(PrimitiveType type, unsigned int elemCount)
 	{
-		glDrawArrays((uint32_t)type, 0, indices);
+		glDrawArrays((uint32_t)type, 0, elemCount);
+	}
+	void GLGraphicsAPI::DrawIndexed(PrimitiveType pType, IndiceType iType, unsigned int elemCount)
+	{
+		glDrawElements((uint32_t)(pType), elemCount, (uint32_t)iType, 0);
 	}
 	void GLGraphicsAPI::UseShaderProgram(ShaderProgramHandler program)
 	{
@@ -213,12 +223,37 @@ namespace photon
 	void GLGraphicsAPI::BindBufferToProgramBlock(ShaderProgramHandler program, int blockIndex, UniformBufferHandler buffer)
 	{
 		uint32_t bindPoint = blockIndex;
-		
+
 		glUniformBlockBinding(program.program, blockIndex, bindPoint);
 
 		glBindBuffer(GL_UNIFORM_BUFFER, buffer.ub);
 		glBindBufferBase(GL_UNIFORM_BUFFER, bindPoint, buffer.ub);
 		glBindBuffer(GL_UNIFORM_BUFFER, GL_NONE);
+	}
+
+	IndexBufferHandler GLGraphicsAPI::CreateIndexBuffer(const void* indices, size_t indicesCount, IndiceType indiceType)
+	{
+		IndexBufferHandler handler;
+
+		size_t size;
+		switch (indiceType)
+		{
+		case IndiceType::UINT: size = sizeof(uint32_t); break;
+		case IndiceType::USHORT: size = sizeof(uint16_t); break;
+		default:
+			break;
+		}
+
+		glGenBuffers(1, &handler.ib);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, handler.ib);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesCount* size, indices, GL_STATIC_DRAW);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, GL_NONE);
+
+		return handler;
+	}
+	void GLGraphicsAPI::DestroyIndexBuffer(IndexBufferHandler handler)
+	{
+		glDeleteBuffers(1, &handler.ib);
 	}
 }
 

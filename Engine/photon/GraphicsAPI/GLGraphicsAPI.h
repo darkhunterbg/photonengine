@@ -45,7 +45,7 @@ namespace photon
 		VertexBufferHandler CreateVertexBuffer(const void* vertices, size_t verticesCount, int sizeOfVertex);
 		void DestroyVertexBuffer(VertexBufferHandler vb);
 
-		VertexBufferBindingHandler CreateVertexBufferBinding(const VertexBufferHandler* vertexBuffers, const VertexBufferLayout* layots, int buffersCount);
+		VertexBufferBindingHandler CreateVertexBufferBinding(const VertexBufferHandler* vertexBuffers, const VertexBufferLayout* layots, int buffersCount,  IndexBufferHandler indexBuffer = IndexBufferHandler::Empty);
 		void DestroyVertexBufferBinding(VertexBufferBindingHandler vbb);
 		void UseVertexBufferBinding(VertexBufferBindingHandler vbb);
 		void ClearVertexBufferBinding();
@@ -55,10 +55,13 @@ namespace photon
 		void* StartUpdateUniformBuffer(UniformBufferHandler handler);
 		void EndUpdateUniformBuffer();
 
+		IndexBufferHandler CreateIndexBuffer(const void* indices, size_t indicesCount, IndiceType indiceType);
+		void DestroyIndexBuffer(IndexBufferHandler handler);
+
 		void BindBufferToProgramBlock(ShaderProgramHandler handler, int blockIndex, UniformBufferHandler buffer);
 
-		void Draw(PrimitiveType type, int indices);
-
+		void Draw(PrimitiveType type,unsigned int elemCount);
+		void DrawIndexed(PrimitiveType pType, IndiceType iType, unsigned int elemCount);
 
 
 	} typedef GraphicsAPI;

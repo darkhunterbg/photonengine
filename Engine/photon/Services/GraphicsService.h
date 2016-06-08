@@ -20,6 +20,7 @@ namespace photon
 		static const int MAX_VERTEX_BUFFERS = 128;
 		static const int MAX_VERTEX_BUFFER_BINDINGS = 128;
 		static const int MAX_UNIFORM_BUFFERS = 128;
+		static const int MAX_INDEX_BUFFERS = 128;
 
 		GraphicsAPI* api;
 
@@ -28,6 +29,7 @@ namespace photon
 		Array<VertexBufferHandler, MAX_VERTEX_BUFFERS> vertexBuffers;
 		Array<VertexBufferBindingHandler, MAX_VERTEX_BUFFER_BINDINGS> vertexBufferBindings;
 		Array<UniformBufferHandler, MAX_UNIFORM_BUFFERS> uniformBuffers;
+		Array<IndexBufferHandler, MAX_INDEX_BUFFERS> indexBuffers;
 
 		GraphicsService(GraphicsAPI* api);
 		~GraphicsService();

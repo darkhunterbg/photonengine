@@ -136,5 +136,8 @@
     <ClCompile Include="photon\Services\AssetsService.cpp">
       <Filter>Services\Assets</Filter>
     </ClCompile>
+    <ClCompile Include="photon\GraphicsAPI\GLGraphicsAPITypes.cpp">
+      <Filter>GraphicsAPI\OpenGL</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
