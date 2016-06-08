@@ -14,6 +14,7 @@ namespace photon
 	}
 	AssetsService::~AssetsService()
 	{
+		int assetsCount = assets.GetCount();
 		for (int i = 0; i < assetsCount; ++i)
 		{
 			gl_MemoryService->FreePage(assets[i].memory);
@@ -47,6 +48,7 @@ namespace photon
 	{
 		ASSERT(text::Length(assetPath) < ASSET_PATH_SIZE);
 
+		int assetsCount = assets.GetCount(); 
 		for (int i = 0; i < assetsCount; ++i)
 		{
 			if (text::Compare(assets[i].path, assetPath) == 0)
@@ -54,11 +56,6 @@ namespace photon
 		}
 
 		return (AssetsHandler)-1;
-
-		AssetsHandler handler = ++assetsCount;
-		text::Copy(assetPath, assets[handler].path);
-
-
 	}
 	TextAsset AssetsService::GetTextAsset(const char* assetPath)
 	{
@@ -66,9 +63,10 @@ namespace photon
 
 		if (handler < 0)
 		{
-			ASSERT(assetsCount < MAX_ASSETS);
-			handler = assetsCount++;
-			text::Copy(assetPath, assets[handler].path);
+			handler = assets.GetCount();
+			AssetEntry& asset = assets.New();
+		
+			text::Copy(assetPath, asset.path);
 
 #pragma message("Fix this code for cross-platforming")
 			TCHAR fullPath[FILE_PATH_CHAR_SIZE];
@@ -77,11 +75,11 @@ namespace photon
 
 			FileHandler file = Platform::FileOpen(fullPath);
 			size_t fileSize = Platform::GetFileSize(file);
-#pragma message("Need better allocation");
+#pragma message("Need better allocation")
 			void* ptr = gl_MemoryService->AllocatePage(fileSize);
 			Platform::ReadFromFile(file, ptr, fileSize);
-			assets[handler].memory = ptr;
-			assets[handler].memorySize = fileSize;
+			asset.memory = ptr;
+			asset.memorySize = fileSize;
 			Platform::FileClose(file);
 		}
 

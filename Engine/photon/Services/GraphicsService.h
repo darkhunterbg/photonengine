@@ -4,16 +4,11 @@
 #include "MemoryStack.h"
 #include "../GraphicsAPI/GraphicsAPI.h"
 #include "../GraphicsAPI/GraphicsAPITypes.h"
+#include "../Utils/Array.h"
 
 namespace photon
 {
-	struct Technique
-	{
-		static const int MAX_SHADERS_COUNT = 3;
-		ShaderProgramHandler program;
-		ShaderHandler shaders[MAX_SHADERS_COUNT];
-		int shadersCount = 0;
-	};
+
 
 	class EXPORT GraphicsService
 	{
@@ -21,9 +16,18 @@ namespace photon
 
 	private:
 		static const int MAX_SHADER_PROGRAMS = 128;
+		static const int MAX_SHADERS = 128;
+		static const int MAX_VERTEX_BUFFERS = 128;
+		static const int MAX_VERTEX_BUFFER_BINDINGS = 128;
+		static const int MAX_UNIFORM_BUFFERS = 128;
+
 		GraphicsAPI* api;
-		Technique techniques[MAX_SHADER_PROGRAMS];
-		int techniquesCount = 0;
+
+		Array<ShaderProgramHandler, MAX_SHADER_PROGRAMS> shaderPrograms;
+		Array<ShaderHandler, MAX_SHADERS> shaders;
+		Array<VertexBufferHandler, MAX_VERTEX_BUFFERS> vertexBuffers;
+		Array<VertexBufferBindingHandler, MAX_VERTEX_BUFFER_BINDINGS> vertexBufferBindings;
+		Array<UniformBufferHandler, MAX_UNIFORM_BUFFERS> uniformBuffers;
 
 		GraphicsService(GraphicsAPI* api);
 		~GraphicsService();

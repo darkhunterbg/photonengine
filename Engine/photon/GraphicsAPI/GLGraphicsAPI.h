@@ -55,7 +55,7 @@ namespace photon
 		void* StartUpdateUniformBuffer(UniformBufferHandler handler);
 		void EndUpdateUniformBuffer();
 
-		void BindBufferToProgramBlock(ShaderProgramHandler handler, const char* blockName, UniformBufferHandler buffer);
+		void BindBufferToProgramBlock(ShaderProgramHandler handler, int blockIndex, UniformBufferHandler buffer);
 
 		void Draw(PrimitiveType type, int indices);
 

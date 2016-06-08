@@ -8,7 +8,7 @@
 layout(location = 0) out vec4 colorBuffer;
 
 //structure, aligned by vec4, starts at location 0
-layout( std140 ) uniform Block
+layout( std140, binding = 0 ) uniform Block
 {
  vec4 color;
 };

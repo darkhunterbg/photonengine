@@ -210,14 +210,11 @@ namespace photon
 	{
 		glDeleteBuffers(1, &buffer.ub);
 	}
-	void GLGraphicsAPI::BindBufferToProgramBlock(ShaderProgramHandler program, const char* blockName, UniformBufferHandler buffer)
+	void GLGraphicsAPI::BindBufferToProgramBlock(ShaderProgramHandler program, int blockIndex, UniformBufferHandler buffer)
 	{
-		uint32_t index = glGetUniformBlockIndex(program.program, blockName);
-		ASSERT(index != GL_INVALID_INDEX);
-
-		uint32_t bindPoint = index;
+		uint32_t bindPoint = blockIndex;
 		
-		glUniformBlockBinding(program.program, index, bindPoint);
+		glUniformBlockBinding(program.program, blockIndex, bindPoint);
 
 		glBindBuffer(GL_UNIFORM_BUFFER, buffer.ub);
 		glBindBufferBase(GL_UNIFORM_BUFFER, bindPoint, buffer.ub);

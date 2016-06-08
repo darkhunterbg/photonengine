@@ -16,10 +16,6 @@ namespace photon
 		{0.0f,  0.5f, 0.0f, 1.0f },
 	};
 
-	VertexBufferBindingHandler vbb;
-	VertexBufferHandler vb;
-	UniformBufferHandler ub;
-
 	GraphicsService::GraphicsService(GraphicsAPI* api) :
 		api(api)
 	{
@@ -27,17 +23,25 @@ namespace photon
 	}
 	GraphicsService::~GraphicsService()
 	{
-		for (int i = 0; i < techniquesCount; ++i)
-		{
-			Technique& technique = techniques[i];
+		int count = shaders.GetCount();
+		for (int i = 0; i < count; ++i)
+			api->DestroyShader(shaders[i]);
 
-			for (int j = 0; j < technique.shadersCount; ++i)
-			{
-				api->DestroyShader(technique.shaders[i]);
-			}
+		count = shaderPrograms.GetCount();
+		for (int i = 0; i < count; ++i)
+			api->DestoryShaderProgram(shaderPrograms[i]);
 
-			api->DestoryShaderProgram(technique.program);
-		}
+		count = vertexBuffers.GetCount();
+		for (int i = 0; i < count; ++i)
+			api->DestroyVertexBuffer(vertexBuffers[i]);
+
+		count = vertexBufferBindings.GetCount();
+		for (int i = 0; i < count; ++i)
+			api->DestroyVertexBufferBinding(vertexBufferBindings[i]);
+
+		count = uniformBuffers.GetCount();
+		for (int i = 0; i < count; ++i)
+			api->DestroyUniformBuffer(uniformBuffers[i]);
 	}
 
 	GraphicsService* GraphicsService::Initialize(GraphicsAPI* api, MemoryStack& stack)
@@ -48,24 +52,20 @@ namespace photon
 		gl_GraphicsService = MEM_NEW(stack, GraphicsService)(api);
 		gl_GraphicsService->InitializeTechniques();
 
-		vb = gl_GraphicsService->api->CreateVertexBuffer(vertices, 3, sizeof(Vector));
+		gl_GraphicsService->vertexBuffers.Add(gl_GraphicsService->api->CreateVertexBuffer(vertices, 3, sizeof(Vector)));
 		VertexBufferLayout layout = {};
 		layout.attributesCount = 1;
 		VertexAttribute attr[] = { { 0, VertexParamType::FLOAT4 } };
 		layout.attributes = attr;
-		vbb = gl_GraphicsService->api->CreateVertexBufferBinding(&vb, &layout, 1);
-		ub = gl_GraphicsService->api->CreateUniformBuffer( sizeof(Vector), nullptr);
-		gl_GraphicsService->api->BindBufferToProgramBlock(gl_GraphicsService->techniques[0].program, "Block", ub);
+		gl_GraphicsService->vertexBufferBindings.Add(gl_GraphicsService->api->CreateVertexBufferBinding(&gl_GraphicsService->vertexBuffers[0], &layout, 1));
+		gl_GraphicsService->uniformBuffers.Add(gl_GraphicsService->api->CreateUniformBuffer(sizeof(Vector), nullptr));
+		gl_GraphicsService->api->BindBufferToProgramBlock(gl_GraphicsService->shaderPrograms[0], 0, gl_GraphicsService->uniformBuffers[0]);
 
 		return gl_GraphicsService;
 	}
 	void GraphicsService::Uninitialize()
 	{
 		ASSERT(gl_GraphicsService);
-
-		gl_GraphicsService->api->DestroyVertexBuffer(vb);
-		gl_GraphicsService->api->DestroyVertexBufferBinding(vbb);
-		gl_GraphicsService->api->DestroyUniformBuffer(ub);
 
 		gl_GraphicsService->~GraphicsService();
 		gl_GraphicsService = nullptr;
@@ -79,17 +79,17 @@ namespace photon
 		i += x* 0.01;
 		if (i > 1 || i < 0)
 			x = -x;
-		Vector data = {i,i,i,1.0f };
+		Vector data = { i,i,i,1.0f };
 
 		api->ClearBuffer({ 0,0,0.4f,0 });
 
-		api->UseShaderProgram(techniques[0].program);
+		api->UseShaderProgram(shaderPrograms[0]);
 
-		Vector* v = (Vector*)api->StartUpdateUniformBuffer(ub);
+		Vector* v = (Vector*)api->StartUpdateUniformBuffer(uniformBuffers[0]);
 		*v = data;
 		api->EndUpdateUniformBuffer();
 
-		api->UseVertexBufferBinding(vbb);
+		api->UseVertexBufferBinding(vertexBufferBindings[0]);
 		api->Draw(PrimitiveType::TRIANGLE_LIST, 3);
 		api->ClearVertexBufferBinding();
 
@@ -101,13 +101,14 @@ namespace photon
 		TextAsset vsText = gl_AssetsService->GetTextAsset("shader.v");
 		TextAsset fsText = gl_AssetsService->GetTextAsset("shader.f");
 
-		Technique technique = {};
+		ShaderHandler vs = api->CreateShader(ShaderType::VERTEX_SHADER, vsText.text);
+		ShaderHandler ps = api->CreateShader(ShaderType::FRAGMENT_SHADER, fsText.text);
 
-		technique.shaders[0] = api->CreateShader(ShaderType::VERTEX_SHADER, vsText.text);
-		technique.shaders[1] = api->CreateShader(ShaderType::FRAGMENT_SHADER, fsText.text);
+		shaders.Add(vs);
+		shaders.Add(ps);
 
-		technique.program = api->CreateShaderProgram(technique.shaders, 2);
+		ShaderHandler shaders[] = { vs,ps };
 
-		techniques[techniquesCount++] = technique;
+		shaderPrograms.Add(api->CreateShaderProgram(shaders, 2));
 	}
 }

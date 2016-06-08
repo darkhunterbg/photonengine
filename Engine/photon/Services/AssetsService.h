@@ -4,6 +4,7 @@
 #include "../Types.h"
 #include "MemoryStack.h"
 #include "Assets.h"
+#include "../Utils/Array.h"
 
 namespace photon
 {
@@ -26,8 +27,8 @@ namespace photon
 
 		MemoryStack* scratchMemory;
 		TCHAR root[FILE_PATH_CHAR_SIZE];
-		AssetEntry assets[MAX_ASSETS];
-		int assetsCount = 0;
+
+		Array<AssetEntry, MAX_ASSETS> assets;
 
 		AssetsService(size_t scratchMemorySize);
 		~AssetsService();

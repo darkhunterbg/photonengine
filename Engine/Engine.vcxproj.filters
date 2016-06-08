@@ -63,6 +63,9 @@
     <ClInclude Include="photon\Services\Assets.h">
       <Filter>Services\Assets</Filter>
     </ClInclude>
+    <ClInclude Include="photon\Utils\Array.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Platform">
@@ -97,6 +100,9 @@
     </Filter>
     <Filter Include="Services\Assets">
       <UniqueIdentifier>{67822647-39b5-4966-b616-133994630aa9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{29c0f3fe-c6e9-4397-9f84-50fc6b15fa96}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
