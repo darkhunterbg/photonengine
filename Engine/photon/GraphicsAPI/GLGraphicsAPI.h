@@ -34,25 +34,30 @@ namespace photon
 
 		void SwapBuffers();
 		void ClearBuffer(const Vector&);
+
 		ShaderHandler CreateShader(ShaderType type, const char* code);
 		void DestroyShader(ShaderHandler shader);
+
 		ShaderProgramHandler CreateShaderProgram(ShaderHandler* shaders, int count);
 		void DestoryShaderProgram(ShaderProgramHandler shaderProgram);
+		void UseShaderProgram(ShaderProgramHandler program);
+
 		VertexBufferHandler CreateVertexBuffer(const void* vertices, size_t verticesCount, int sizeOfVertex);
 		void DestroyVertexBuffer(VertexBufferHandler vb);
+
 		VertexBufferBindingHandler CreateVertexBufferBinding(const VertexBufferHandler* vertexBuffers, const VertexBufferLayout* layots, int buffersCount);
 		void DestroyVertexBufferBinding(VertexBufferBindingHandler vbb);
-		
+		void UseVertexBufferBinding(VertexBufferBindingHandler vbb);
+		void ClearVertexBufferBinding();
+
 		ProgramBlockHandler CreateProgramBlock(ShaderProgramHandler handler,const char* blockName,size_t bufferSize, void* bufferValue);
 		void DestroyProgramBlock(ProgramBlockHandler block);
 		void* StartUpdateProgramBlock(ProgramBlockHandler block);
 		void EndUpdateProgramBlock();
 
 		void Draw(PrimitiveType type, int indices);
-		void UseShaderProgram(ShaderProgramHandler program);
-		void SetShaderProgramParam(uint32_t location,const Vector& val);
-		void UseVertexBufferBinding(VertexBufferBindingHandler vbb);
-		void ClearVertexBufferBinding();
+		
+
 
 	} typedef GraphicsAPI;
 }

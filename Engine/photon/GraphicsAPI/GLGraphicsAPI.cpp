@@ -175,10 +175,7 @@ namespace photon
 	{
 		glUseProgram(program.program);
 	}
-	void GLGraphicsAPI::SetShaderProgramParam(uint32_t location, const Vector& val)
-	{
-		glUniform4fv(location, 1, &val.x);
-	}
+	
 	void GLGraphicsAPI::UseVertexBufferBinding(VertexBufferBindingHandler vbb)
 	{
 		glBindVertexArray(vbb.vao);
@@ -196,6 +193,7 @@ namespace photon
 	void GLGraphicsAPI::EndUpdateProgramBlock()
 	{
 		glUnmapBuffer(GL_UNIFORM_BUFFER);
+		glBindBuffer(GL_UNIFORM_BUFFER, GL_NONE);
 	}
 
 	ProgramBlockHandler GLGraphicsAPI::CreateProgramBlock(ShaderProgramHandler program, const char* blockName, size_t bufferSize, void* bufferValue)
@@ -218,10 +216,8 @@ namespace photon
 	}
 	void GLGraphicsAPI::DestroyProgramBlock(ProgramBlockHandler block)
 	{
-		glBindBuffer(GL_UNIFORM_BUFFER, GL_NONE);
 		glDeleteBuffers(1, &block.ub);
 	}
-
 }
 
 #endif

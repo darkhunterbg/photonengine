@@ -9,11 +9,10 @@ namespace photon
 {
 	struct Technique
 	{
+		static const int MAX_SHADERS_COUNT = 3;
 		ShaderProgramHandler program;
-		ShaderHandler vs;
-		ShaderHandler fs;
-		bool hasVS : 1;
-		bool hasFS : 1;
+		ShaderHandler shaders[MAX_SHADERS_COUNT];
+		int shadersCount = 0;
 	};
 
 	class EXPORT GraphicsService

@@ -31,11 +31,10 @@ namespace photon
 		{
 			Technique& technique = techniques[i];
 
-			if (technique.hasVS)
-				api->DestroyShader(technique.vs);
-
-			if (technique.hasFS)
-				api->DestroyShader(technique.fs);
+			for (int j = 0; j < technique.shadersCount; ++i)
+			{
+				api->DestroyShader(technique.shaders[i]);
+			}
 
 			api->DestoryShaderProgram(technique.program);
 		}
@@ -81,14 +80,16 @@ namespace photon
 		Vector data = {i,i,i,1.0f };
 
 		api->ClearBuffer({ 0,0,0.4f,0 });
+
 		api->UseShaderProgram(techniques[0].program);
 		Vector* v = (Vector*)api->StartUpdateProgramBlock(pb);
 		*v = data;
 		api->EndUpdateProgramBlock();
-		//api->SetShaderProgramParam(0, { 1.0f,1.0f,0.0f,1.0f });
+
 		api->UseVertexBufferBinding(vbb);
 		api->Draw(PrimitiveType::TRIANGLE_LIST, 3);
 		api->ClearVertexBufferBinding();
+
 		api->SwapBuffers();
 	}
 
@@ -99,13 +100,10 @@ namespace photon
 
 		Technique technique = {};
 
-		technique.vs = api->CreateShader(ShaderType::VERTEX_SHADER, vsText.text);
-		technique.fs = api->CreateShader(ShaderType::FRAGMENT_SHADER, fsText.text);
-		ShaderHandler shaders[] = { technique.vs,technique.fs };
+		technique.shaders[0] = api->CreateShader(ShaderType::VERTEX_SHADER, vsText.text);
+		technique.shaders[1] = api->CreateShader(ShaderType::FRAGMENT_SHADER, fsText.text);
 
-		technique.program = api->CreateShaderProgram(shaders, 2);
-		technique.hasVS = true;
-		technique.hasFS = true;
+		technique.program = api->CreateShaderProgram(technique.shaders, 2);
 
 		techniques[techniquesCount++] = technique;
 	}
