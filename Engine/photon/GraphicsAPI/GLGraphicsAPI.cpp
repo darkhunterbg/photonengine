@@ -175,7 +175,7 @@ namespace photon
 	{
 		glUseProgram(program.program);
 	}
-	
+
 	void GLGraphicsAPI::UseVertexBufferBinding(VertexBufferBindingHandler vbb)
 	{
 		glBindVertexArray(vbb.vao);
@@ -184,39 +184,44 @@ namespace photon
 	{
 		glBindVertexArray(GL_NONE);
 	}
-	void* GLGraphicsAPI::StartUpdateProgramBlock(ProgramBlockHandler block)
+	void* GLGraphicsAPI::StartUpdateUniformBuffer(UniformBufferHandler block)
 	{
 		glBindBuffer(GL_UNIFORM_BUFFER, block.ub);
-		void* ptr =glMapBuffer(GL_UNIFORM_BUFFER, GL_WRITE_ONLY);
+		void* ptr = glMapBuffer(GL_UNIFORM_BUFFER, GL_WRITE_ONLY);
 		return ptr;
 	}
-	void GLGraphicsAPI::EndUpdateProgramBlock()
+	void GLGraphicsAPI::EndUpdateUniformBuffer()
 	{
 		glUnmapBuffer(GL_UNIFORM_BUFFER);
 		glBindBuffer(GL_UNIFORM_BUFFER, GL_NONE);
 	}
-
-	ProgramBlockHandler GLGraphicsAPI::CreateProgramBlock(ShaderProgramHandler program, const char* blockName, size_t bufferSize, void* bufferValue)
+	UniformBufferHandler GLGraphicsAPI::CreateUniformBuffer(size_t bufferSize, void* bufferValue)
 	{
-		ProgramBlockHandler handler;
-
-		handler.index = glGetUniformBlockIndex(program.program, blockName);
-		uint32_t bindPoint = handler.index;
-
-		glUniformBlockBinding(program.program, handler.index, bindPoint);
+		UniformBufferHandler handler;
 
 		glGenBuffers(1, &handler.ub);
 		glBindBuffer(GL_UNIFORM_BUFFER, handler.ub);
 		glBufferData(GL_UNIFORM_BUFFER, bufferSize, bufferValue, GL_DYNAMIC_DRAW);
-
-		glBindBufferBase(GL_UNIFORM_BUFFER, bindPoint, handler.ub);
-
 		glBindBuffer(GL_UNIFORM_BUFFER, GL_NONE);
+
 		return handler;
 	}
-	void GLGraphicsAPI::DestroyProgramBlock(ProgramBlockHandler block)
+	void GLGraphicsAPI::DestroyUniformBuffer(UniformBufferHandler buffer)
 	{
-		glDeleteBuffers(1, &block.ub);
+		glDeleteBuffers(1, &buffer.ub);
+	}
+	void GLGraphicsAPI::BindBufferToProgramBlock(ShaderProgramHandler program, const char* blockName, UniformBufferHandler buffer)
+	{
+		uint32_t index = glGetUniformBlockIndex(program.program, blockName);
+		ASSERT(index != GL_INVALID_INDEX);
+
+		uint32_t bindPoint = index;
+		
+		glUniformBlockBinding(program.program, index, bindPoint);
+
+		glBindBuffer(GL_UNIFORM_BUFFER, buffer.ub);
+		glBindBufferBase(GL_UNIFORM_BUFFER, bindPoint, buffer.ub);
+		glBindBuffer(GL_UNIFORM_BUFFER, GL_NONE);
 	}
 }
 

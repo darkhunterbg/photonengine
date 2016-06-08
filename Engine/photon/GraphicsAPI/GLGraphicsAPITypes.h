@@ -25,11 +25,10 @@ namespace photon
 	{
 		uint32_t vao;
 	};
-	
-	struct ProgramBlockHandler
+
+	struct UniformBufferHandler
 	{
 		uint32_t ub;
-		uint32_t index;
 	};
 
 	enum class PrimitiveType : uint32_t

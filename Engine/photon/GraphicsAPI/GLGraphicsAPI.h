@@ -50,13 +50,15 @@ namespace photon
 		void UseVertexBufferBinding(VertexBufferBindingHandler vbb);
 		void ClearVertexBufferBinding();
 
-		ProgramBlockHandler CreateProgramBlock(ShaderProgramHandler handler,const char* blockName,size_t bufferSize, void* bufferValue);
-		void DestroyProgramBlock(ProgramBlockHandler block);
-		void* StartUpdateProgramBlock(ProgramBlockHandler block);
-		void EndUpdateProgramBlock();
+		UniformBufferHandler CreateUniformBuffer(size_t bufferSize, void* bufferValue);
+		void DestroyUniformBuffer(UniformBufferHandler handler);
+		void* StartUpdateUniformBuffer(UniformBufferHandler handler);
+		void EndUpdateUniformBuffer();
+
+		void BindBufferToProgramBlock(ShaderProgramHandler handler, const char* blockName, UniformBufferHandler buffer);
 
 		void Draw(PrimitiveType type, int indices);
-		
+
 
 
 	} typedef GraphicsAPI;

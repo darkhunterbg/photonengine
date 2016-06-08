@@ -18,7 +18,7 @@ namespace photon
 
 	VertexBufferBindingHandler vbb;
 	VertexBufferHandler vb;
-	ProgramBlockHandler pb;
+	UniformBufferHandler ub;
 
 	GraphicsService::GraphicsService(GraphicsAPI* api) :
 		api(api)
@@ -54,7 +54,8 @@ namespace photon
 		VertexAttribute attr[] = { { 0, VertexParamType::FLOAT4 } };
 		layout.attributes = attr;
 		vbb = gl_GraphicsService->api->CreateVertexBufferBinding(&vb, &layout, 1);
-		pb = gl_GraphicsService->api->CreateProgramBlock(gl_GraphicsService->techniques[0].program, "Block", sizeof(Vector), nullptr);
+		ub = gl_GraphicsService->api->CreateUniformBuffer( sizeof(Vector), nullptr);
+		gl_GraphicsService->api->BindBufferToProgramBlock(gl_GraphicsService->techniques[0].program, "Block", ub);
 
 		return gl_GraphicsService;
 	}
@@ -64,6 +65,7 @@ namespace photon
 
 		gl_GraphicsService->api->DestroyVertexBuffer(vb);
 		gl_GraphicsService->api->DestroyVertexBufferBinding(vbb);
+		gl_GraphicsService->api->DestroyUniformBuffer(ub);
 
 		gl_GraphicsService->~GraphicsService();
 		gl_GraphicsService = nullptr;
@@ -82,9 +84,10 @@ namespace photon
 		api->ClearBuffer({ 0,0,0.4f,0 });
 
 		api->UseShaderProgram(techniques[0].program);
-		Vector* v = (Vector*)api->StartUpdateProgramBlock(pb);
+
+		Vector* v = (Vector*)api->StartUpdateUniformBuffer(ub);
 		*v = data;
-		api->EndUpdateProgramBlock();
+		api->EndUpdateUniformBuffer();
 
 		api->UseVertexBufferBinding(vbb);
 		api->Draw(PrimitiveType::TRIANGLE_LIST, 3);
