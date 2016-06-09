@@ -255,6 +255,41 @@ namespace photon
 	{
 		glDeleteBuffers(1, &handler.ib);
 	}
+
+	TextureHandler GLGraphicsAPI::CreateTexture(void* data, TextureFormat format, uint32_t width, uint32_t height, size_t blockSize, uint32_t mipsCount )
+	{
+		TextureHandler handler;
+
+		glGenTextures(1, &handler.texture);
+
+		glBindTexture(GL_TEXTURE_2D, handler.texture);
+		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+		uint32_t offset = 0;
+		uint32_t level = 0;
+		BYTE* buffer = (BYTE*)data;
+		size_t size = ((width + 3) / 4)*((height + 3) / 4)*blockSize;
+
+		for ( level = 0; level < mipsCount && (width || height); ++level)
+		{
+			size = ((width + 3) / 4)*((height + 3) / 4)*blockSize;
+			glCompressedTexImage2D(GL_TEXTURE_2D, level, (uint32_t)format, width, height, 0, size, buffer + offset);
+			auto error = glGetError();
+			ASSERT(error==0);
+
+			offset += size;
+			width /= max(width / 2, 1);
+			height /= max(height / 2, 1);
+		}
+
+		glBindTexture(GL_TEXTURE_2D, GL_NONE);
+
+		return handler;
+	}
+	void GLGraphicsAPI::DestroyTexture(TextureHandler handler)
+	{
+		glDeleteTextures(1, &handler.texture);
+	}
 }
 
 #endif

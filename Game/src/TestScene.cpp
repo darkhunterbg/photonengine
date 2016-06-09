@@ -6,8 +6,7 @@ class TestScene : public photon::Scene
 {
 	virtual void Initialize() override
 	{
-		photon::TextAsset asset = photon::gl_AssetsService->GetTextAsset("test.txt");
-		photon::gl_AssetsService->GetTextAsset("test.txt");
+		photon::TextureAsset& texture = photon::gl_AssetsService->GetTextureAsset("texture.dds");
 	}
 
 	virtual void Update() override

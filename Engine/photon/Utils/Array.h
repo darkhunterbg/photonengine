@@ -5,7 +5,7 @@
 namespace photon
 {
 	template <class T, unsigned int CAPACITY>
-	class EXPORT Array
+	class Array
 	{
 		DISABLE_COPY(Array);
 
@@ -17,6 +17,11 @@ namespace photon
 		~Array() = default;
 
 		inline T& operator[](unsigned int index)
+		{
+			ASSERT(index < used);
+			return buffer[index];
+		}
+		inline T& Get(unsigned int index)
 		{
 			ASSERT(index < used);
 			return buffer[index];

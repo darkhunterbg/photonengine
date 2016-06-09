@@ -13,10 +13,11 @@ namespace photon
 	Vector vertices[] = {
 		{-0.5f, -0.5f, 0.0f, 1.0f},
 		{0.5f, -0.5f, 0.0f, 1.0f },
-		{0.0f,  0.5f, 0.0f, 1.0f },
+		{0.5f,  0.5f, 0.0f, 1.0f },
+		{ -0.5f,  0.5f, 0.0f, 1.0f },
 	};
 	unsigned short indices[] = {
-		0,1,2,
+		0,1,3,2
 	};
 
 	GraphicsService::GraphicsService(GraphicsAPI* api) :
@@ -49,6 +50,10 @@ namespace photon
 		count = indexBuffers.GetCount();
 		for (int i = 0; i < count; ++i)
 			api->DestroyIndexBuffer(indexBuffers[i]);
+
+		count = textures.GetCount();
+		for (int i = 0; i < count; ++i)
+			api->DestroyTexture(textures[i]);
 	}
 
 	GraphicsService* GraphicsService::Initialize(GraphicsAPI* api, MemoryStack& stack)
@@ -59,14 +64,14 @@ namespace photon
 		gl_GraphicsService = MEM_NEW(stack, GraphicsService)(api);
 		gl_GraphicsService->InitializeTechniques();
 
-		gl_GraphicsService->indexBuffers.Add(gl_GraphicsService->api->CreateIndexBuffer(indices, 3, IndiceType::USHORT));
-		gl_GraphicsService->vertexBuffers.Add(gl_GraphicsService->api->CreateVertexBuffer(vertices, 3, sizeof(Vector)));
+		gl_GraphicsService->indexBuffers.Add(gl_GraphicsService->api->CreateIndexBuffer(indices, 4, IndiceType::USHORT));
+		gl_GraphicsService->vertexBuffers.Add(gl_GraphicsService->api->CreateVertexBuffer(vertices, 4, sizeof(Vector)));
 		VertexBufferLayout layout = {};
 		layout.attributesCount = 1;
 		VertexAttribute attr[] = { { 0, VertexParamType::FLOAT4 } };
 		layout.attributes = attr;
 		gl_GraphicsService->vertexBufferBindings.Add(
-			gl_GraphicsService->api->CreateVertexBufferBinding(&gl_GraphicsService->vertexBuffers[0], &layout, 1, 
+			gl_GraphicsService->api->CreateVertexBufferBinding(&gl_GraphicsService->vertexBuffers[0], &layout, 1,
 				gl_GraphicsService->indexBuffers[0]));
 		gl_GraphicsService->uniformBuffers.Add(gl_GraphicsService->api->CreateUniformBuffer(sizeof(Vector), nullptr));
 		gl_GraphicsService->api->BindBufferToProgramBlock(gl_GraphicsService->shaderPrograms[0], 0, gl_GraphicsService->uniformBuffers[0]);
@@ -100,7 +105,7 @@ namespace photon
 		api->EndUpdateUniformBuffer();
 
 		api->UseVertexBufferBinding(vertexBufferBindings[0]);
-		api->DrawIndexed(PrimitiveType::TRIANGLE_LIST, photon::IndiceType::USHORT, 3);
+		api->DrawIndexed(PrimitiveType::TRIANGLE_STRIP, photon::IndiceType::USHORT, 4);
 		api->ClearVertexBufferBinding();
 
 		api->SwapBuffers();
@@ -120,5 +125,12 @@ namespace photon
 		ShaderHandler shaders[] = { vs,ps };
 
 		shaderPrograms.Add(api->CreateShaderProgram(shaders, 2));
+	}
+
+	TextureHandler GraphicsService::CreateTexture(void* data, TextureFormat format, uint32_t width, uint32_t height, size_t blockSize, uint32_t mipsCount)
+	{
+		TextureHandler texture = api->CreateTexture(data, format, width, height, blockSize, mipsCount);
+		textures.Add(texture);
+		return texture;
 	}
 }
