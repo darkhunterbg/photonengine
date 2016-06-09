@@ -126,36 +126,50 @@ namespace photon
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer.ib);
 
+		size_t layoutSize = 0;
+		for (int i = 0; i < buffersCount; ++i)
+			layoutSize += layots[i].GetTotalSize();
+
 		for (int i = 0; i < buffersCount; ++i)
 		{
 			glBindBuffer(GL_ARRAY_BUFFER, vertexBuffers[i].vb);
-			glEnableVertexAttribArray(i);
 
 			int attrCount = layots[i].attributesCount;
 			int offset = 0;
 
 
+			char* ptr = 0;
+
 			for (int j = 0; j < attrCount; ++j)
 			{
 				VertexAttribute attr = layots[i].attributes[j];
+				int size = 0;
+
+				glEnableVertexAttribArray(attr.location);
 
 				switch (attr.type)
 				{
 				case VertexParamType::FLOAT:
-					glVertexAttribPointer(attr.location, 1, GL_FLOAT, GL_FALSE, sizeof(float), nullptr);
+					size = sizeof(float);
+					glVertexAttribPointer(attr.location, 1, GL_FLOAT, GL_FALSE, layoutSize, ptr);
 					break;
 				case VertexParamType::FLOAT2:
-					glVertexAttribPointer(attr.location, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, nullptr);
+					size = sizeof(float) * 2;
+					glVertexAttribPointer(attr.location, 2, GL_FLOAT, GL_FALSE, layoutSize, ptr);
 					break;
 				case VertexParamType::FLOAT3:
-					glVertexAttribPointer(attr.location, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, nullptr);
+					size = sizeof(float) * 3;
+					glVertexAttribPointer(attr.location, 3, GL_FLOAT, GL_FALSE, layoutSize, ptr);
 					break;
 				case VertexParamType::FLOAT4:
-					glVertexAttribPointer(attr.location, 4, GL_FLOAT, GL_FALSE, sizeof(float) * 4, nullptr);
+					size = sizeof(float) * 4;
+					glVertexAttribPointer(attr.location, 4, GL_FLOAT, GL_FALSE, layoutSize, ptr);
 					break;
 				default:
 					break;
 				}
+
+				ptr += size;
 			}
 		}
 
@@ -165,7 +179,16 @@ namespace photon
 		glBindBuffer(GL_ARRAY_BUFFER, GL_NONE);
 
 		for (int i = 0; i < buffersCount; ++i)
-			glDisableVertexAttribArray(i);
+		{
+			int attrCount = layots[i].attributesCount;
+			for (int j = 0; j < attrCount; ++j)
+			{
+				VertexAttribute attr = layots[i].attributes[j];
+				glDisableVertexAttribArray(attr.location);
+			}
+
+		}
+
 
 		return handler;
 	}
@@ -256,7 +279,7 @@ namespace photon
 		glDeleteBuffers(1, &handler.ib);
 	}
 
-	TextureHandler GLGraphicsAPI::CreateTexture(void* data, TextureFormat format, uint32_t width, uint32_t height, size_t blockSize, uint32_t mipsCount )
+	TextureHandler GLGraphicsAPI::CreateTexture(void* data, TextureFormat format, uint32_t width, uint32_t height, size_t blockSize, uint32_t mipsCount)
 	{
 		TextureHandler handler;
 
@@ -270,12 +293,12 @@ namespace photon
 		BYTE* buffer = (BYTE*)data;
 		size_t size = ((width + 3) / 4)*((height + 3) / 4)*blockSize;
 
-		for ( level = 0; level < mipsCount && (width || height); ++level)
+		for (level = 0; level < mipsCount && (width || height); ++level)
 		{
 			size = ((width + 3) / 4)*((height + 3) / 4)*blockSize;
 			glCompressedTexImage2D(GL_TEXTURE_2D, level, (uint32_t)format, width, height, 0, size, buffer + offset);
 			auto error = glGetError();
-			ASSERT(error==0);
+			ASSERT(error == 0);
 
 			offset += size;
 			width /= max(width / 2, 1);
@@ -289,6 +312,18 @@ namespace photon
 	void GLGraphicsAPI::DestroyTexture(TextureHandler handler)
 	{
 		glDeleteTextures(1, &handler.texture);
+	}
+
+	void GLGraphicsAPI::UseTexture(TextureHandler texture, uint32_t location, ShaderProgramHandler shader)
+	{
+		auto texLoc = glGetUniformLocation(shader.program, "texSampler");
+		ASSERT(texLoc >= 0);
+		glUniform1i(texLoc, location);
+
+		glActiveTexture(GL_TEXTURE0 + location);
+
+		glBindTexture(GL_TEXTURE_2D, texture.texture);
+
 	}
 }
 

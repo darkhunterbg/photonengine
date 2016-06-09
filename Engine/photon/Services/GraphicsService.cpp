@@ -10,11 +10,16 @@ namespace photon
 {
 	GraphicsService* gl_GraphicsService = nullptr;
 
-	Vector vertices[] = {
-		{-0.5f, -0.5f, 0.0f, 1.0f},
-		{0.5f, -0.5f, 0.0f, 1.0f },
-		{0.5f,  0.5f, 0.0f, 1.0f },
-		{ -0.5f,  0.5f, 0.0f, 1.0f },
+
+	struct Vertex {
+		Vector position;
+		float texCoordX;
+		float texCoordY;
+	} vertices[] = {
+		{{-0.5f, -0.5f, 0.0f, 1.0f}, 0.0f, 1.0f },
+		{{ 0.5f, -0.5f, 0.0f, 1.0f }, 1.0f, 1.0f },
+		{{ 0.5f,  0.5f, 0.0f, 1.0f }, 1.0f, 0.0f },
+		{{ -0.5f,  0.5f, 0.0f, 1.0f }, 0.0f, 0.0f },
 	};
 	unsigned short indices[] = {
 		0,1,3,2
@@ -65,10 +70,10 @@ namespace photon
 		gl_GraphicsService->InitializeTechniques();
 
 		gl_GraphicsService->indexBuffers.Add(gl_GraphicsService->api->CreateIndexBuffer(indices, 4, IndiceType::USHORT));
-		gl_GraphicsService->vertexBuffers.Add(gl_GraphicsService->api->CreateVertexBuffer(vertices, 4, sizeof(Vector)));
+		gl_GraphicsService->vertexBuffers.Add(gl_GraphicsService->api->CreateVertexBuffer(vertices, 4, sizeof(Vertex)));
 		VertexBufferLayout layout = {};
-		layout.attributesCount = 1;
-		VertexAttribute attr[] = { { 0, VertexParamType::FLOAT4 } };
+		layout.attributesCount = 2;
+		VertexAttribute attr[] = { { 0, VertexParamType::FLOAT4 }, { 1 , VertexParamType::FLOAT2 } };
 		layout.attributes = attr;
 		gl_GraphicsService->vertexBufferBindings.Add(
 			gl_GraphicsService->api->CreateVertexBufferBinding(&gl_GraphicsService->vertexBuffers[0], &layout, 1,
@@ -105,6 +110,7 @@ namespace photon
 		api->EndUpdateUniformBuffer();
 
 		api->UseVertexBufferBinding(vertexBufferBindings[0]);
+		api->UseTexture(textures[0], 0, shaderPrograms[0]);
 		api->DrawIndexed(PrimitiveType::TRIANGLE_STRIP, photon::IndiceType::USHORT, 4);
 		api->ClearVertexBufferBinding();
 

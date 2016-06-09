@@ -1,8 +1,18 @@
-#version 330 core
+#version 420 core
 
-layout(location = 0) in vec4 vertexPosition;
+struct vertex
+{
+	vec4 pos;
+	vec2 texCoord;
+};
+
+out vec2 texCoord;
+
+layout(location = 0) in vertex v;
 
 void main()
 {
-	gl_Position = vertexPosition;
+	texCoord = v.texCoord;
+	gl_Position = v.pos;
+
 }

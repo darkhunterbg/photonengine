@@ -65,6 +65,8 @@ namespace photon
 
 		TextureHandler CreateTexture(void* data, TextureFormat format, uint32_t width, uint32_t height, size_t blockSize, uint32_t mipsCount);
 		void DestroyTexture(TextureHandler handler);
+		void UseTexture(TextureHandler texture, uint32_t location , ShaderProgramHandler shader);
+
 
 	} typedef GraphicsAPI;
 }
