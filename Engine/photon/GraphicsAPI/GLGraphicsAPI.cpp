@@ -317,9 +317,11 @@ namespace photon
 	void GLGraphicsAPI::UseTexture(TextureHandler texture, uint32_t location, ShaderProgramHandler shader)
 	{
 		auto texLoc = glGetUniformLocation(shader.program, "texSampler");
-		glUniform1i(texLoc, 0);
+		ASSERT(texLoc >= 0);
+		glUniform1i(texLoc, location);
 
 		glActiveTexture(GL_TEXTURE0 + location);
+
 		glBindTexture(GL_TEXTURE_2D, texture.texture);
 
 	}
