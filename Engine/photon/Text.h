@@ -22,6 +22,18 @@ namespace photon
 			return std::char_traits<T>::compare(a, b, (sizeA > sizeB) ? sizeA : sizeB);
 		}
 
+		template <class T>
+		inline static bool EndsWith(const T* string, const T* suffix)
+		{
+			size_t sizeA = std::char_traits<T>::length(string);
+			size_t sizeB = std::char_traits<T>::length(suffix);
+			if (sizeA < sizeB)
+				return false;
+
+			return std::char_traits<T>::compare(string + (sizeA - sizeB), suffix, sizeB) == 0;
+		}
+
+
 
 		inline static void Append(wchar_t* source, const char* append)
 		{

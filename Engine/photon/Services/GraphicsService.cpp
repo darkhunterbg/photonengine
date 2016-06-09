@@ -133,9 +133,19 @@ namespace photon
 		shaderPrograms.Add(api->CreateShaderProgram(shaders, 2));
 	}
 
-	TextureHandler GraphicsService::CreateTexture(void* data, TextureFormat format, uint32_t width, uint32_t height, size_t blockSize, uint32_t mipsCount)
+	TextureHandler GraphicsService::LoadTexture(void* data, LoadTextureType type)
 	{
-		TextureHandler texture = api->CreateTexture(data, format, width, height, blockSize, mipsCount);
+		TextureHandler texture;
+		switch (type)
+		{
+		case LoadTextureType::Bitmap:
+			texture = api->LoadTextureBitmap(data);
+			break;
+		case LoadTextureType::DDS:
+			texture = api->LoadTextureDDS(data);
+		default:
+			break;
+		}
 		textures.Add(texture);
 		return texture;
 	}

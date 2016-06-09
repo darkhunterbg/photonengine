@@ -8,7 +8,11 @@
 
 namespace photon
 {
-
+	enum class LoadTextureType
+	{
+		Bitmap,
+		DDS,
+	};
 
 	class EXPORT GraphicsService
 	{
@@ -44,7 +48,7 @@ namespace photon
 
 		void PresentFrame();
 
-		TextureHandler CreateTexture(void* data, TextureFormat format, uint32_t width, uint32_t height, size_t blockSize, uint32_t mipsCount);
+		TextureHandler LoadTexture(void* data, LoadTextureType type);
 	};
 
 	EXPORT extern GraphicsService* gl_GraphicsService;

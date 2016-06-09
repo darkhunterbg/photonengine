@@ -50,10 +50,4 @@ namespace photon
 		USHORT = 0x1403,
 		UINT = 0x1405,
 	};
-	enum class TextureFormat : uint32_t
-	{
-		DXT1= 0x83F1,
-		DXT3= 0x83F2,
-		DXT5= 0x83F3
-	};
 }

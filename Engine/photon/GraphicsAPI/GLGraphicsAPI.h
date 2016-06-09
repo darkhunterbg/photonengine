@@ -63,7 +63,8 @@ namespace photon
 		void Draw(PrimitiveType type, unsigned int elemCount);
 		void DrawIndexed(PrimitiveType pType, IndiceType iType, unsigned int elemCount);
 
-		TextureHandler CreateTexture(void* data, TextureFormat format, uint32_t width, uint32_t height, size_t blockSize, uint32_t mipsCount);
+		TextureHandler LoadTextureBitmap(void* data);
+		TextureHandler LoadTextureDDS(void* data);
 		void DestroyTexture(TextureHandler handler);
 		void UseTexture(TextureHandler texture, uint32_t location , ShaderProgramHandler shader);
 

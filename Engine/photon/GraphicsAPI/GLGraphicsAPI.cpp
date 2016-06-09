@@ -6,12 +6,21 @@
 
 #include "../Services/MemoryStack.h"
 #include "../Alloc.h"
+#include "../Text.h"
 
 #include "OpenGL.h"
 #include "../Math/Vector.h"
 
 namespace photon
 {
+	enum class FourCCType : uint32_t
+	{
+		FOURCC_DXT1 = 0x31545844,
+		FOURCC_DXT3 = 0x33545844,
+		FOURCC_DXT5 = 0x35545844,
+	};
+
+
 	GLGraphicsAPI::GLGraphicsAPI(GLAPIParam apiParam)
 	{
 		this->context = Platform::GLCreateContext(apiParam.createParam);
@@ -279,24 +288,73 @@ namespace photon
 		glDeleteBuffers(1, &handler.ib);
 	}
 
-	TextureHandler GLGraphicsAPI::CreateTexture(void* data, TextureFormat format, uint32_t width, uint32_t height, size_t blockSize, uint32_t mipsCount)
+	TextureHandler GLGraphicsAPI::LoadTextureDDS(void* data)
 	{
 		TextureHandler handler;
 
+		BYTE* header = (BYTE*)data + 4;
+		BYTE* buffer = header + 124;
+
+		/* verify the type of file */
+		char* filecode = (char*)data;
+		ASSERT(text::Compare(filecode, "DDS "));
+	
+		uint32_t height = *(uint32_t*)&(header[8]);
+		uint32_t width = *(uint32_t*)&(header[12]);
+		uint32_t linearSize = *(uint32_t*)&(header[16]);
+		uint32_t mipMapCount = *(uint32_t*)&(header[24]);
+		FourCCType fourCC = *(FourCCType*)&(header[80]);
+
+		uint32_t bufsize;
+		uint32_t blockSize = (fourCC == FourCCType::FOURCC_DXT1) ? 8 : 16;
+		int numblocks = ((width + 3) / 4) * ((height + 3) / 4);   // number of 4*4 texel blocks
+		
+																  /* how big is it going to be including all mipmaps? */
+		if (linearSize != 0)
+			bufsize = mipMapCount > 1 ? linearSize * 2 : linearSize;
+		else
+			bufsize = blockSize * numblocks;
+
+		if (mipMapCount < 1)
+			mipMapCount = 1;
+
+
+		uint32_t components = (fourCC == FourCCType::FOURCC_DXT1) ? 3 : 4;
+		uint32_t format;
+		switch (fourCC)
+		{
+		case  FourCCType::FOURCC_DXT1:
+			format = GL_COMPRESSED_RGBA_S3TC_DXT1_EXT;
+			break;
+		case  FourCCType::FOURCC_DXT3:
+			format = GL_COMPRESSED_RGBA_S3TC_DXT3_EXT;
+			break;
+		case  FourCCType::FOURCC_DXT5:
+			format = GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;
+			break;
+		default:
+			ASSERT(false);
+		}
+
 		glGenTextures(1, &handler.texture);
 
+		// "Bind" the newly created texture : all future texture functions will modify this texture
 		glBindTexture(GL_TEXTURE_2D, handler.texture);
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-		uint32_t offset = 0;
-		uint32_t level = 0;
-		BYTE* buffer = (BYTE*)data;
-		size_t size = ((width + 3) / 4)*((height + 3) / 4)*blockSize;
+		//Filtering
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
-		for (level = 0; level < mipsCount && (width || height); ++level)
+		UINT offset = 0;
+
+		/* load the mipmaps */
+		for (UINT level = 0; level < mipMapCount && (width || height); ++level)
 		{
-			size = ((width + 3) / 4)*((height + 3) / 4)*blockSize;
-			glCompressedTexImage2D(GL_TEXTURE_2D, level, (uint32_t)format, width, height, 0, size, buffer + offset);
+			UINT size = ((width + 3) / 4)*((height + 3) / 4)*blockSize;
+			//UINT size = ((width ) / 4)*((height) / 4)*blockSize;
+			glCompressedTexImage2D(GL_TEXTURE_2D, level, format, width, height, 0, size, buffer + offset);
+
 			auto error = glGetError();
 			ASSERT(error == 0);
 
@@ -309,6 +367,45 @@ namespace photon
 
 		return handler;
 	}
+
+	TextureHandler GLGraphicsAPI::LoadTextureBitmap(void* data)
+	{
+		// Create one OpenGL texture
+		TextureHandler handler;
+
+		BYTE* header = (BYTE*)data;  // Each BMP file begins by a 54-bytes header
+		uint32_t dataPos;     // Position in the file where the actual data begins
+		uint32_t width, height;
+		uint32_t imageSize;   // = width*height*3
+								  // Actual RGB data
+
+		ASSERT(header[0] == 'B' && header[1] == 'M');
+
+		dataPos = *(int*)&(header[0x0A]);
+		imageSize = *(int*)&(header[0x22]);
+		width = *(int*)&(header[0x12]);
+		height = *(int*)&(header[0x16]);
+
+		// Some BMP files are misformatted, guess missing information
+		if (imageSize == 0)    imageSize = width*height * 3; // 3 : one byte for each Red, Green and Blue component
+		if (dataPos == 0)      dataPos = 54; // The BMP header is done that way
+
+		BYTE* buffer = header + 54;
+
+		glGenTextures(1, &handler.texture);
+		glBindTexture(GL_TEXTURE_2D, handler.texture);
+
+		// Give the image to OpenGL
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_BGR, GL_UNSIGNED_BYTE, buffer);
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+		glBindTexture(GL_TEXTURE_2D, GL_NONE);
+
+		return handler;
+	}
+
 	void GLGraphicsAPI::DestroyTexture(TextureHandler handler)
 	{
 		glDeleteTextures(1, &handler.texture);

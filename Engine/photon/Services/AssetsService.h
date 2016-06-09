@@ -85,6 +85,7 @@ namespace photon
 		TextAsset& GetTextAsset(const char* assetPath);
 		TextureAsset& GetTextureAsset(const char* assetPath);
 
+
 		void SetRoot(const TCHAR* root);
 	};
 

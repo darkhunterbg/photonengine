@@ -55,7 +55,7 @@ namespace photon
 			asset->text = (char*)texts[handler].memory;
 			asset->textLength = (size_t)texts[handler].memorySize;
 		}
-	
+
 		return *asset;
 
 	}
@@ -69,38 +69,16 @@ namespace photon
 			asset = &textures[handler].asset;
 			asset->handler = handler;
 
-			char* filecode =(char*)textures[handler].memory;
-			ASSERT(text::Compare(filecode, "DDS "));
+			LoadTextureType type;
 
-			DDSHeader& header = *(DDSHeader*)((BYTE*)textures[handler].memory + 4);
+			if (text::EndsWith(assetPath, "dds"))
+				type = LoadTextureType::DDS;
+			if (text::EndsWith(assetPath, "bmp"))
+				type = LoadTextureType::Bitmap;
 
-			uint32_t blockSize = (header.fourCC == FourCCType::FOURCC_DXT1) ? 8 : 16;
-			int numblocks = ((header.width + 3) / 4) * ((header.height + 3) / 4);
-
-			uint32_t bufsize;
-			if (header.linearSize != 0)
-				bufsize = header.mipMapCount > 1 ? header.linearSize * 2 : header.linearSize;
-			else
-				bufsize = blockSize * numblocks;
-
-			if (header.mipMapCount < 1)
-				header.mipMapCount = 1;
-
-			BYTE* buffer = (BYTE*)textures[handler].memory + sizeof(DDSHeader);
-
-			TextureFormat format;
-
-			switch (header.fourCC)
-			{
-			case FourCCType::FOURCC_DXT1: format = TextureFormat::DXT1; break;
-			case FourCCType::FOURCC_DXT3: format = TextureFormat::DXT3; break;
-			case FourCCType::FOURCC_DXT5: format = TextureFormat::DXT5; break;
-			default:
-				ASSERT(false);
-			}
-
-			asset->texture = gl_GraphicsService->CreateTexture(buffer, format, header.width, header.height, blockSize, header.mipMapCount);
+			asset->texture = gl_GraphicsService->LoadTexture(textures[handler].memory, type);
 		}
 		return *asset;
 	}
+
 }
