@@ -16,10 +16,10 @@ namespace photon
 		float texCoordX;
 		float texCoordY;
 	} vertices[] = {
-		{{-0.5f, -0.5f, 0.0f, 1.0f}, 0.0f, 1.0f },
-		{{ 0.5f, -0.5f, 0.0f, 1.0f }, 1.0f, 1.0f },
-		{{ 0.5f,  0.5f, 0.0f, 1.0f }, 1.0f, 0.0f },
-		{{ -0.5f,  0.5f, 0.0f, 1.0f }, 0.0f, 0.0f },
+		{{-1.0f, -1.f, 0.0f, 1.0f}, 0.0f, 1.0f },
+		{{ 1.f, -1.f, 0.0f, 1.0f }, 1.0f, 1.0f },
+		{{ 1.f,  1.f, 0.0f, 1.0f }, 1.0f, 0.0f },
+		{{ -1.f,  1.f, 0.0f, 1.0f }, 0.0f, 0.0f },
 	};
 	unsigned short indices[] = {
 		0,1,3,2
@@ -69,6 +69,7 @@ namespace photon
 		gl_GraphicsService = MEM_NEW(stack, GraphicsService)(api);
 		gl_GraphicsService->InitializeTechniques();
 
+
 		gl_GraphicsService->indexBuffers.Add(gl_GraphicsService->api->CreateIndexBuffer(indices, 4, IndiceType::USHORT));
 		gl_GraphicsService->vertexBuffers.Add(gl_GraphicsService->api->CreateVertexBuffer(vertices, 4, sizeof(Vertex)));
 		VertexBufferLayout layout = {};
@@ -99,9 +100,9 @@ namespace photon
 		i += x* 0.01;
 		if (i > 1 || i < 0)
 			x = -x;
-		Vector data = { i,i,i,1.0f };
+		Vector data = { 1,1,1, i };
 
-		api->ClearBuffer({ 0,0,0.4f,0 });
+		api->ClearBuffer({ 0,0,0.4f, 1 });
 
 		api->UseShaderProgram(shaderPrograms[0]);
 

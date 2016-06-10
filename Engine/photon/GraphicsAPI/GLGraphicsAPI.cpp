@@ -26,6 +26,10 @@ namespace photon
 		this->context = Platform::GLCreateContext(apiParam.createParam);
 		auto result = glewInit();
 		ASSERT(result == 0);
+
+		glEnable(GL_CULL_FACE);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	}
 	GLGraphicsAPI::~GLGraphicsAPI()
 	{

@@ -17,8 +17,7 @@ layout( std140, binding = 0 ) uniform Block
 void main()
 {
 	vec3 texColor = texture(texSampler, texCoord).rgb;
-	//colorBuffer = color;
-	colorBuffer.rgb= texColor;
+	colorBuffer = color;
+	colorBuffer.rgb *= texColor;
 	//colorBuffer.rg= texCoord;
-	colorBuffer.a = 1;
 }
