@@ -38,6 +38,19 @@ namespace photon
 		uint32_t texture;
 	};
 
+	struct DepthStencilStateHandler
+	{
+		uint32_t id;
+	};
+	struct RasterizationStateHandler
+	{
+		uint32_t id;
+	};
+	struct BlendStateHandler
+	{
+		uint32_t id;
+	};
+
 	//Taken directly from OpenGL/glew header
 	//TODO: Verify values are the same across platforms
 	enum class PrimitiveType : uint32_t

@@ -9,18 +9,13 @@
 #include "../Text.h"
 
 #include "OpenGL.h"
+
+
 #include "../Math/Vector.h"
+
 
 namespace photon
 {
-	enum class FourCCType : uint32_t
-	{
-		FOURCC_DXT1 = 0x31545844,
-		FOURCC_DXT3 = 0x33545844,
-		FOURCC_DXT5 = 0x35545844,
-	};
-
-
 	GLGraphicsAPI::GLGraphicsAPI(GLAPIParam apiParam)
 	{
 		this->context = Platform::GLCreateContext(apiParam.createParam);
@@ -298,17 +293,17 @@ namespace photon
 		/* verify the type of file */
 		char* filecode = (char*)data;
 		ASSERT(text::Compare(filecode, "DDS "));
-	
+
 		uint32_t height = *(uint32_t*)&(header[8]);
 		uint32_t width = *(uint32_t*)&(header[12]);
 		uint32_t linearSize = *(uint32_t*)&(header[16]);
 		uint32_t mipMapCount = *(uint32_t*)&(header[24]);
-		FourCCType fourCC = *(FourCCType*)&(header[80]);
+		gl::FourCCType fourCC = *(gl::FourCCType*)&(header[80]);
 
 		uint32_t bufsize;
-		uint32_t blockSize = (fourCC == FourCCType::FOURCC_DXT1) ? 8 : 16;
+		uint32_t blockSize = (fourCC == gl::FourCCType::FOURCC_DXT1) ? 8 : 16;
 		int numblocks = ((width + 3) / 4) * ((height + 3) / 4);   // number of 4*4 texel blocks
-		
+
 																  /* how big is it going to be including all mipmaps? */
 		if (linearSize != 0)
 			bufsize = mipMapCount > 1 ? linearSize * 2 : linearSize;
@@ -319,17 +314,17 @@ namespace photon
 			mipMapCount = 1;
 
 
-		uint32_t components = (fourCC == FourCCType::FOURCC_DXT1) ? 3 : 4;
+		uint32_t components = (fourCC == gl::FourCCType::FOURCC_DXT1) ? 3 : 4;
 		uint32_t format;
 		switch (fourCC)
 		{
-		case  FourCCType::FOURCC_DXT1:
+		case  gl::FourCCType::FOURCC_DXT1:
 			format = GL_COMPRESSED_RGBA_S3TC_DXT1_EXT;
 			break;
-		case  FourCCType::FOURCC_DXT3:
+		case  gl::FourCCType::FOURCC_DXT3:
 			format = GL_COMPRESSED_RGBA_S3TC_DXT3_EXT;
 			break;
-		case  FourCCType::FOURCC_DXT5:
+		case  gl::FourCCType::FOURCC_DXT5:
 			format = GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;
 			break;
 		default:
@@ -423,8 +418,22 @@ namespace photon
 
 	}
 
-	void GLGraphicsAPI::SetRasterizationState(RasterizationState state)
+
+	RasterizationStateHandler GLGraphicsAPI::CreateRasterizationState(FillMode fillMode, CullMode cullMode)
 	{
+		RasterizationStateHandler handler;
+		handler.id = rasterizationStates.GetCount();
+		rasterizationStates.Add({ fillMode,cullMode });
+		return handler;
+	}
+	void GLGraphicsAPI::DestroyRasterizationState(RasterizationStateHandler handler)
+	{
+		rasterizationStates.Remove(handler.id);
+	}
+	void GLGraphicsAPI::SetRasterizationState(RasterizationStateHandler handler)
+	{
+		gl::GLRasterizationState& state = rasterizationStates[handler.id];
+
 		if (state.cullMode != CullMode::NONE)
 		{
 			glEnable(GL_CULL_FACE);
@@ -439,8 +448,22 @@ namespace photon
 		glPolygonMode(GL_FRONT_AND_BACK, (uint32_t)state.fillMode);
 
 	}
-	void GLGraphicsAPI::SetBlendingState(BlendingState state)
+
+	BlendStateHandler GLGraphicsAPI::CreateBlendState(bool enabled, BlendFactor source, BlendFactor dest)
 	{
+		BlendStateHandler handler;
+		handler.id = blendStates.GetCount();
+		blendStates.Add({ source,dest,enabled });
+		return handler;
+	}
+	void GLGraphicsAPI::DestroyBlendState(BlendStateHandler handler)
+	{
+		blendStates.Remove(handler.id);
+	}
+	void GLGraphicsAPI::SetBlendState(BlendStateHandler handler)
+	{
+		gl::GLBlendingState& state = blendStates[handler.id];
+
 		if (state.enabled)
 		{
 			glEnable(GL_BLEND);
@@ -451,8 +474,22 @@ namespace photon
 			glDisable(GL_BLEND);
 		}
 	}
-	void GLGraphicsAPI::SetDepthStencilState(DepthStencilState state)
+
+	DepthStencilStateHandler GLGraphicsAPI::CreateDepthStencilState(bool depthEnabled)
 	{
+		DepthStencilStateHandler handler;
+		handler.id = depthStencilStates.GetCount();
+		depthStencilStates.Add({ depthEnabled });
+		return handler;
+	}
+	void GLGraphicsAPI::DestroyDepthStencilState(DepthStencilStateHandler handler)
+	{
+		depthStencilStates.Remove(handler.id);
+	}
+	void GLGraphicsAPI::SetDepthStencilState(DepthStencilStateHandler handler)
+	{
+		gl::GLDepthStencilState& state = depthStencilStates[handler.id];
+
 		if (state.depthEnabled)
 		{
 			glEnable(GL_DEPTH_TEST);
@@ -461,10 +498,10 @@ namespace photon
 		else
 		{
 			glDisable(GL_DEPTH_TEST);
-		
 		}
 
 	}
+
 	void GLGraphicsAPI::SetViewport(Viewport viewport)
 	{
 		glViewport(viewport.x, viewport.y, viewport.width, viewport.height);

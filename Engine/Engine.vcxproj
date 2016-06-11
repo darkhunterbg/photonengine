@@ -31,6 +31,7 @@
     <ClInclude Include="photon\GraphicsAPI\DXGraphicsAPI.h" />
     <ClInclude Include="photon\GraphicsAPI\GLGraphicsAPI.h" />
     <ClInclude Include="photon\GraphicsAPI\GLGraphicsAPITypes.h" />
+    <ClInclude Include="photon\GraphicsAPI\GLPrivate.h" />
     <ClInclude Include="photon\GraphicsAPI\GraphicsAPI.h" />
     <ClInclude Include="photon\GraphicsAPI\GraphicsAPITypes.h" />
     <ClInclude Include="photon\GraphicsAPI\OpenGL.h" />

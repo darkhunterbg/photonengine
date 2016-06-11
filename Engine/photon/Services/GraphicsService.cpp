@@ -28,9 +28,14 @@ namespace photon
 	GraphicsService::GraphicsService(GraphicsAPI* api) :
 		api(api)
 	{
-		api->SetRasterizationState({ FillMode::SOLID, CullMode::NONE });
-		api->SetBlendingState({ true, BlendFactor::SRC_ALPHA, BlendFactor::ONE_MINUS_SRC_ALPHA });
-		api->SetDepthStencilState({ true});
+		RasterizationStateHandler rs= api->CreateRasterizationState( FillMode::SOLID, CullMode::NONE );
+		api->SetRasterizationState(rs);
+
+		BlendStateHandler bs = api->CreateBlendState(true, BlendFactor::SRC_ALPHA, BlendFactor::ONE_MINUS_SRC_ALPHA);
+		api->SetBlendState(bs);
+
+		DepthStencilStateHandler dss = api->CreateDepthStencilState(true);
+		api->SetDepthStencilState(dss);
 	}
 	GraphicsService::~GraphicsService()
 	{

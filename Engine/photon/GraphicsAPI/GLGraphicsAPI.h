@@ -8,7 +8,8 @@
 
 #include "../Platform/PlatformGL.h"
 #include "GraphicsAPITypes.h"
-
+#include "../Utils/Array.h"
+#include "GLPrivate.h"
 
 namespace photon
 {
@@ -26,6 +27,12 @@ namespace photon
 
 	private:
 		GLContext context;
+
+		static const int MAX_STATES = 16;
+		Array<gl::GLDepthStencilState, MAX_STATES> depthStencilStates;
+		Array<gl::GLRasterizationState, MAX_STATES> rasterizationStates;
+		Array<gl::GLBlendingState, MAX_STATES> blendStates;
+
 		GLGraphicsAPI(GLAPIParam apiParam);
 		~GLGraphicsAPI();
 	public:
@@ -68,9 +75,17 @@ namespace photon
 		void DestroyTexture(TextureHandler handler);
 		void UseTexture(TextureHandler texture, uint32_t location, ShaderProgramHandler shader);
 
-		void SetRasterizationState(RasterizationState state);
-		void SetBlendingState(BlendingState state);
-		void SetDepthStencilState(DepthStencilState state);
+		RasterizationStateHandler CreateRasterizationState(FillMode fillMode, CullMode cullMode);
+		void DestroyRasterizationState(RasterizationStateHandler handler);
+		void SetRasterizationState(RasterizationStateHandler state);
+
+		BlendStateHandler CreateBlendState(bool enabled, BlendFactor source, BlendFactor dest);
+		void DestroyBlendState(BlendStateHandler handler);
+		void SetBlendState(BlendStateHandler state);
+
+		DepthStencilStateHandler CreateDepthStencilState(bool depthEnabled);
+		void DestroyDepthStencilState(DepthStencilStateHandler handler);
+		void SetDepthStencilState(DepthStencilStateHandler state);
 
 		void SetViewport(Viewport viewport);
 

@@ -66,6 +66,9 @@
     <ClInclude Include="photon\Utils\Array.h">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="photon\GraphicsAPI\GLPrivate.h">
+      <Filter>GraphicsAPI\OpenGL</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Platform">
