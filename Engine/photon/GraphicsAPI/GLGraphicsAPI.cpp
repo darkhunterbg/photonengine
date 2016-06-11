@@ -41,7 +41,7 @@ namespace photon
 	{
 		Platform::GLSwapBuffers(this->context);
 	}
-	void GLGraphicsAPI::ClearFrameBuffer(const Vector& color, float depth)
+	void GLGraphicsAPI::ClearFrameBuffer(const Vector4& color, float depth)
 	{
 		glClearColor(color.x, color.y, color.z, color.w);
 		glClearDepth(depth);

@@ -14,7 +14,7 @@
 namespace photon
 {
 	class MemoryStack;
-	struct Vector;
+	struct Vector4;
 
 	struct EXPORT GLAPIParam
 	{
@@ -40,7 +40,7 @@ namespace photon
 		static void UninitializeAPI(GLGraphicsAPI* api);
 
 		void SwapBuffers();
-		void ClearFrameBuffer(const Vector& color, float depth);
+		void ClearFrameBuffer(const Vector4& color, float depth);
 
 		ShaderHandler CreateShader(ShaderType type, const char* code);
 		void DestroyShader(ShaderHandler shader);

@@ -77,6 +77,9 @@ namespace photon
 				type = LoadTextureType::Bitmap;
 
 			asset->texture = gl_GraphicsService->LoadTexture(textures[handler].memory, type);
+			gl_MemoryService->FreePage(textures[handler].memory);
+			textures[handler].memory = nullptr;
+			textures[handler].memorySize = 0;
 		}
 		return *asset;
 	}

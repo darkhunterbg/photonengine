@@ -37,6 +37,7 @@
     <ClInclude Include="photon\GraphicsAPI\OpenGL.h" />
     <ClInclude Include="photon\Macro.h" />
     <ClInclude Include="photon\Compiler.h" />
+    <ClInclude Include="photon\Math\Matrix.h" />
     <ClInclude Include="photon\Math\Vector.h" />
     <ClInclude Include="photon\Platform\Platform.h" />
     <ClInclude Include="photon\Platform\PlatformGL.h" />

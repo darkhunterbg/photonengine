@@ -12,7 +12,7 @@ namespace photon
 
 
 	struct Vertex {
-		Vector position;
+		Vector4 position;
 		float texCoordX;
 		float texCoordY;
 	} vertices[] = {
@@ -86,7 +86,7 @@ namespace photon
 		gl_GraphicsService->vertexBufferBindings.Add(
 			gl_GraphicsService->api->CreateVertexBufferBinding(&gl_GraphicsService->vertexBuffers[0], &layout, 1,
 				gl_GraphicsService->indexBuffers[0]));
-		gl_GraphicsService->uniformBuffers.Add(gl_GraphicsService->api->CreateUniformBuffer(sizeof(Vector), nullptr));
+		gl_GraphicsService->uniformBuffers.Add(gl_GraphicsService->api->CreateUniformBuffer(sizeof(Vector4), nullptr));
 		gl_GraphicsService->api->BindBufferToProgramBlock(gl_GraphicsService->shaderPrograms[0], 0, gl_GraphicsService->uniformBuffers[0]);
 
 		return gl_GraphicsService;
@@ -107,13 +107,13 @@ namespace photon
 		i += x* 0.01;
 		if (i > 1 || i < 0)
 			x = -x;
-		Vector data = { 1,1,1, i };
+		Vector4 data = { 1,1,1, i };
 
 		api->ClearFrameBuffer({ 0,0,0.4f, 1 }, 1.0f);
 
 		api->UseShaderProgram(shaderPrograms[0]);
 
-		Vector* v = (Vector*)api->StartUpdateUniformBuffer(uniformBuffers[0]);
+		Vector4* v = (Vector4*)api->StartUpdateUniformBuffer(uniformBuffers[0]);
 		*v = data;
 		api->EndUpdateUniformBuffer();
 
