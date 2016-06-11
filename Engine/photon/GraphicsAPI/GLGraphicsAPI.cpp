@@ -26,10 +26,6 @@ namespace photon
 		this->context = Platform::GLCreateContext(apiParam.createParam);
 		auto result = glewInit();
 		ASSERT(result == 0);
-
-		glEnable(GL_CULL_FACE);
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	}
 	GLGraphicsAPI::~GLGraphicsAPI()
 	{
@@ -50,10 +46,10 @@ namespace photon
 	{
 		Platform::GLSwapBuffers(this->context);
 	}
-	void GLGraphicsAPI::ClearBuffer(const Vector& color)
+	void GLGraphicsAPI::ClearFrameBuffer(const Vector& color, float depth)
 	{
 		glClearColor(color.x, color.y, color.z, color.w);
-		glClearDepth(0);
+		glClearDepth(depth);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 	ShaderHandler GLGraphicsAPI::CreateShader(ShaderType type, const char* code)
@@ -425,6 +421,53 @@ namespace photon
 
 		glBindTexture(GL_TEXTURE_2D, texture.texture);
 
+	}
+
+	void GLGraphicsAPI::SetRasterizationState(RasterizationState state)
+	{
+		if (state.cullMode != CullMode::NONE)
+		{
+			glEnable(GL_CULL_FACE);
+			glCullFace((uint32_t)state.cullMode);
+		}
+		else
+		{
+			glDisable(GL_CULL_FACE);
+			return;
+		}
+
+		glPolygonMode(GL_FRONT_AND_BACK, (uint32_t)state.fillMode);
+
+	}
+	void GLGraphicsAPI::SetBlendingState(BlendingState state)
+	{
+		if (state.enabled)
+		{
+			glEnable(GL_BLEND);
+			glBlendFunc((uint32_t)state.source, (uint32_t)state.dest);
+		}
+		else
+		{
+			glDisable(GL_BLEND);
+		}
+	}
+	void GLGraphicsAPI::SetDepthStencilState(DepthStencilState state)
+	{
+		if (state.depthEnabled)
+		{
+			glEnable(GL_DEPTH_TEST);
+			glDepthMask(GL_TRUE);
+		}
+		else
+		{
+			glDisable(GL_DEPTH_TEST);
+		
+		}
+
+	}
+	void GLGraphicsAPI::SetViewport(Viewport viewport)
+	{
+		glViewport(viewport.x, viewport.y, viewport.width, viewport.height);
 	}
 }
 

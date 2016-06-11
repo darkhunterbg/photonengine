@@ -33,7 +33,7 @@ namespace photon
 		static void UninitializeAPI(GLGraphicsAPI* api);
 
 		void SwapBuffers();
-		void ClearBuffer(const Vector&);
+		void ClearFrameBuffer(const Vector& color, float depth);
 
 		ShaderHandler CreateShader(ShaderType type, const char* code);
 		void DestroyShader(ShaderHandler shader);
@@ -66,8 +66,13 @@ namespace photon
 		TextureHandler LoadTextureBitmap(void* data);
 		TextureHandler LoadTextureDDS(void* data);
 		void DestroyTexture(TextureHandler handler);
-		void UseTexture(TextureHandler texture, uint32_t location , ShaderProgramHandler shader);
+		void UseTexture(TextureHandler texture, uint32_t location, ShaderProgramHandler shader);
 
+		void SetRasterizationState(RasterizationState state);
+		void SetBlendingState(BlendingState state);
+		void SetDepthStencilState(DepthStencilState state);
+
+		void SetViewport(Viewport viewport);
 
 	} typedef GraphicsAPI;
 }

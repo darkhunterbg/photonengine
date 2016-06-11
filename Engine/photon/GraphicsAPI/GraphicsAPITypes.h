@@ -68,4 +68,25 @@ namespace photon
 
 	
 	};
+
+	struct DepthStencilState
+	{
+		bool depthEnabled;
+	};
+	struct RasterizationState
+	{
+		FillMode fillMode;
+		CullMode cullMode;
+	};
+
+	struct BlendingState
+	{
+		bool enabled;
+		BlendFactor source;
+		BlendFactor dest;
+	};
+	struct  Viewport
+	{
+		int x, y, width, height;
+	};
 }

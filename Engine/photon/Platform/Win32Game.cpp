@@ -62,7 +62,7 @@ namespace photon
 				gl_SceneService->Update();
 				gl_GraphicsService->PresentFrame();
 				//======================================================
-				
+
 				deltaTime -= ((freq.QuadPart * 16'666) / (1000 * 1000));
 			}
 			Sleep(1);
@@ -94,7 +94,7 @@ namespace photon
 #endif
 		api = photon::GraphicsAPI::InitializeAPI(*memStack, param);
 		photon::GraphicsService::Initialize(api, *memStack);
-		
+
 		photon::SceneService::Initialize(*memStack);
 	}
 	void Win32Game::Uninitialize()
@@ -151,11 +151,34 @@ namespace photon
 		switch (message)
 		{
 		case WM_DESTROY:
+		{
 			PostQuitMessage(0);
-			return 0;
+		}
+		break;
+		case WM_SIZE:
+		{
+			RECT rect;
+			GetWindowRect(hWnd, &rect);
+
+			if (gl_GraphicsService)
+				gl_GraphicsService->OnResize(rect.right - rect.left, rect.bottom - rect.top);
+		}
+		break;
+		case WM_KEYUP:
+		{
+			switch (wParam)
+			{
+			case VK_ESCAPE:
+				PostQuitMessage(0);
+				break;
+			}
+			break;
+		}
 		default:
 			return DefWindowProc(hWnd, message, wParam, lParam);
 		}
+
+		return 0;
 	}
 }
 

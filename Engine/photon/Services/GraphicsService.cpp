@@ -28,7 +28,9 @@ namespace photon
 	GraphicsService::GraphicsService(GraphicsAPI* api) :
 		api(api)
 	{
-
+		api->SetRasterizationState({ FillMode::SOLID, CullMode::NONE });
+		api->SetBlendingState({ true, BlendFactor::SRC_ALPHA, BlendFactor::ONE_MINUS_SRC_ALPHA });
+		api->SetDepthStencilState({ true});
 	}
 	GraphicsService::~GraphicsService()
 	{
@@ -102,7 +104,7 @@ namespace photon
 			x = -x;
 		Vector data = { 1,1,1, i };
 
-		api->ClearBuffer({ 0,0,0.4f, 1 });
+		api->ClearFrameBuffer({ 0,0,0.4f, 1 }, 1.0f);
 
 		api->UseShaderProgram(shaderPrograms[0]);
 
@@ -149,5 +151,10 @@ namespace photon
 		}
 		textures.Add(texture);
 		return texture;
+	}
+
+	void GraphicsService::OnResize(int width, int height)
+	{
+		api->SetViewport({ 0,0,width,height });
 	}
 }

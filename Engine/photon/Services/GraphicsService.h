@@ -49,6 +49,8 @@ namespace photon
 		void PresentFrame();
 
 		TextureHandler LoadTexture(void* data, LoadTextureType type);
+
+		void OnResize(int width, int height);
 	};
 
 	EXPORT extern GraphicsService* gl_GraphicsService;
