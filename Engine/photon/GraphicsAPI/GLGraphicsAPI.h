@@ -73,7 +73,7 @@ namespace photon
 		TextureHandler LoadTextureBitmap(void* data);
 		TextureHandler LoadTextureDDS(void* data);
 		void DestroyTexture(TextureHandler handler);
-		void UseTexture(TextureHandler texture, uint32_t location, ShaderProgramHandler shader);
+		void UseTexture(TextureHandler texture, uint32_t location, uint32_t samplerLocation, ShaderProgramHandler shader);
 
 		RasterizationStateHandler CreateRasterizationState(FillMode fillMode, CullMode cullMode);
 		void DestroyRasterizationState(RasterizationStateHandler handler);

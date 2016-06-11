@@ -28,7 +28,7 @@ namespace photon
 	GraphicsService::GraphicsService(GraphicsAPI* api) :
 		api(api)
 	{
-		RasterizationStateHandler rs= api->CreateRasterizationState( FillMode::SOLID, CullMode::NONE );
+		RasterizationStateHandler rs = api->CreateRasterizationState(FillMode::SOLID, CullMode::NONE);
 		api->SetRasterizationState(rs);
 
 		BlendStateHandler bs = api->CreateBlendState(true, BlendFactor::SRC_ALPHA, BlendFactor::ONE_MINUS_SRC_ALPHA);
@@ -118,7 +118,7 @@ namespace photon
 		api->EndUpdateUniformBuffer();
 
 		api->UseVertexBufferBinding(vertexBufferBindings[0]);
-		api->UseTexture(textures[0], 0, shaderPrograms[0]);
+		api->UseTexture(textures[0], 0, 1, shaderPrograms[0]);
 		api->DrawIndexed(PrimitiveType::TRIANGLE_STRIP, photon::IndiceType::USHORT, 4);
 		api->ClearVertexBufferBinding();
 

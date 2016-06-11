@@ -362,7 +362,6 @@ namespace photon
 
 		return handler;
 	}
-
 	TextureHandler GLGraphicsAPI::LoadTextureBitmap(void* data)
 	{
 		// Create one OpenGL texture
@@ -405,19 +404,15 @@ namespace photon
 	{
 		glDeleteTextures(1, &handler.texture);
 	}
-
-	void GLGraphicsAPI::UseTexture(TextureHandler texture, uint32_t location, ShaderProgramHandler shader)
+	void GLGraphicsAPI::UseTexture(TextureHandler texture, uint32_t location, uint32_t samplerLocation ,ShaderProgramHandler shader)
 	{
-		auto texLoc = glGetUniformLocation(shader.program, "texSampler");
-		ASSERT(texLoc >= 0);
-		glUniform1i(texLoc, location);
+		glUniform1i(samplerLocation, location);
 
 		glActiveTexture(GL_TEXTURE0 + location);
 
 		glBindTexture(GL_TEXTURE_2D, texture.texture);
 
 	}
-
 
 	RasterizationStateHandler GLGraphicsAPI::CreateRasterizationState(FillMode fillMode, CullMode cullMode)
 	{
