@@ -7,6 +7,9 @@
 
 #include "AssetsService.h"
 
+#include <glm/mat4x4.hpp> // glm::mat4
+#include <glm/gtc/matrix_transform.hpp>
+
 namespace photon
 {
 	GraphicsService* gl_GraphicsService = nullptr;
@@ -132,13 +135,11 @@ namespace photon
 		{
 			Matrix* m = (Matrix*)api->StartUpdateUniformBuffer(uniformBuffers[0]);
 
-			Matrix world =  Matrix::CreateRotationZ(PI) * Matrix::CreateScale({ 0.5f,0.5f,0.5f,1 });
+			Matrix world = Matrix::CreateScale({ 0.5f,0.5f,0.5f,1 }).Transpose();
+			Matrix view = Matrix::LookAtRH({ 0,0,9*i,0 }, { 0,0,0,0 }, { 0,1,0,0 }).Transpose();
+			Matrix proj = Matrix::PerspectiveRH(PI_OVER_4, 1.0f, 0.01f, 10.0f).Transpose();
 
-			Matrix view = Matrix::LookAtRH({ 0,0,-10*i,0 }, { 0,0,1,0 }, { 0,1,0,0 });
-			Matrix proj = Matrix::Perspective(PI_OVER_4, 1.2f, 0.01f, 100.0f);// .Transpose();
-
-
-			*m = ( view * proj * world).Transpose();
+			*m = (world * view * proj);
 			api->EndUpdateUniformBuffer();
 
 			api->DrawIndexed(PrimitiveType::TRIANGLE_STRIP, photon::IndiceType::USHORT, 4);

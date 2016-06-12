@@ -143,7 +143,7 @@
     <TargetName>photon</TargetName>
     <IntDir>$(SolutionDir)Tmp\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)Include\GLEW;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Include\GLEW;$(SolutionDir)Include\GLM;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)Lib\GLEW\$(Platform);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Development|Win32'">
@@ -151,7 +151,7 @@
     <TargetName>photon</TargetName>
     <IntDir>$(SolutionDir)Tmp\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)Include\GLEW;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Include\GLEW;$(SolutionDir)Include\GLM;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)Lib\GLEW\$(Platform);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -159,7 +159,7 @@
     <TargetName>photon</TargetName>
     <IntDir>$(SolutionDir)Tmp\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SolutionDir)Include\GLEW;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Include\GLEW;$(SolutionDir)Include\GLM;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)Lib\GLEW\$(Platform);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -167,7 +167,7 @@
     <TargetName>photon64</TargetName>
     <IntDir>$(SolutionDir)Tmp\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)Include\GLEW;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Include\GLEW;$(SolutionDir)Include\GLM;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)Lib\GLEW\$(Platform);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Development|x64'">
@@ -175,7 +175,7 @@
     <TargetName>photon64</TargetName>
     <IntDir>$(SolutionDir)Tmp\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)Include\GLEW;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Include\GLEW;$(SolutionDir)Include\GLM;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)Lib\GLEW\$(Platform);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -183,7 +183,7 @@
     <TargetName>photon64</TargetName>
     <IntDir>$(SolutionDir)Tmp\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SolutionDir)Include\GLEW;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Include\GLEW;$(SolutionDir)Include\GLM;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)Lib\GLEW\$(Platform);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

@@ -17,7 +17,7 @@ out vec2 texCoord;
 
 void main()
 {
-	texCoord = uv * vec2(1,-1);
-	gl_Position = wvp* pos;
+	texCoord = uv ;
+	gl_Position =   wvp * pos;
 
 }

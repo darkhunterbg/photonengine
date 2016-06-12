@@ -84,7 +84,7 @@ namespace photon
 			};
 		}
 		static Matrix LookAtRH(Vector4 position, Vector4 target, Vector4 up);
-		static Matrix Perspective(float fov,float aspectRatio, float nearPlane,float farPlane);
+		static Matrix PerspectiveRH(float fov,float aspectRatio, float nearPlane,float farPlane);
 
 		inline Matrix Transpose() const
 		{
