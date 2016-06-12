@@ -252,6 +252,9 @@ namespace photon
 	{
 		uint32_t bindPoint = blockIndex;
 
+		int a = glGetUniformBlockIndex(program.program,"VertexBlock");
+		int b = glGetUniformBlockIndex(program.program, "Block");
+
 		glUniformBlockBinding(program.program, blockIndex, bindPoint);
 
 		int error = glGetError();

@@ -8,7 +8,7 @@ layout(location = 0) out vec4 colorBuffer;
 in vec2 texCoord;
 
 //structure, aligned by vec4, starts at location 0
-layout( std140, binding = 0 ) uniform Block
+layout( std140, binding = 1 ) uniform Block
 {
  vec4 color;
 };

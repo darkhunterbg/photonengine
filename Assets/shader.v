@@ -6,12 +6,11 @@ in vec4 pos;
 //layout(location = 1)
 in vec2 uv;
 
-uniform mat4 wvp;
 
-//layout( std140, binding = 0 ) uniform VertexBlock
-//{
-//	mat4 wvp;
-//};
+layout( std140, binding = 0 ) uniform VertexBlock
+{
+	mat4 wvp;
+};
 
 
 out vec2 texCoord;

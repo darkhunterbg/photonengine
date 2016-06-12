@@ -88,12 +88,12 @@ namespace photon
 			gl_GraphicsService->api->CreateVertexBufferBinding(&gl_GraphicsService->vertexBuffers[0], &layout, 1,
 				gl_GraphicsService->indexBuffers[0]));
 
-		/*
+
 		gl_GraphicsService->uniformBuffers.Add(gl_GraphicsService->api->CreateUniformBuffer(sizeof(Matrix), nullptr));
-		gl_GraphicsService->api->BindBufferToProgramBlock(gl_GraphicsService->shaderPrograms[0], 0, gl_GraphicsService->uniformBuffers[0]);
-*/
+		gl_GraphicsService->api->BindBufferToProgramBlock(gl_GraphicsService->shaderPrograms[0], 1, gl_GraphicsService->uniformBuffers[0]);
+
 		gl_GraphicsService->uniformBuffers.Add(gl_GraphicsService->api->CreateUniformBuffer(sizeof(Vector4), nullptr));
-		gl_GraphicsService->api->BindBufferToProgramBlock(gl_GraphicsService->shaderPrograms[0], 0, gl_GraphicsService->uniformBuffers[0]);
+		gl_GraphicsService->api->BindBufferToProgramBlock(gl_GraphicsService->shaderPrograms[0], 0, gl_GraphicsService->uniformBuffers[1]);
 
 		return gl_GraphicsService;
 	}
@@ -119,19 +119,14 @@ namespace photon
 
 		api->UseShaderProgram(shaderPrograms[0]);
 
-		Matrix m = IDENTITY_MATRIX;
-		api->UpdateMatrix(shaderPrograms[0], m);
-		/*Matrix* m = (Matrix*)api->StartUpdateUniformBuffer(uniformBuffers[0]);
-		*m = { 0 };
-		float* f = (float*)m;
-		f[0] = 1.0f;
-		f[4 + 1] = 1.0f;
-		f[8 + 2] = 1.0f;
-		f[12 + 3] = 1.0f;
-		//*m = IDENTITY_MATRIX.Transpose();
-		api->EndUpdateUniformBuffer();*/
+		//Matrix m = IDENTITY_MATRIX;
+		//api->UpdateMatrix(shaderPrograms[0], m);
+		Matrix* m = (Matrix*)api->StartUpdateUniformBuffer(uniformBuffers[0]);
 
-		Vector4* v = (Vector4*)api->StartUpdateUniformBuffer(uniformBuffers[0]);
+		*m = (Matrix::CreateTranslation({ i-0.5f,i-0.5f,0, 0 }) * Matrix::CreateRotationZ(i*PI * 2.0f)  * Matrix::CreateScale({ 0.5f,0.5f,0.5f,1 })  ).Transpose();
+			api->EndUpdateUniformBuffer();
+
+		Vector4* v = (Vector4*)api->StartUpdateUniformBuffer(uniformBuffers[1]);
 		*v = data;
 		api->EndUpdateUniformBuffer();
 
