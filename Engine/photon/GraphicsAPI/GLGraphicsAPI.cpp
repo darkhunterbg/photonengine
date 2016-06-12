@@ -248,24 +248,23 @@ namespace photon
 	{
 		glDeleteBuffers(1, &buffer.ub);
 	}
-	void GLGraphicsAPI::BindBufferToProgramBlock(ShaderProgramHandler program, int blockIndex, UniformBufferHandler buffer)
+	void GLGraphicsAPI::BindBufferToProgramBlock(ShaderProgramHandler program, const char* blockName, uint32_t bindPoint, UniformBufferHandler buffer)
 	{
-		uint32_t bindPoint = blockIndex;
-
-		int a = glGetUniformBlockIndex(program.program,"VertexBlock");
-		int b = glGetUniformBlockIndex(program.program, "Block");
-
-		glUniformBlockBinding(program.program, blockIndex, bindPoint);
-
+		uint32_t blockIndex = glGetUniformBlockIndex(program.program, blockName);
 		int error = glGetError();
 		ASSERT(error == GL_NONE);
 
-		glBindBuffer(GL_UNIFORM_BUFFER, buffer.ub);
-		glBindBufferBase(GL_UNIFORM_BUFFER, bindPoint, buffer.ub);
+		glUniformBlockBinding(program.program, blockIndex, bindPoint);
 		error = glGetError();
 		ASSERT(error == GL_NONE);
-		glBindBuffer(GL_UNIFORM_BUFFER, GL_NONE);
 	}
+	void GLGraphicsAPI::UseUniformBuffer(UniformBufferHandler buffer, uint32_t bindPoint)
+	{
+		glBindBufferBase(GL_UNIFORM_BUFFER, bindPoint, buffer.ub);
+		int error = glGetError();
+		ASSERT(error == GL_NONE);
+	}
+
 
 	IndexBufferHandler GLGraphicsAPI::CreateIndexBuffer(const void* indices, size_t indicesCount, IndiceType indiceType)
 	{
@@ -511,14 +510,6 @@ namespace photon
 		glViewport(viewport.x, viewport.y, viewport.width, viewport.height);
 	}
 
-	void GLGraphicsAPI::UpdateMatrix(ShaderProgramHandler program,  Matrix& matrix)
-	{
-		GLuint MatrixID = glGetUniformLocation(program.program, "wvp");
-
-		// Send our transformation to the currently bound shader, in the "MVP" uniform
-		// This is done in the main loop since each model will have a different MVP matrix (At least for the M part)
-		glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &matrix[0][0]);
-	}
 }
 
 #endif

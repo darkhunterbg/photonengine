@@ -66,7 +66,8 @@ namespace photon
 		IndexBufferHandler CreateIndexBuffer(const void* indices, size_t indicesCount, IndiceType indiceType);
 		void DestroyIndexBuffer(IndexBufferHandler handler);
 
-		void BindBufferToProgramBlock(ShaderProgramHandler handler, int blockIndex, UniformBufferHandler buffer);
+		void BindBufferToProgramBlock(ShaderProgramHandler handler, const char* blockName, uint32_t bindPoint, UniformBufferHandler buffer);
+		void UseUniformBuffer(UniformBufferHandler buffer, uint32_t bindPoint);
 
 		void Draw(PrimitiveType type, unsigned int elemCount);
 		void DrawIndexed(PrimitiveType pType, IndiceType iType, unsigned int elemCount);
@@ -90,7 +91,6 @@ namespace photon
 
 		void SetViewport(Viewport viewport);
 
-		void UpdateMatrix(ShaderProgramHandler program,  Matrix& matrix);
 
 	} typedef GraphicsAPI;
 }

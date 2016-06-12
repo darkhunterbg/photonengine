@@ -90,10 +90,10 @@ namespace photon
 
 
 		gl_GraphicsService->uniformBuffers.Add(gl_GraphicsService->api->CreateUniformBuffer(sizeof(Matrix), nullptr));
-		gl_GraphicsService->api->BindBufferToProgramBlock(gl_GraphicsService->shaderPrograms[0], 1, gl_GraphicsService->uniformBuffers[0]);
+		gl_GraphicsService->api->BindBufferToProgramBlock(gl_GraphicsService->shaderPrograms[0], "VertexBlock", 0, gl_GraphicsService->uniformBuffers[0]);
 
 		gl_GraphicsService->uniformBuffers.Add(gl_GraphicsService->api->CreateUniformBuffer(sizeof(Vector4), nullptr));
-		gl_GraphicsService->api->BindBufferToProgramBlock(gl_GraphicsService->shaderPrograms[0], 0, gl_GraphicsService->uniformBuffers[1]);
+		gl_GraphicsService->api->BindBufferToProgramBlock(gl_GraphicsService->shaderPrograms[0], "FragmentBlock", 1, gl_GraphicsService->uniformBuffers[1]);
 
 		return gl_GraphicsService;
 	}
@@ -110,6 +110,7 @@ namespace photon
 
 	void GraphicsService::PresentFrame()
 	{
+
 		i += x* 0.01;
 		if (i > 1 || i < 0)
 			x = -x;
@@ -118,21 +119,24 @@ namespace photon
 		api->ClearFrameBuffer({ 0,0,0.4f, 1 }, 1.0f);
 
 		api->UseShaderProgram(shaderPrograms[0]);
-
-		//Matrix m = IDENTITY_MATRIX;
-		//api->UpdateMatrix(shaderPrograms[0], m);
-		Matrix* m = (Matrix*)api->StartUpdateUniformBuffer(uniformBuffers[0]);
-
-		*m = (Matrix::CreateTranslation({ i-0.5f,i-0.5f,0, 0 }) * Matrix::CreateRotationZ(i*PI * 2.0f)  * Matrix::CreateScale({ 0.5f,0.5f,0.5f,1 })  ).Transpose();
-			api->EndUpdateUniformBuffer();
+		api->UseUniformBuffer(uniformBuffers[0], 0);
+		api->UseUniformBuffer(uniformBuffers[1], 1);
+		api->UseVertexBufferBinding(vertexBufferBindings[0]);
+		api->UseTexture(textures[0], 0, 1, shaderPrograms[0]);
 
 		Vector4* v = (Vector4*)api->StartUpdateUniformBuffer(uniformBuffers[1]);
 		*v = data;
 		api->EndUpdateUniformBuffer();
 
-		api->UseVertexBufferBinding(vertexBufferBindings[0]);
-		api->UseTexture(textures[0], 0, 1, shaderPrograms[0]);
-		api->DrawIndexed(PrimitiveType::TRIANGLE_STRIP, photon::IndiceType::USHORT, 4);
+		for (int j = 0; j < 4; ++j)
+		{
+			Matrix* m = (Matrix*)api->StartUpdateUniformBuffer(uniformBuffers[0]);
+
+			*m = (Matrix::CreateTranslation({ -.5f + (float)(j%2) ,.5f - (float)((j/2)%2), 0, 0}) * Matrix::CreateRotationZ(PI) * Matrix::CreateScale({ 0.5f,0.5f,0.5f,1 })).Transpose();
+			api->EndUpdateUniformBuffer();
+
+			api->DrawIndexed(PrimitiveType::TRIANGLE_STRIP, photon::IndiceType::USHORT, 4);
+		}
 		api->ClearVertexBufferBinding();
 
 		api->SwapBuffers();

@@ -59,13 +59,14 @@ namespace photon
 			if (deltaMcS >= 16'666)
 			{
 				//================ GAME LOOP ============================
-				gl_SceneService->Update();
 				gl_GraphicsService->PresentFrame();
+				gl_SceneService->Update();
+				
 				//======================================================
 
 				deltaTime -= ((freq.QuadPart * 16'666) / (1000 * 1000));
 			}
-			Sleep(1);
+			//Sleep(1);
 
 		}
 	}
