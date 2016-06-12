@@ -59,6 +59,7 @@
     <ClCompile Include="photon\GraphicsAPI\DXGraphicsAPI.cpp" />
     <ClCompile Include="photon\GraphicsAPI\GLGraphicsAPI.cpp" />
     <ClCompile Include="photon\GraphicsAPI\GLGraphicsAPITypes.cpp" />
+    <ClCompile Include="photon\Math\Matrix.cpp" />
     <ClCompile Include="photon\Platform\Win32Game.cpp" />
     <ClCompile Include="photon\Platform\Win32Platform.cpp" />
     <ClCompile Include="photon\Services\AssetsService.cpp" />

@@ -145,5 +145,8 @@
     <ClCompile Include="photon\GraphicsAPI\GLGraphicsAPITypes.cpp">
       <Filter>GraphicsAPI\OpenGL</Filter>
     </ClCompile>
+    <ClCompile Include="photon\Math\Matrix.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

@@ -13,6 +13,7 @@ namespace photon
 	struct Matrix
 	{
 		static const int ELEM_COUNT = 4;
+		static const Matrix IDENTITY;
 
 		union
 		{
@@ -82,8 +83,10 @@ namespace photon
 				0, 0, 0 , 1
 			};
 		}
+		static Matrix LookAtRH(Vector4 position, Vector4 target, Vector4 up);
+		static Matrix Perspective(float fov,float aspectRatio, float nearPlane,float farPlane);
 
-		Matrix Transpose() const
+		inline Matrix Transpose() const
 		{
 			Matrix r;
 			for (int i = 0; i < Matrix::ELEM_COUNT; ++i)
@@ -94,13 +97,6 @@ namespace photon
 		}
 	};
 
-	static const Matrix IDENTITY_MATRIX =
-	{
-		1,0,0,0,
-		0,1,0,0,
-		0,0,1,0,
-		0,0,0,1
-	};
 
 	inline Vector4 operator* (const Matrix& a, const Vector4& b)
 	{
@@ -110,6 +106,8 @@ namespace photon
 
 		return r;
 	}
+
+
 	inline Matrix operator* (const Matrix& a, const Matrix& b)
 	{
 		Matrix r;
@@ -122,4 +120,5 @@ namespace photon
 
 		return r;
 	}
+
 }

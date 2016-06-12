@@ -128,11 +128,17 @@ namespace photon
 		*v = data;
 		api->EndUpdateUniformBuffer();
 
-		for (int j = 0; j < 4; ++j)
+		for (int j = 0; j < 1; ++j)
 		{
 			Matrix* m = (Matrix*)api->StartUpdateUniformBuffer(uniformBuffers[0]);
 
-			*m = (Matrix::CreateTranslation({ -.5f + (float)(j%2) ,.5f - (float)((j/2)%2), 0, 0}) * Matrix::CreateRotationZ(PI) * Matrix::CreateScale({ 0.5f,0.5f,0.5f,1 })).Transpose();
+			Matrix world =  Matrix::CreateRotationZ(PI) * Matrix::CreateScale({ 0.5f,0.5f,0.5f,1 });
+
+			Matrix view = Matrix::LookAtRH({ 0,0,-10*i,0 }, { 0,0,1,0 }, { 0,1,0,0 });
+			Matrix proj = Matrix::Perspective(PI_OVER_4, 1.2f, 0.01f, 100.0f);// .Transpose();
+
+
+			*m = ( view * proj * world).Transpose();
 			api->EndUpdateUniformBuffer();
 
 			api->DrawIndexed(PrimitiveType::TRIANGLE_STRIP, photon::IndiceType::USHORT, 4);
