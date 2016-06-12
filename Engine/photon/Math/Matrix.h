@@ -84,7 +84,7 @@ namespace photon
 			};
 		}
 		static Matrix LookAtRH(Vector4 position, Vector4 target, Vector4 up);
-		static Matrix PerspectiveRH(float fov,float aspectRatio, float nearPlane,float farPlane);
+		static Matrix PerspectiveRH(float fov, float aspectRatio, float nearPlane, float farPlane);
 
 		inline Matrix Transpose() const
 		{
@@ -102,7 +102,7 @@ namespace photon
 	{
 		Vector4 r;
 		for (int i = 0; i < Matrix::ELEM_COUNT; ++i)
-			r.m[i] = (a[i] * b).Sum();
+			r.m[i] = Vector4::Dot(a[i], b);
 
 		return r;
 	}
@@ -114,7 +114,7 @@ namespace photon
 		for (int i = 0; i < Matrix::ELEM_COUNT; ++i)
 			for (int j = 0; j < Matrix::ELEM_COUNT; ++j)
 			{
-				float val = (a[i] * b[j]).Sum();
+				float val = Vector4::Dot(a[i], b[j]);
 				r.m[i][j] = val;
 			}
 

@@ -18,6 +18,6 @@ out vec2 texCoord;
 void main()
 {
 	texCoord = uv ;
-	gl_Position =    pos *wvp;
+	gl_Position =    wvp * pos;
 
 }

@@ -26,16 +26,12 @@ namespace photon
 		{
 			return m[index];
 		}
-		inline float Sum() const
-		{
-			return x + y + z + w;
-		}
+
 		inline Vector4 Normalize3()
 		{
 			float f = sqrtf(x*x + y*y + z*z);
 			return{ x / f , y / f, z / f ,0 };
 		}
-
 
 		inline static Vector4 Cross(const Vector4& a, const Vector4& b)
 		{
