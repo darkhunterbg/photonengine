@@ -132,11 +132,11 @@ namespace photon
 		{
 			Matrix* m = (Matrix*)api->StartUpdateUniformBuffer(uniformBuffers[0]);
 
-			Matrix world = Matrix::CreateTranslation({ 0.5f,0.5f,0.0f,1 });
-			Matrix view = Matrix::LookAtRH({ 0,0, i * 10,0 }, { 0,0,0,0 }, { 0,1,0,0 });
+			Matrix world = Matrix::CreateRotationZ(i*2.0f*PI) *  Matrix::CreateScale({ 0.5f,0.5f,0.5f,1 });
+			Matrix view = Matrix::LookAtRH({ 0,0, i*10.0f ,0 }, { 0,0,0,0 }, { 0,1,0,0 });
 			Matrix proj = Matrix::PerspectiveRH(PI_OVER_4, 1.0f, 0.01f, 10.0f);
 
-			*m = (world  * view ).Transpose();
+			*m = (world*(view*proj)).Transpose();
 			api->EndUpdateUniformBuffer();
 
 			api->DrawIndexed(PrimitiveType::TRIANGLE_STRIP, photon::IndiceType::USHORT, 4);

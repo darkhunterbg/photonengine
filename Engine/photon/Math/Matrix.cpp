@@ -47,8 +47,8 @@ namespace photon
 		r[0][0] = xScale;
 		r[1][1] = yScale;
 		r[2][2] = farPlane / (nearPlane - farPlane);
-		r[2][3] = -1;
-		r[3][2] = (farPlane * nearPlane) / (nearPlane - farPlane);
+		r[3][2] = -1;
+		r[2][3] = (farPlane * nearPlane) / (nearPlane - farPlane);
 		return r;
 	}
 }
