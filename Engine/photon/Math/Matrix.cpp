@@ -13,9 +13,9 @@ namespace photon
 
 	Matrix Matrix::LookAtRH(Vector4 position, Vector4 target, Vector4 up)
 	{
-		Vector4 zAxis = (target - position).Normalize3();
-		Vector4 xAxis = Vector4::Cross(zAxis, up).Normalize3();
-		Vector4 yAxis = Vector4::Cross(xAxis, zAxis);
+		Vector4 zAxis = (position - target).Normalize3();
+		Vector4 xAxis = Vector4::Cross(up, zAxis).Normalize3();
+		Vector4 yAxis = Vector4::Cross(zAxis, xAxis);
 
 		Matrix r = {};
 		r[0][0] = xAxis.x;
@@ -30,7 +30,7 @@ namespace photon
 		r[3] = {
 			-Vector4::Dot(xAxis,position),
 			-Vector4::Dot(yAxis,position),
-			Vector4::Dot(zAxis,position),
+			-Vector4::Dot(zAxis,position),
 			1
 		};
 
@@ -43,12 +43,12 @@ namespace photon
 		float yScale = 1.0f / tan(fov / 2.0f);
 		float xScale = yScale / aspectRatio;
 
-		Matrix r;
-		r[0] = { xScale,0,0,0 };
-		r[1] = { 0,yScale,0,0 };
-		r[2] = { 0,0, -(farPlane + nearPlane) / (farPlane - nearPlane), -1 };
-		r[3] = { 0,0, (- farPlane * nearPlane) / (farPlane - nearPlane),0 };
-
+		Matrix r = {};
+		r[0][0] = xScale;
+		r[1][1] = yScale;
+		r[2][2] = farPlane / (nearPlane - farPlane);
+		r[2][3] = -1;
+		r[3][2] = (farPlane * nearPlane) / (nearPlane - farPlane);
 		return r;
 	}
 }

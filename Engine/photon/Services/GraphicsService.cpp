@@ -7,9 +7,6 @@
 
 #include "AssetsService.h"
 
-#include <glm/mat4x4.hpp> // glm::mat4
-#include <glm/gtc/matrix_transform.hpp>
-
 namespace photon
 {
 	GraphicsService* gl_GraphicsService = nullptr;
@@ -32,7 +29,7 @@ namespace photon
 	GraphicsService::GraphicsService(GraphicsAPI* api) :
 		api(api)
 	{
-		RasterizationStateHandler rs = api->CreateRasterizationState(FillMode::SOLID, CullMode::NONE);
+		RasterizationStateHandler rs = api->CreateRasterizationState(FillMode::SOLID, CullMode::BACK_FACE);
 		api->SetRasterizationState(rs);
 
 		BlendStateHandler bs = api->CreateBlendState(true, BlendFactor::SRC_ALPHA, BlendFactor::ONE_MINUS_SRC_ALPHA);
@@ -135,11 +132,11 @@ namespace photon
 		{
 			Matrix* m = (Matrix*)api->StartUpdateUniformBuffer(uniformBuffers[0]);
 
-			Matrix world = Matrix::CreateScale({ 0.5f,0.5f,0.5f,1 }).Transpose();
-			Matrix view = Matrix::LookAtRH({ 0,0,9*i,0 }, { 0,0,0,0 }, { 0,1,0,0 }).Transpose();
+			Matrix world = Matrix::CreateTranslation({ 0.5f,0.5f,0.5f,1 }).Transpose();
+			Matrix view = Matrix::LookAtRH({ 0,0,10 * i,0 }, { 0,0,0,0 }, { 0,1,0,0 });
 			Matrix proj = Matrix::PerspectiveRH(PI_OVER_4, 1.0f, 0.01f, 10.0f).Transpose();
 
-			*m = (world * view * proj);
+			*m = (proj*view*world);
 			api->EndUpdateUniformBuffer();
 
 			api->DrawIndexed(PrimitiveType::TRIANGLE_STRIP, photon::IndiceType::USHORT, 4);
