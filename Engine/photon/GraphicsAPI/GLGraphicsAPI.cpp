@@ -12,6 +12,7 @@
 
 
 #include "../Math/Vector.h"
+#include "../Math/Matrix.h"
 
 
 namespace photon
@@ -253,8 +254,13 @@ namespace photon
 
 		glUniformBlockBinding(program.program, blockIndex, bindPoint);
 
+		int error = glGetError();
+		ASSERT(error == GL_NONE);
+
 		glBindBuffer(GL_UNIFORM_BUFFER, buffer.ub);
 		glBindBufferBase(GL_UNIFORM_BUFFER, bindPoint, buffer.ub);
+		error = glGetError();
+		ASSERT(error == GL_NONE);
 		glBindBuffer(GL_UNIFORM_BUFFER, GL_NONE);
 	}
 
@@ -500,6 +506,15 @@ namespace photon
 	void GLGraphicsAPI::SetViewport(Viewport viewport)
 	{
 		glViewport(viewport.x, viewport.y, viewport.width, viewport.height);
+	}
+
+	void GLGraphicsAPI::UpdateMatrix(ShaderProgramHandler program,  Matrix& matrix)
+	{
+		GLuint MatrixID = glGetUniformLocation(program.program, "wvp");
+
+		// Send our transformation to the currently bound shader, in the "MVP" uniform
+		// This is done in the main loop since each model will have a different MVP matrix (At least for the M part)
+		glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &matrix[0][0]);
 	}
 }
 

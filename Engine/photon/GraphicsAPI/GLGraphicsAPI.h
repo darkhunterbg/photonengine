@@ -15,6 +15,7 @@ namespace photon
 {
 	class MemoryStack;
 	struct Vector4;
+	struct Matrix;
 
 	struct EXPORT GLAPIParam
 	{
@@ -88,6 +89,8 @@ namespace photon
 		void SetDepthStencilState(DepthStencilStateHandler state);
 
 		void SetViewport(Viewport viewport);
+
+		void UpdateMatrix(ShaderProgramHandler program,  Matrix& matrix);
 
 	} typedef GraphicsAPI;
 }

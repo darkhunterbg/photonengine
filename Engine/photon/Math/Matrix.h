@@ -23,11 +23,14 @@ namespace photon
 			};
 		};
 
-		inline Vector4 operator[](int index) const
+		inline const Vector4& operator[](int index) const
 		{
 			return m[index];
 		}
-
+		inline Vector4& operator[](int index)
+		{
+			return m[index];
+		}
 
 		inline static Matrix CreateTranslation(const Vector4& m)
 		{
@@ -74,10 +77,20 @@ namespace photon
 			return
 			{
 				cosf(r),-sinf(r), 0, 0,
-				sinf(r), cosf(r), 0,
+				sinf(r), cosf(r), 0, 0,
 				0, 0, 1, 0,
-				0, 0,0 , 1
+				0, 0, 0 , 1
 			};
+		}
+
+		Matrix Transpose() const
+		{
+			Matrix r;
+			for (int i = 0; i < Matrix::ELEM_COUNT; ++i)
+				for (int j = 0; j < Matrix::ELEM_COUNT; ++j)
+					r[i][j] = m[j][i];
+
+			return r;
 		}
 	};
 
@@ -104,7 +117,7 @@ namespace photon
 			for (int j = 0; j < Matrix::ELEM_COUNT; ++j)
 			{
 				float val = (a[i] * b[j]).Sum();
-				r.m[i].Set(j, val);
+				r.m[i][j] = val;
 			}
 
 		return r;

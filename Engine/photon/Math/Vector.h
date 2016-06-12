@@ -20,12 +20,11 @@ namespace photon
 		{
 			return m[index];
 		}
-	
-
-		inline void Set(int index, float val)
+		inline float& operator[](int index) 
 		{
-			m[index] = val;
+			return m[index];
 		}
+
 
 		inline float Sum() const
 		{

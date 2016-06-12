@@ -18,6 +18,6 @@ void main()
 {
 	vec3 texColor = texture(texSampler, texCoord).rgb;
 	colorBuffer = color;
-	colorBuffer.rgb *= texColor;
-	//colorBuffer.rg= texCoord;
+	colorBuffer.rgb = texColor;
+	
 }
