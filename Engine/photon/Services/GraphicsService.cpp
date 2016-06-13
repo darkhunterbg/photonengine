@@ -132,7 +132,7 @@ namespace photon
 		api->UseUniformBuffer(uniformBuffers[0], 0);
 		api->UseUniformBuffer(uniformBuffers[1], 1);
 		api->UseVertexBufferBinding(vertexBufferBindings[0]);
-		api->UseTexture(textures[0], 0, 1, shaderPrograms[0]);
+		api->UseTexture(textures[0], 0, 2, shaderPrograms[0]);
 
 		Vector4* v = (Vector4*)api->StartUpdateUniformBuffer(uniformBuffers[1]);
 		*v = data;
@@ -161,7 +161,6 @@ namespace photon
 
 
 			*(instances + j) = world;// .Transpose();
-			//*(instances + j) = Matrix::IDENTITY;
 		}
 		api->EndUpdateVertexBuffer();
 

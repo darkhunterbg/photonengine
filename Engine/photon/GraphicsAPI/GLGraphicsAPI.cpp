@@ -17,11 +17,17 @@
 
 namespace photon
 {
+	void CheckForErrors(const char* method)
+	{
+		uint32_t error = glGetError();
+		ASSERT(error == GL_NONE);
+	}
+
 	GLGraphicsAPI::GLGraphicsAPI(GLAPIParam apiParam)
 	{
 		this->context = Platform::GLCreateContext(apiParam.createParam);
-		auto result = glewInit();
-		ASSERT(result == 0);
+		auto error = glewInit();
+		ASSERT(error == GL_NONE);
 	}
 	GLGraphicsAPI::~GLGraphicsAPI()
 	{
@@ -47,20 +53,14 @@ namespace photon
 		glClearColor(color.x, color.y, color.z, color.w);
 		glClearDepth(depth);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		CheckForErrors("glClear");
 	}
 	ShaderHandler GLGraphicsAPI::CreateShader(ShaderType type, const char* code)
 	{
 		GLenum shaderType;
 		ShaderHandler handler;
 
-		switch (type)
-		{
-		case ShaderType::VERTEX_SHADER: shaderType = GL_VERTEX_SHADER; break;
-		case ShaderType::FRAGMENT_SHADER: shaderType = GL_FRAGMENT_SHADER; break;
-		case ShaderType::GEOMETRY_SHADER: shaderType = GL_GEOMETRY_SHADER; break;
-		}
-
-		handler.shader = glCreateShader(shaderType);
+		handler.shader = glCreateShader((uint32_t)type);
 		glShaderSource(handler.shader, 1, &code, nullptr);
 		glCompileShader(handler.shader);
 
@@ -86,9 +86,13 @@ namespace photon
 		handler.program = glCreateProgram();
 
 		for (int i = 0; i < count; ++i)
+		{
 			glAttachShader(handler.program, shaders[i].shader);
+			CheckForErrors("glAttachShader");
+		}
 
 		glLinkProgram(handler.program);
+	
 
 		GLint linked;
 		glGetProgramiv(handler.program, GL_LINK_STATUS, &linked);
@@ -115,6 +119,7 @@ namespace photon
 		glGenBuffers(1, &handler.vb);
 		glBindBuffer(GL_ARRAY_BUFFER, handler.vb);
 		glBufferData(GL_ARRAY_BUFFER, sizeOfVertex * verticesCount, vertices, (uint32_t)type);
+		CheckForErrors("glBufferData");
 		glBindBuffer(GL_ARRAY_BUFFER, GL_NONE);
 
 		return handler;
@@ -127,6 +132,7 @@ namespace photon
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, handler.vb);
 		void* ptr = glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
+		CheckForErrors("glMapBuffer");
 		return ptr;
 	}
 	void GLGraphicsAPI::EndUpdateVertexBuffer()
@@ -143,11 +149,12 @@ namespace photon
 		glBindVertexArray(handler.vao);
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer.ib);
-
+		CheckForErrors("glBindBuffer");
 
 		for (int i = 0; i < buffersCount; ++i)
 		{
 			glBindBuffer(GL_ARRAY_BUFFER, vertexBuffers[i].vb);
+			CheckForErrors("glBindBuffer");
 
 			int attrCount = layots[i].attributesCount;
 			int offset = 0;
@@ -162,6 +169,7 @@ namespace photon
 				int size = 0;
 
 				glEnableVertexAttribArray(attr.location);
+				CheckForErrors("glEnableVertexAttribArray");
 
 				switch (attr.type)
 				{
@@ -185,7 +193,10 @@ namespace photon
 					break;
 				}
 
+				CheckForErrors("glVertexAttribPointer");
+
 				glVertexAttribDivisor(attr.location, layots[i].instance);
+				CheckForErrors("glVertexAttribDivisor");
 
 				ptr += size;
 			}
@@ -218,25 +229,29 @@ namespace photon
 	void GLGraphicsAPI::Draw(PrimitiveType type, unsigned int elemCount)
 	{
 		glDrawArrays((uint32_t)type, 0, elemCount);
+		CheckForErrors("glDrawArrays");
 	}
 	void GLGraphicsAPI::DrawIndexed(PrimitiveType pType, IndiceType iType, uint32_t elemCount)
 	{
 		glDrawElements((uint32_t)(pType), elemCount, (uint32_t)iType, 0);
+		CheckForErrors("glDrawElements");
 	}
 	void GLGraphicsAPI::DrawIndexedInstanced(PrimitiveType pType, IndiceType iType, uint32_t elemCount, uint32_t instancesCount)
 	{
-		
 		glDrawElementsInstanced((uint32_t)(pType), elemCount, (uint32_t)iType, 0, instancesCount);
+		CheckForErrors("glDrawElementsInstanced");
 	}
 
 	void GLGraphicsAPI::UseShaderProgram(ShaderProgramHandler program)
 	{
 		glUseProgram(program.program);
+		CheckForErrors("glUseProgram");
 	}
 
 	void GLGraphicsAPI::UseVertexBufferBinding(VertexBufferBindingHandler vbb)
 	{
 		glBindVertexArray(vbb.vao);
+		CheckForErrors("glBindVertexArray");
 	}
 	void GLGraphicsAPI::ClearVertexBufferBinding()
 	{
@@ -246,6 +261,7 @@ namespace photon
 	{
 		glBindBuffer(GL_UNIFORM_BUFFER, block.ub);
 		void* ptr = glMapBuffer(GL_UNIFORM_BUFFER, GL_WRITE_ONLY);
+		CheckForErrors("glMapBuffer");
 		return ptr;
 	}
 	void GLGraphicsAPI::EndUpdateUniformBuffer()
@@ -260,6 +276,7 @@ namespace photon
 		glGenBuffers(1, &handler.ub);
 		glBindBuffer(GL_UNIFORM_BUFFER, handler.ub);
 		glBufferData(GL_UNIFORM_BUFFER, bufferSize, bufferValue, GL_DYNAMIC_DRAW);
+		CheckForErrors("glBufferData");
 		glBindBuffer(GL_UNIFORM_BUFFER, GL_NONE);
 
 		return handler;
@@ -271,18 +288,15 @@ namespace photon
 	void GLGraphicsAPI::BindBufferToProgramBlock(ShaderProgramHandler program, const char* blockName, uint32_t bindPoint, UniformBufferHandler buffer)
 	{
 		uint32_t blockIndex = glGetUniformBlockIndex(program.program, blockName);
-		int error = glGetError();
-		ASSERT(error == GL_NONE);
+		CheckForErrors("glGetUniformBlockIndex");
 
 		glUniformBlockBinding(program.program, blockIndex, bindPoint);
-		error = glGetError();
-		ASSERT(error == GL_NONE);
+		CheckForErrors("glUniformBlockBinding");
 	}
 	void GLGraphicsAPI::UseUniformBuffer(UniformBufferHandler buffer, uint32_t bindPoint)
 	{
 		glBindBufferBase(GL_UNIFORM_BUFFER, bindPoint, buffer.ub);
-		int error = glGetError();
-		ASSERT(error == GL_NONE);
+		CheckForErrors("glBindBufferBase");
 	}
 
 
@@ -302,6 +316,7 @@ namespace photon
 		glGenBuffers(1, &handler.ib);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, handler.ib);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesCount* size, indices, GL_STATIC_DRAW);
+		CheckForErrors("glBufferData");
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, GL_NONE);
 
 		return handler;
@@ -378,8 +393,7 @@ namespace photon
 			//UINT size = ((width ) / 4)*((height) / 4)*blockSize;
 			glCompressedTexImage2D(GL_TEXTURE_2D, level, format, width, height, 0, size, buffer + offset);
 
-			auto error = glGetError();
-			ASSERT(error == 0);
+			CheckForErrors("glCompressedTexImage2D");
 
 			offset += size;
 			width /= max(width / 2, 1);
@@ -419,6 +433,7 @@ namespace photon
 
 		// Give the image to OpenGL
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_BGR, GL_UNSIGNED_BYTE, buffer);
+		CheckForErrors("glTexImage2D");
 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -435,8 +450,10 @@ namespace photon
 	void GLGraphicsAPI::UseTexture(TextureHandler texture, uint32_t location, uint32_t samplerLocation ,ShaderProgramHandler shader)
 	{
 		glUniform1i(samplerLocation, location);
+		CheckForErrors("glUniform1i");
 
 		glActiveTexture(GL_TEXTURE0 + location);
+		CheckForErrors("glActiveTexture");
 
 		glBindTexture(GL_TEXTURE_2D, texture.texture);
 
@@ -469,6 +486,7 @@ namespace photon
 		}
 
 		glPolygonMode(GL_FRONT_AND_BACK, (uint32_t)state.fillMode);
+		CheckForErrors("glPolygonMode");
 
 	}
 
@@ -528,6 +546,7 @@ namespace photon
 	void GLGraphicsAPI::SetViewport(Viewport viewport)
 	{
 		glViewport(viewport.x, viewport.y, viewport.width, viewport.height);
+		CheckForErrors("glViewport");
 	}
 
 }

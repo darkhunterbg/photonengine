@@ -89,5 +89,12 @@ namespace photon
 		STATIC = 0x88E4,
 		DYNAMIC = 0x88E8
 	};
+	enum class ShaderType
+	{
+		VERTEX_SHADER = 0x8B31,
+		FRAGMENT_SHADER = 0x8B30,
+		GEOMETRY_SHADER = 0x8DD9,
+	};
+
 
 }
