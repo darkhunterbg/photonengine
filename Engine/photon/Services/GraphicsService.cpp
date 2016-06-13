@@ -141,7 +141,7 @@ namespace photon
 
 		Matrix* m = (Matrix*)api->StartUpdateUniformBuffer(uniformBuffers[0]);
 
-		Matrix view = Matrix::LookAtRH({ i,0, 10*i,0 }, { i,0,0,0 }, { 0,1,0,0 });
+		Matrix view = Matrix::LookAtRH({ 0,0, 10*i,0 }, { 0,0,0,0 }, { 0,1,0,0 });
 		Matrix proj = Matrix::PerspectiveRH(PI_OVER_4, 1.0f, 0.01f, 10.0f);
 
 		*m = (view * proj);//.Transpose();
@@ -175,16 +175,19 @@ namespace photon
 	{
 		TextAsset vsText = gl_AssetsService->GetTextAsset("shader.v");
 		TextAsset fsText = gl_AssetsService->GetTextAsset("shader.f");
+		TextAsset gsText = gl_AssetsService->GetTextAsset("shader.g");
 
 		ShaderHandler vs = api->CreateShader(ShaderType::VERTEX_SHADER, vsText.text);
-		ShaderHandler ps = api->CreateShader(ShaderType::FRAGMENT_SHADER, fsText.text);
+		ShaderHandler fs = api->CreateShader(ShaderType::FRAGMENT_SHADER, fsText.text);
+		ShaderHandler gs = api->CreateShader(ShaderType::GEOMETRY_SHADER, gsText.text);
 
 		shaders.Add(vs);
-		shaders.Add(ps);
+		shaders.Add(gs);
+		shaders.Add(fs);
 
-		ShaderHandler shaders[] = { vs,ps };
+		ShaderHandler shaders[] = { vs, gs ,fs };
 
-		shaderPrograms.Add(api->CreateShaderProgram(shaders, 2));
+		shaderPrograms.Add(api->CreateShaderProgram(shaders, 3));
 	}
 
 	TextureHandler GraphicsService::LoadTexture(void* data, LoadTextureType type)

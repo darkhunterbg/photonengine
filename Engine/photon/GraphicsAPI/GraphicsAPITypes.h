@@ -15,6 +15,7 @@ namespace photon
 	{
 		VERTEX_SHADER,
 		FRAGMENT_SHADER,
+		GEOMETRY_SHADER,
 	};
 
 	enum  class VertexParamType 

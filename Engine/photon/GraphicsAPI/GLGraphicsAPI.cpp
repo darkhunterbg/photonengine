@@ -57,6 +57,7 @@ namespace photon
 		{
 		case ShaderType::VERTEX_SHADER: shaderType = GL_VERTEX_SHADER; break;
 		case ShaderType::FRAGMENT_SHADER: shaderType = GL_FRAGMENT_SHADER; break;
+		case ShaderType::GEOMETRY_SHADER: shaderType = GL_GEOMETRY_SHADER; break;
 		}
 
 		handler.shader = glCreateShader(shaderType);
