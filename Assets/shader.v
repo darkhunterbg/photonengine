@@ -6,10 +6,13 @@ in vec4 pos;
 //layout(location = 1)
 in vec2 uv;
 
+//Instance
+layout(location = 2)
+in mat4 world;
 
 layout( std140, binding = 0 ) uniform VertexBlock
 {
-	mat4 wvp;
+	mat4 vp;
 };
 
 
@@ -18,6 +21,7 @@ out vec2 texCoord;
 void main()
 {
 	texCoord = uv ;
-	gl_Position =    wvp * pos;
+	mat4  wvp =    world * vp    ;
+	gl_Position =   pos * wvp ;
 
 }

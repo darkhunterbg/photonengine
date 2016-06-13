@@ -78,14 +78,24 @@ namespace photon
 		gl_GraphicsService->InitializeTechniques();
 
 
+		VertexBufferLayout layouts[2];
+
 		gl_GraphicsService->indexBuffers.Add(gl_GraphicsService->api->CreateIndexBuffer(indices, 4, IndiceType::USHORT));
-		gl_GraphicsService->vertexBuffers.Add(gl_GraphicsService->api->CreateVertexBuffer(vertices, 4, sizeof(Vertex)));
-		VertexBufferLayout layout = {};
-		layout.attributesCount = 2;
-		VertexAttribute attr[] = { { 0, VertexParamType::FLOAT4 }, { 1 , VertexParamType::FLOAT2 } };
-		layout.attributes = attr;
+
+		gl_GraphicsService->vertexBuffers.Add(gl_GraphicsService->api->CreateVertexBuffer(VertexBufferType::STATIC, vertices, 4, sizeof(Vertex)));
+		layouts[0].attributesCount = 2;
+		layouts[0].instance = 0;
+		VertexAttribute attr0[] = { { 0, VertexParamType::FLOAT4 },{ 1 , VertexParamType::FLOAT2 } };
+		layouts[0].attributes = attr0;
+
+		gl_GraphicsService->vertexBuffers.Add(gl_GraphicsService->api->CreateVertexBuffer(VertexBufferType::DYNAMIC, nullptr, 128, sizeof(Matrix)));
+		layouts[1].attributesCount = 4;
+		layouts[1].instance = 1;
+		VertexAttribute attr1[] = { { 2, VertexParamType::FLOAT4 },{ 3 , VertexParamType::FLOAT4 },{ 4 , VertexParamType::FLOAT4 } ,{ 5 , VertexParamType::FLOAT4 } };
+		layouts[1].attributes = attr1;
+
 		gl_GraphicsService->vertexBufferBindings.Add(
-			gl_GraphicsService->api->CreateVertexBufferBinding(&gl_GraphicsService->vertexBuffers[0], &layout, 1,
+			gl_GraphicsService->api->CreateVertexBufferBinding(&gl_GraphicsService->vertexBuffers[0], layouts, 2,
 				gl_GraphicsService->indexBuffers[0]));
 
 
@@ -128,19 +138,34 @@ namespace photon
 		*v = data;
 		api->EndUpdateUniformBuffer();
 
-		for (int j = 0; j < 1; ++j)
+
+		Matrix* m = (Matrix*)api->StartUpdateUniformBuffer(uniformBuffers[0]);
+
+		Matrix view = Matrix::LookAtRH({ i,0, 10*i,0 }, { i,0,0,0 }, { 0,1,0,0 });
+		Matrix proj = Matrix::PerspectiveRH(PI_OVER_4, 1.0f, 0.01f, 10.0f);
+
+		*m = (view * proj);//.Transpose();
+		api->EndUpdateUniformBuffer();
+
+		Matrix* instances = (Matrix*)api->StartUpdateVertexBuffer(vertexBuffers[1]);
+
+		int instanceCount = 16;
+		for (int j = 0; j < instanceCount; ++j)
 		{
-			Matrix* m = (Matrix*)api->StartUpdateUniformBuffer(uniformBuffers[0]);
+			Matrix world =
+				Matrix::CreateTranslation({ (j % 4)*-0.5f + 0.75f,
+				(j / 4)*-0.5f + 0.75f ,
+					0,0 }) *
+				Matrix::CreateScale({ 0.25,0.25,1.0f,0.0f });
+			//Matrix::CreateRotationZ(i*2.0f*PI) *
 
-			Matrix world = Matrix::CreateRotationZ(i*2.0f*PI) *  Matrix::CreateScale({ 0.5f,0.5f,0.5f,1 });
-			Matrix view = Matrix::LookAtRH({ 0,0, i*10.0f ,0 }, { 0,0,0,0 }, { 0,1,0,0 });
-			Matrix proj = Matrix::PerspectiveRH(PI_OVER_4, 1.0f, 0.01f, 10.0f);
 
-			*m = (world*(view*proj)).Transpose();
-			api->EndUpdateUniformBuffer();
-
-			api->DrawIndexed(PrimitiveType::TRIANGLE_STRIP, photon::IndiceType::USHORT, 4);
+			*(instances + j) = world;// .Transpose();
+			//*(instances + j) = Matrix::IDENTITY;
 		}
+		api->EndUpdateVertexBuffer();
+
+		api->DrawIndexedInstanced(PrimitiveType::TRIANGLE_STRIP, photon::IndiceType::USHORT, 4, instanceCount);
 		api->ClearVertexBufferBinding();
 
 		api->SwapBuffers();

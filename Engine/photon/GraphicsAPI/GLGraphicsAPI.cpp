@@ -107,13 +107,13 @@ namespace photon
 	{
 		glDeleteProgram(shaderProgram.program);
 	}
-	VertexBufferHandler GLGraphicsAPI::CreateVertexBuffer(const void* vertices, size_t verticesCount, int sizeOfVertex)
+	VertexBufferHandler GLGraphicsAPI::CreateVertexBuffer(VertexBufferType type, const void* vertices, size_t verticesCount, int sizeOfVertex)
 	{
 		VertexBufferHandler handler;
 
 		glGenBuffers(1, &handler.vb);
 		glBindBuffer(GL_ARRAY_BUFFER, handler.vb);
-		glBufferData(GL_ARRAY_BUFFER, sizeOfVertex * verticesCount, vertices, GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, sizeOfVertex * verticesCount, vertices, (uint32_t)type);
 		glBindBuffer(GL_ARRAY_BUFFER, GL_NONE);
 
 		return handler;
@@ -122,6 +122,18 @@ namespace photon
 	{
 		glDeleteBuffers(1, &vb.vb);
 	}
+	void* GLGraphicsAPI::StartUpdateVertexBuffer(VertexBufferHandler handler)
+	{
+		glBindBuffer(GL_ARRAY_BUFFER, handler.vb);
+		void* ptr = glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
+		return ptr;
+	}
+	void GLGraphicsAPI::EndUpdateVertexBuffer()
+	{
+		glUnmapBuffer(GL_ARRAY_BUFFER);
+		glBindBuffer(GL_ARRAY_BUFFER, GL_NONE);
+	}
+
 	VertexBufferBindingHandler GLGraphicsAPI::CreateVertexBufferBinding(const VertexBufferHandler* vertexBuffers, const VertexBufferLayout* layots, int buffersCount, IndexBufferHandler indexBuffer)
 	{
 		VertexBufferBindingHandler handler;
@@ -131,9 +143,6 @@ namespace photon
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer.ib);
 
-		size_t layoutSize = 0;
-		for (int i = 0; i < buffersCount; ++i)
-			layoutSize += layots[i].GetTotalSize();
 
 		for (int i = 0; i < buffersCount; ++i)
 		{
@@ -142,6 +151,7 @@ namespace photon
 			int attrCount = layots[i].attributesCount;
 			int offset = 0;
 
+			size_t layoutSize = layots[i].GetTotalSize();
 
 			char* ptr = 0;
 
@@ -174,6 +184,8 @@ namespace photon
 					break;
 				}
 
+				glVertexAttribDivisor(attr.location, layots[i].instance);
+
 				ptr += size;
 			}
 		}
@@ -201,14 +213,21 @@ namespace photon
 	{
 		glDeleteVertexArrays(1, &vbb.vao);
 	}
+
 	void GLGraphicsAPI::Draw(PrimitiveType type, unsigned int elemCount)
 	{
 		glDrawArrays((uint32_t)type, 0, elemCount);
 	}
-	void GLGraphicsAPI::DrawIndexed(PrimitiveType pType, IndiceType iType, unsigned int elemCount)
+	void GLGraphicsAPI::DrawIndexed(PrimitiveType pType, IndiceType iType, uint32_t elemCount)
 	{
 		glDrawElements((uint32_t)(pType), elemCount, (uint32_t)iType, 0);
 	}
+	void GLGraphicsAPI::DrawIndexedInstanced(PrimitiveType pType, IndiceType iType, uint32_t elemCount, uint32_t instancesCount)
+	{
+		
+		glDrawElementsInstanced((uint32_t)(pType), elemCount, (uint32_t)iType, 0, instancesCount);
+	}
+
 	void GLGraphicsAPI::UseShaderProgram(ShaderProgramHandler program)
 	{
 		glUseProgram(program.program);

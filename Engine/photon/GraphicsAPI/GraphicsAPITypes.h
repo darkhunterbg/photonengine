@@ -36,6 +36,7 @@ namespace photon
 	{
 		VertexAttribute* attributes;
 		int attributesCount;
+		int instance;
 
 		size_t GetTotalSize() const
 		{

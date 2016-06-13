@@ -50,8 +50,11 @@ namespace photon
 		void DestoryShaderProgram(ShaderProgramHandler shaderProgram);
 		void UseShaderProgram(ShaderProgramHandler program);
 
-		VertexBufferHandler CreateVertexBuffer(const void* vertices, size_t verticesCount, int sizeOfVertex);
+		VertexBufferHandler CreateVertexBuffer(VertexBufferType type, const void* vertices, size_t verticesCount, int sizeOfVertex);
 		void DestroyVertexBuffer(VertexBufferHandler vb);
+		void* StartUpdateVertexBuffer(VertexBufferHandler handler);
+		void EndUpdateVertexBuffer();
+
 
 		VertexBufferBindingHandler CreateVertexBufferBinding(const VertexBufferHandler* vertexBuffers, const VertexBufferLayout* layots, int buffersCount, IndexBufferHandler indexBuffer = IndexBufferHandler::Empty);
 		void DestroyVertexBufferBinding(VertexBufferBindingHandler vbb);
@@ -70,7 +73,8 @@ namespace photon
 		void UseUniformBuffer(UniformBufferHandler buffer, uint32_t bindPoint);
 
 		void Draw(PrimitiveType type, unsigned int elemCount);
-		void DrawIndexed(PrimitiveType pType, IndiceType iType, unsigned int elemCount);
+		void DrawIndexed(PrimitiveType pType, IndiceType iType, uint32_t elemCount);
+		void DrawIndexedInstanced(PrimitiveType pType, IndiceType iType, uint32_t elemCount, uint32_t instancesCount);
 
 		TextureHandler LoadTextureBitmap(void* data);
 		TextureHandler LoadTextureDDS(void* data);

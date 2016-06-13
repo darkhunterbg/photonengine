@@ -84,5 +84,10 @@ namespace photon
 		ONE_MINUS_SRC_ALPHA = 0x0303,
 		ONE_MINUS_DST_ALPHA = 0x0305
 	};
+	enum class VertexBufferType
+	{
+		STATIC = 0x88E4,
+		DYNAMIC = 0x88E8
+	};
 
 }
