@@ -469,7 +469,7 @@ namespace photon
 	RasterizationStateHandler GLGraphicsAPI::CreateRasterizationState(FillMode fillMode, CullMode cullMode)
 	{
 		RasterizationStateHandler handler;
-		handler.id = rasterizationStates.GetCount();
+		handler.id = rasterizationStates.Count();
 		rasterizationStates.Add({ fillMode,cullMode });
 		return handler;
 	}
@@ -500,7 +500,7 @@ namespace photon
 	BlendStateHandler GLGraphicsAPI::CreateBlendState(bool enabled, BlendFactor source, BlendFactor dest)
 	{
 		BlendStateHandler handler;
-		handler.id = blendStates.GetCount();
+		handler.id = blendStates.Count();
 		blendStates.Add({ source,dest,enabled });
 		return handler;
 	}
@@ -526,7 +526,7 @@ namespace photon
 	DepthStencilStateHandler GLGraphicsAPI::CreateDepthStencilState(bool depthEnabled)
 	{
 		DepthStencilStateHandler handler;
-		handler.id = depthStencilStates.GetCount();
+		handler.id = depthStencilStates.Count();
 		depthStencilStates.Add({ depthEnabled });
 		return handler;
 	}

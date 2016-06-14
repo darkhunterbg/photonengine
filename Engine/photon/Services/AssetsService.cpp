@@ -14,7 +14,7 @@ namespace photon
 	}
 	AssetsService::~AssetsService()
 	{
-		int assetsCount = texts.GetCount();
+		int assetsCount = texts.Count();
 		for (int i = 0; i < assetsCount; ++i)
 			gl_MemoryService->FreePage(texts[i].memory);
 

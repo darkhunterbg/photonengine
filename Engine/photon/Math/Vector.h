@@ -1,10 +1,11 @@
 #pragma once
 
+#include "../Macro.h"
 #include <math.h>
 
 namespace photon
 {
-	struct Vector4
+	struct EXPORT Vector4
 	{
 		static const int ELEM_COUNT = 4;
 

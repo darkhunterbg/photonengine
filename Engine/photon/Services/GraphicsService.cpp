@@ -40,31 +40,31 @@ namespace photon
 	}
 	GraphicsService::~GraphicsService()
 	{
-		int count = shaders.GetCount();
+		int count = shaders.Count();
 		for (int i = 0; i < count; ++i)
 			api->DestroyShader(shaders[i]);
 
-		count = shaderPrograms.GetCount();
+		count = shaderPrograms.Count();
 		for (int i = 0; i < count; ++i)
 			api->DestoryShaderProgram(shaderPrograms[i].handler);
 
-		count = vertexBuffers.GetCount();
+		count = vertexBuffers.Count();
 		for (int i = 0; i < count; ++i)
 			api->DestroyVertexBuffer(vertexBuffers[i]);
 
-		count = vertexBufferBindings.GetCount();
+		count = vertexBufferBindings.Count();
 		for (int i = 0; i < count; ++i)
 			api->DestroyVertexBufferBinding(vertexBufferBindings[i]);
 
-		count = uniformBuffers.GetCount();
+		count = uniformBuffers.Count();
 		for (int i = 0; i < count; ++i)
 			api->DestroyUniformBuffer(uniformBuffers[i]);
 
-		count = indexBuffers.GetCount();
+		count = indexBuffers.Count();
 		for (int i = 0; i < count; ++i)
 			api->DestroyIndexBuffer(indexBuffers[i]);
 
-		count = textures.GetCount();
+		count = textures.Count();
 		for (int i = 0; i < count; ++i)
 			api->DestroyTexture(textures[i]);
 	}
@@ -117,60 +117,10 @@ namespace photon
 		gl_GraphicsService = nullptr;
 	}
 
-	float i = 0;
-	int x = 1;
+
 
 	void GraphicsService::PresentFrame()
 	{
-		i += x* 0.01f;
-		if (i > 1 || i < 0)
-			x = -x;
-		Vector4 data = { 1,1,1, i };
-
-		api->ClearFrameBuffer({ 0,0,0.4f, 1 }, 1.0f);
-
-		api->UseShaderProgram(shaderPrograms[0].handler);
-		api->UseUniformBuffer(uniformBuffers[0], 0);
-		api->UseUniformBuffer(uniformBuffers[1], 1);
-		api->UseVertexBufferBinding(vertexBufferBindings[0]);
-	
-	
-		api->SetTextureUnitSampler(0, sampler);
-		api->UseTexture(textures[0], 0, shaderPrograms[0].samplersLocation[0]);
-
-		Vector4* v = (Vector4*)api->StartUpdateUniformBuffer(uniformBuffers[1]);
-		*v = data;
-		api->EndUpdateUniformBuffer();
-
-
-		Matrix* m = (Matrix*)api->StartUpdateUniformBuffer(uniformBuffers[0]);
-
-		Matrix view = Matrix::LookAtRH({ 0,0, 10*i,0 }, { 0,0,0,0 }, { 0,1,0,0 });
-		Matrix proj = Matrix::PerspectiveRH(PI_OVER_4, 1.0f, 0.01f, 10.0f);
-
-		*m = (view * proj);//.Transpose();
-		api->EndUpdateUniformBuffer();
-
-		Matrix* instances = (Matrix*)api->StartUpdateVertexBuffer(vertexBuffers[1]);
-
-		int instanceCount = 16;
-		for (int j = 0; j < instanceCount; ++j)
-		{
-			Matrix world =
-				Matrix::CreateTranslation({ (j % 4)*-0.5f + 0.75f,
-				(j / 4)*-0.5f + 0.75f ,
-					0,0 }) *
-				Matrix::CreateScale({ 0.25,0.25,1.0f,0.0f });
-			//Matrix::CreateRotationZ(i*2.0f*PI) *
-
-
-			*(instances + j) = world;// .Transpose();
-		}
-		api->EndUpdateVertexBuffer();
-
-		api->DrawIndexedInstanced(PrimitiveType::TRIANGLE_STRIP, photon::IndiceType::USHORT, 4, instanceCount);
-		api->ClearVertexBufferBinding();
-
 		api->SwapBuffers();
 	}
 
@@ -216,5 +166,57 @@ namespace photon
 	void GraphicsService::OnResize(int width, int height)
 	{
 		api->SetViewport({ 0,0,width,height });
+	}
+
+
+	void GraphicsService::ExecuteCommads()
+	{
+		api->ClearFrameBuffer({ 0,0,0.4f, 1 }, 1.0f);
+
+		Vector4* v = (Vector4*)api->StartUpdateUniformBuffer(uniformBuffers[1]);
+		*v = { 1,1,1,1 };
+		api->EndUpdateUniformBuffer();
+
+		Matrix* m = (Matrix*)api->StartUpdateUniformBuffer(uniformBuffers[0]);
+
+		Matrix view = Matrix::LookAtRH({ 0,0, 10 ,0 }, { 0,0,0,0 }, { 0,1,0,0 });
+		Matrix proj = Matrix::PerspectiveRH(PI_OVER_4, 1.0f, 0.01f, 10.0f);
+
+		*m = (view * proj);//.Transpose();
+		api->EndUpdateUniformBuffer();
+
+		api->UseShaderProgram(shaderPrograms[0].handler);
+		api->UseUniformBuffer(uniformBuffers[0], 0);
+		api->UseUniformBuffer(uniformBuffers[1], 1);
+		api->UseVertexBufferBinding(vertexBufferBindings[0]);
+
+		api->SetTextureUnitSampler(0, sampler);
+		api->UseTexture(textures[0], 0, shaderPrograms[0].samplersLocation[0]);
+
+		int commandsCount = commands.Count();
+
+		Matrix* instances = (Matrix*)api->StartUpdateVertexBuffer(vertexBuffers[1]);
+		for (int i = 0; i < commandsCount; ++i)
+		{
+			*(instances + i) = commands[i].worldMatrix;
+		}
+		api->EndUpdateVertexBuffer();
+
+		api->DrawIndexedInstanced(PrimitiveType::TRIANGLE_STRIP, photon::IndiceType::USHORT, 4, commandsCount);
+
+		api->ClearVertexBufferBinding();
+
+		commands.Clear();
+		buckets.Clear();
+	}
+
+
+	void GraphicsService::RenderObject(const Matrix& world)
+	{
+		DrawBucket& b = buckets.New();
+		b.commandID = commands.Count();
+		b.key = buckets.Count();
+		DrawCommand& c = commands.New();
+		c.worldMatrix = world;
 	}
 }

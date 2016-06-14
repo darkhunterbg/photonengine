@@ -45,7 +45,7 @@ namespace photon
 		{
 			used = 0;
 		}
-		inline unsigned int GetCount() const
+		inline unsigned int Count() const
 		{
 			return used;
 		}

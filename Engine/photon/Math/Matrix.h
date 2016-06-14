@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../Macro.h"
+
 #include "Vector.h"
 #include <math.h>
 
@@ -10,7 +12,7 @@ namespace photon
 	static const float  PI_OVER_2 = 1.57079632679489661923f;   // pi/2
 	static const float  PI_OVER_4 = 0.785398163397448309616f;  // pi/4
 
-	struct Matrix
+	struct EXPORT Matrix
 	{
 		static const int ELEM_COUNT = 4;
 		static const Matrix IDENTITY;
@@ -33,7 +35,7 @@ namespace photon
 			return m[index];
 		}
 
-		inline static Matrix CreateTranslation(const Vector4& m)
+		inline static Matrix Translation(const Vector4& m)
 		{
 			return
 			{
@@ -43,7 +45,7 @@ namespace photon
 				0,0,0,1
 			};
 		}
-		inline static Matrix CreateScale(const Vector4& m)
+		inline static Matrix Scale(const Vector4& m)
 		{
 			return
 			{
@@ -53,7 +55,7 @@ namespace photon
 				0,0,0, 1
 			};
 		}
-		inline static Matrix CreateRotationX(float r)
+		inline static Matrix RotationX(float r)
 		{
 			return
 			{
@@ -63,7 +65,7 @@ namespace photon
 				0,0,0,1
 			};
 		}
-		inline static Matrix CreateRotationY(float r)
+		inline static Matrix RotationY(float r)
 		{
 			return
 			{
@@ -73,7 +75,7 @@ namespace photon
 				0,0,0,1
 			};
 		}
-		inline static Matrix CreateRotationZ(float r)
+		inline static Matrix RotationZ(float r)
 		{
 			return
 			{

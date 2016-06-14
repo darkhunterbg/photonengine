@@ -42,7 +42,7 @@ namespace photon
 		{
 			ASSERT(text::Length(assetPath) < ASSET_PATH_SIZE);
 
-			int assetsCount = assets.GetCount();
+			int assetsCount = assets.Count();
 			for (int i = 0; i < assetsCount; ++i)
 			{
 				if (text::Compare(assets.Get(i).path, assetPath) == 0)
@@ -55,7 +55,7 @@ namespace photon
 		template<class ASSET, unsigned int SIZE>
 		AssetsHandler NewAsset(const char* assetPath, Array<AssetEntry<ASSET>, SIZE>& assets)
 		{
-			AssetsHandler handler = assets.GetCount();
+			AssetsHandler handler = assets.Count();
 
 			AssetEntry<ASSET>& entry = assets.New();
 

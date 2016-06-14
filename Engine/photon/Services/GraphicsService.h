@@ -23,6 +23,11 @@ namespace photon
 		static const int MAX_INDEX_BUFFERS = 128;
 		static const int MAX_TEXTURES = 128;
 
+		static const int MAX_MATERIALS = 2 << 4;
+		static const int MAX_GEOMETRIES = 2 << 4;
+
+		static const int MAX_DRAW_COMMANDS = 1024;
+
 		GraphicsAPI* api;
 
 		Array<ShaderProgram, MAX_SHADER_PROGRAMS> shaderPrograms;
@@ -33,22 +38,33 @@ namespace photon
 		Array<IndexBufferHandler, MAX_INDEX_BUFFERS> indexBuffers;
 		Array<TextureHandler, MAX_TEXTURES> textures;
 
+		Array<TexturedMaterial, MAX_MATERIALS> materials;
+		Array<Gemoetry, MAX_GEOMETRIES> geometries;
+
+
+		Array<DrawCommand, MAX_DRAW_COMMANDS> commands;
+		Array<DrawBucket, MAX_DRAW_COMMANDS> buckets;
+
 		SamplerHandler sampler;
 
 		GraphicsService(GraphicsAPI* api);
 		~GraphicsService();
 
-
+	
 		void InitializeTechniques();
 	public:
 		static GraphicsService* Initialize(GraphicsAPI* api, MemoryStack& stack);
 		static void Uninitialize();
 
+		void ExecuteCommads();
 		void PresentFrame();
 
 		TextureHandler LoadTexture(void* data, LoadTextureType type);
 
 		void OnResize(int width, int height);
+
+
+		void RenderObject(const Matrix& world);
 	};
 
 	EXPORT extern GraphicsService* gl_GraphicsService;

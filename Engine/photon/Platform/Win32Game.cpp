@@ -61,7 +61,7 @@ namespace photon
 				//================ GAME LOOP ============================
 				gl_GraphicsService->PresentFrame();
 				gl_SceneService->Update();
-				
+				gl_GraphicsService->ExecuteCommads();
 				//======================================================
 
 				deltaTime -= ((freq.QuadPart * 16'666) / (1000 * 1000));
