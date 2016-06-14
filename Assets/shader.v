@@ -21,7 +21,7 @@ out vec2 texCoord;
 void main()
 {
 	texCoord = uv ;
-	mat4  wvp =    world * vp    ;
-	gl_Position =   pos * wvp ;
+	mat4  wvp = world * vp;
+	gl_Position = pos * wvp;
 
 }

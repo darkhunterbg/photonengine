@@ -92,7 +92,7 @@ namespace photon
 		}
 
 		glLinkProgram(handler.program);
-	
+
 
 		GLint linked;
 		glGetProgramiv(handler.program, GL_LINK_STATUS, &linked);
@@ -381,8 +381,8 @@ namespace photon
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
 		//Filtering
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
 		UINT offset = 0;
 
@@ -396,8 +396,13 @@ namespace photon
 			CheckForErrors("glCompressedTexImage2D");
 
 			offset += size;
-			width /= max(width / 2, 1);
-			height /= max(height / 2, 1);
+			width = max(width / 2, 1);
+			height = max(height / 2, 1);
+		}
+		if (mipMapCount == 0)
+		{
+			glGenerateTextureMipmap(handler.texture);
+			CheckForErrors("glGenerateTextureMipmap");
 		}
 
 		glBindTexture(GL_TEXTURE_2D, GL_NONE);
@@ -435,8 +440,11 @@ namespace photon
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_BGR, GL_UNSIGNED_BYTE, buffer);
 		CheckForErrors("glTexImage2D");
 
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+		glGenerateTextureMipmap(handler.texture);
+		CheckForErrors("glGenerateTextureMipmap");
 
 		glBindTexture(GL_TEXTURE_2D, GL_NONE);
 
@@ -447,12 +455,12 @@ namespace photon
 	{
 		glDeleteTextures(1, &handler.texture);
 	}
-	void GLGraphicsAPI::UseTexture(TextureHandler texture, uint32_t location, uint32_t samplerLocation ,ShaderProgramHandler shader)
+	void GLGraphicsAPI::UseTexture(TextureHandler texture, uint32_t textureUnit, uint32_t samplerLocation)
 	{
-		glUniform1i(samplerLocation, location);
+		glUniform1i(samplerLocation, textureUnit);
 		CheckForErrors("glUniform1i");
 
-		glActiveTexture(GL_TEXTURE0 + location);
+		glActiveTexture(GL_TEXTURE0 + textureUnit);
 		CheckForErrors("glActiveTexture");
 
 		glBindTexture(GL_TEXTURE_2D, texture.texture);
@@ -541,6 +549,43 @@ namespace photon
 			glDisable(GL_DEPTH_TEST);
 		}
 
+	}
+
+	SamplerHandler GLGraphicsAPI::CreateSampler(MinMagFilter minFilter, MinMagFilter magFilter, float maxAnisotropy)
+	{
+		SamplerHandler sampler;
+		glGenSamplers(1, &sampler.id);
+
+		glSamplerParameteri(sampler.id, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		CheckForErrors("glSamplerParameteri");
+		glSamplerParameteri(sampler.id, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		CheckForErrors("glSamplerParameteri");
+		glSamplerParameteri(sampler.id, GL_TEXTURE_MAG_FILTER, (uint32_t)magFilter);
+		CheckForErrors("glSamplerParameteri");
+		glSamplerParameteri(sampler.id, GL_TEXTURE_MIN_FILTER, (uint32_t)minFilter);
+		CheckForErrors("glSamplerParameteri");
+		glSamplerParameterf(sampler.id, GL_TEXTURE_MAX_ANISOTROPY_EXT, maxAnisotropy);
+		CheckForErrors("glSamplerParameterf");
+
+		return sampler;
+	}
+	void GLGraphicsAPI::DestroySampler(SamplerHandler handler)
+	{
+		glDeleteSamplers(1, &handler.id);
+
+
+	}
+	int GLGraphicsAPI::GetProgramSamplerLocation(ShaderProgramHandler handler, const char* samplerName)
+	{
+		return  glGetUniformLocation(handler.program, samplerName);
+	}
+	void GLGraphicsAPI::SetTextureUnitSampler(uint32_t textureUnit, SamplerHandler handler)
+	{
+		glBindSampler( textureUnit, handler.id);
+	}
+	void GLGraphicsAPI::ClearTextureUnitSampler(uint32_t textureUnit)
+	{
+		glBindSampler(textureUnit, GL_NONE);
 	}
 
 	void GLGraphicsAPI::SetViewport(Viewport viewport)

@@ -105,6 +105,8 @@ namespace photon
 		gl_GraphicsService->uniformBuffers.Add(gl_GraphicsService->api->CreateUniformBuffer(sizeof(Vector4), nullptr));
 		gl_GraphicsService->api->BindBufferToProgramBlock(gl_GraphicsService->shaderPrograms[0], "FragmentBlock", 1, gl_GraphicsService->uniformBuffers[1]);
 
+		gl_GraphicsService->sampler = gl_GraphicsService->api->CreateSampler(MinMagFilter::LINEAR_MIPMAP_LINEAR, MinMagFilter::LINEAR, 16.0f);
+
 		return gl_GraphicsService;
 	}
 	void GraphicsService::Uninitialize()
@@ -120,7 +122,6 @@ namespace photon
 
 	void GraphicsService::PresentFrame()
 	{
-
 		i += x* 0.01;
 		if (i > 1 || i < 0)
 			x = -x;
@@ -132,7 +133,10 @@ namespace photon
 		api->UseUniformBuffer(uniformBuffers[0], 0);
 		api->UseUniformBuffer(uniformBuffers[1], 1);
 		api->UseVertexBufferBinding(vertexBufferBindings[0]);
-		api->UseTexture(textures[0], 0, 2, shaderPrograms[0]);
+		int samplerLocation = api->GetProgramSamplerLocation(shaderPrograms[0], "texSampler");
+	
+		api->SetTextureUnitSampler(0, sampler);
+		api->UseTexture(textures[0], 0, samplerLocation);
 
 		Vector4* v = (Vector4*)api->StartUpdateUniformBuffer(uniformBuffers[1]);
 		*v = data;

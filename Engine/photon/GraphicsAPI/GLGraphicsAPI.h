@@ -79,7 +79,7 @@ namespace photon
 		TextureHandler LoadTextureBitmap(void* data);
 		TextureHandler LoadTextureDDS(void* data);
 		void DestroyTexture(TextureHandler handler);
-		void UseTexture(TextureHandler texture, uint32_t location, uint32_t samplerLocation, ShaderProgramHandler shader);
+		void UseTexture(TextureHandler texture, uint32_t textureUnit, uint32_t samplerLocation);
 
 		RasterizationStateHandler CreateRasterizationState(FillMode fillMode, CullMode cullMode);
 		void DestroyRasterizationState(RasterizationStateHandler handler);
@@ -92,6 +92,12 @@ namespace photon
 		DepthStencilStateHandler CreateDepthStencilState(bool depthEnabled);
 		void DestroyDepthStencilState(DepthStencilStateHandler handler);
 		void SetDepthStencilState(DepthStencilStateHandler state);
+
+		SamplerHandler CreateSampler(MinMagFilter minFilter, MinMagFilter magFilter, float maxAnisotropy);
+		void DestroySampler(SamplerHandler handler);
+		void SetTextureUnitSampler(uint32_t textureUnit, SamplerHandler handler);
+		void ClearTextureUnitSampler(uint32_t textureUnit);
+		int GetProgramSamplerLocation(ShaderProgramHandler handler, const char* samplerName);
 
 		void SetViewport(Viewport viewport);
 

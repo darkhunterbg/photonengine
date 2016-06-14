@@ -8,7 +8,6 @@ class TestScene : public photon::Scene
 	{
 		photon::TextureAsset& texture = photon::gl_AssetsService->GetTextureAsset("texture.dds");
 		//photon::TextureAsset& texture = photon::gl_AssetsService->GetTextureAsset("texture.bmp");
-		int x = 0;
 	}
 
 	virtual void Update() override

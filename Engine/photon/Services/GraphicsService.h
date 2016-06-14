@@ -37,6 +37,8 @@ namespace photon
 		Array<IndexBufferHandler, MAX_INDEX_BUFFERS> indexBuffers;
 		Array<TextureHandler, MAX_TEXTURES> textures;
 
+		SamplerHandler sampler;
+
 		GraphicsService(GraphicsAPI* api);
 		~GraphicsService();
 

@@ -32,7 +32,6 @@ namespace photon
 
 		static const IndexBufferHandler Empty;
 	};
-
 	struct TextureHandler
 	{
 		uint32_t texture;
@@ -47,6 +46,10 @@ namespace photon
 		uint32_t id;
 	};
 	struct BlendStateHandler
+	{
+		uint32_t id;
+	};
+	struct SamplerHandler
 	{
 		uint32_t id;
 	};
@@ -95,6 +98,14 @@ namespace photon
 		FRAGMENT_SHADER = 0x8B30,
 		GEOMETRY_SHADER = 0x8DD9,
 	};
-
+	enum class MinMagFilter
+	{
+		NEAREST = 0x2600,
+		LINEAR = 0x2601,
+		NEAREST_MIPMAP_NEAREST = 0x2700,
+		LINEAR_MIPMAP_NEAREST = 0x2701,
+		NEAREST_MIPMAP_LINEAR = 0x2702,
+		LINEAR_MIPMAP_LINEAR = 0x2703,
+	};
 
 }
