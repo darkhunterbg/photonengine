@@ -6,9 +6,9 @@
 namespace photon
 {
 	//From math.h
-	static const float  PI = 3.14159265358979323846;   // pi
-	static const float  PI_OVER_2 = 1.57079632679489661923;   // pi/2
-	static const float  PI_OVER_4 = 0.785398163397448309616;  // pi/4
+	static const float  PI = 3.14159265358979323846f;   // pi
+	static const float  PI_OVER_2 = 1.57079632679489661923f;   // pi/2
+	static const float  PI_OVER_4 = 0.785398163397448309616f;  // pi/4
 
 	struct Matrix
 	{
@@ -101,8 +101,10 @@ namespace photon
 	inline Vector4 operator* (const Matrix& a, const Vector4& b)
 	{
 		Vector4 r;
-		for (int i = 0; i < Matrix::ELEM_COUNT; ++i)
-			r.m[i] = Vector4::Dot(a[i], b);
+		r[0] = Vector4::Dot(a[0], b);
+		r[1] = Vector4::Dot(a[1], b);
+		r[2] = Vector4::Dot(a[2], b);
+		r[3] = Vector4::Dot(a[3], b);
 
 		return r;
 	}
@@ -112,11 +114,13 @@ namespace photon
 	{
 		Matrix r;
 		for (int i = 0; i < Matrix::ELEM_COUNT; ++i)
-			for (int j = 0; j < Matrix::ELEM_COUNT; ++j)
-			{
-				float val = Vector4::Dot(a[i], b[j]);
-				r.m[i][j] = val;
-			}
+		{
+			r.m[i][0] = Vector4::Dot(a[i], b[0]);
+			r.m[i][1] = Vector4::Dot(a[i], b[1]);
+			r.m[i][2] = Vector4::Dot(a[i], b[2]);
+			r.m[i][3] = Vector4::Dot(a[i], b[3]);
+		}
+
 
 		return r;
 	}

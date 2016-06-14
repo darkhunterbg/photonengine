@@ -57,7 +57,6 @@ namespace photon
 	}
 	ShaderHandler GLGraphicsAPI::CreateShader(ShaderType type, const char* code)
 	{
-		GLenum shaderType;
 		ShaderHandler handler;
 
 		handler.shader = glCreateShader((uint32_t)type);

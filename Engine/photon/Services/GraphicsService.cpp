@@ -46,7 +46,7 @@ namespace photon
 
 		count = shaderPrograms.GetCount();
 		for (int i = 0; i < count; ++i)
-			api->DestoryShaderProgram(shaderPrograms[i]);
+			api->DestoryShaderProgram(shaderPrograms[i].handler);
 
 		count = vertexBuffers.GetCount();
 		for (int i = 0; i < count; ++i)
@@ -100,10 +100,10 @@ namespace photon
 
 
 		gl_GraphicsService->uniformBuffers.Add(gl_GraphicsService->api->CreateUniformBuffer(sizeof(Matrix), nullptr));
-		gl_GraphicsService->api->BindBufferToProgramBlock(gl_GraphicsService->shaderPrograms[0], "VertexBlock", 0, gl_GraphicsService->uniformBuffers[0]);
+		gl_GraphicsService->api->BindBufferToProgramBlock(gl_GraphicsService->shaderPrograms[0].handler, "VertexBlock", 0, gl_GraphicsService->uniformBuffers[0]);
 
 		gl_GraphicsService->uniformBuffers.Add(gl_GraphicsService->api->CreateUniformBuffer(sizeof(Vector4), nullptr));
-		gl_GraphicsService->api->BindBufferToProgramBlock(gl_GraphicsService->shaderPrograms[0], "FragmentBlock", 1, gl_GraphicsService->uniformBuffers[1]);
+		gl_GraphicsService->api->BindBufferToProgramBlock(gl_GraphicsService->shaderPrograms[0].handler, "FragmentBlock", 1, gl_GraphicsService->uniformBuffers[1]);
 
 		gl_GraphicsService->sampler = gl_GraphicsService->api->CreateSampler(MinMagFilter::LINEAR_MIPMAP_LINEAR, MinMagFilter::LINEAR, 16.0f);
 
@@ -122,21 +122,21 @@ namespace photon
 
 	void GraphicsService::PresentFrame()
 	{
-		i += x* 0.01;
+		i += x* 0.01f;
 		if (i > 1 || i < 0)
 			x = -x;
 		Vector4 data = { 1,1,1, i };
 
 		api->ClearFrameBuffer({ 0,0,0.4f, 1 }, 1.0f);
 
-		api->UseShaderProgram(shaderPrograms[0]);
+		api->UseShaderProgram(shaderPrograms[0].handler);
 		api->UseUniformBuffer(uniformBuffers[0], 0);
 		api->UseUniformBuffer(uniformBuffers[1], 1);
 		api->UseVertexBufferBinding(vertexBufferBindings[0]);
-		int samplerLocation = api->GetProgramSamplerLocation(shaderPrograms[0], "texSampler");
+	
 	
 		api->SetTextureUnitSampler(0, sampler);
-		api->UseTexture(textures[0], 0, samplerLocation);
+		api->UseTexture(textures[0], 0, shaderPrograms[0].samplersLocation[0]);
 
 		Vector4* v = (Vector4*)api->StartUpdateUniformBuffer(uniformBuffers[1]);
 		*v = data;
@@ -190,7 +190,10 @@ namespace photon
 
 		ShaderHandler shaders[] = { vs, gs ,fs };
 
-		shaderPrograms.Add(api->CreateShaderProgram(shaders, 3));
+		ShaderProgram program;
+		program.handler = api->CreateShaderProgram(shaders, 3);
+		program.samplersLocation[0] = api->GetProgramSamplerLocation(program.handler, "texSampler");
+		shaderPrograms.Add(program);
 	}
 
 	TextureHandler GraphicsService::LoadTexture(void* data, LoadTextureType type)

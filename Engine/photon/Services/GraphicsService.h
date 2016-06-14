@@ -2,17 +2,13 @@
 
 #include "../Macro.h"
 #include "MemoryStack.h"
+#include "GraphicsData.h"
 #include "../GraphicsAPI/GraphicsAPI.h"
-#include "../GraphicsAPI/GraphicsAPITypes.h"
 #include "../Utils/Array.h"
+
 
 namespace photon
 {
-	enum class LoadTextureType
-	{
-		Bitmap,
-		DDS,
-	};
 
 	class EXPORT GraphicsService
 	{
@@ -29,7 +25,7 @@ namespace photon
 
 		GraphicsAPI* api;
 
-		Array<ShaderProgramHandler, MAX_SHADER_PROGRAMS> shaderPrograms;
+		Array<ShaderProgram, MAX_SHADER_PROGRAMS> shaderPrograms;
 		Array<ShaderHandler, MAX_SHADERS> shaders;
 		Array<VertexBufferHandler, MAX_VERTEX_BUFFERS> vertexBuffers;
 		Array<VertexBufferBindingHandler, MAX_VERTEX_BUFFER_BINDINGS> vertexBufferBindings;

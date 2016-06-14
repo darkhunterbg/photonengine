@@ -13,7 +13,7 @@ namespace photon
 	static const int ASSET_PATH_SIZE = 128;
 
 	template<class ASSET>
-	struct AssetEntry
+	struct EXPORT AssetEntry
 	{
 		char path[ASSET_PATH_SIZE];
 		ASSET asset;

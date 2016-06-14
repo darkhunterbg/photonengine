@@ -35,12 +35,12 @@ namespace photon
 		};
 
 
-		return    r;
+		return r;
 	}
 
 	Matrix Matrix::PerspectiveRH(float fov, float aspectRatio, float nearPlane, float farPlane)
 	{
-		float yScale = 1.0f / tan(fov / 2.0f);
+		float yScale = 1.0f / tanf(fov / 2.0f);
 		float xScale = yScale / aspectRatio;
 
 		Matrix r = {};

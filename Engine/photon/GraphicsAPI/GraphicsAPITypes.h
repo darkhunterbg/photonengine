@@ -11,7 +11,6 @@
 
 namespace photon
 {
-
 	enum  class VertexParamType 
 	{
 		FLOAT ,

@@ -47,8 +47,10 @@ namespace photon
 		inline static float Dot(const Vector4& a, const Vector4& b)
 		{
 			float r = 0;
-			for (int i = 0; i < Vector4::ELEM_COUNT; ++i)
-				r += a[i] * b[i];
+			r += a[0] * b[0];
+			r += a[1] * b[1];
+			r += a[2] * b[2];
+			r += a[3] * b[3];
 
 			return r;
 		}
@@ -58,8 +60,11 @@ namespace photon
 	inline Vector4 operator- (const Vector4& a, const Vector4& b)
 	{
 		Vector4 r;
-		for (int i = 0; i < Vector4::ELEM_COUNT; ++i)
-			r.m[i] = a[i] - b[i];
+		r[0] = a[0] - b[0];
+		r[1] = a[1] - b[1];
+		r[2] = a[2] - b[2];
+		r[3] = a[3] - b[3];
+
 
 		return r;
 	}
@@ -67,8 +72,10 @@ namespace photon
 	inline Vector4 operator+ (const Vector4& a, const Vector4& b)
 	{
 		Vector4 r;
-		for (int i = 0; i < Vector4::ELEM_COUNT; ++i)
-			r.m[i] = a[i] + b[i];
+		r[0] = a[0] + b[0];
+		r[1] = a[1] + b[1];
+		r[2] = a[2] + b[2];
+		r[3] = a[3] + b[3];
 
 		return r;
 	}
@@ -76,16 +83,20 @@ namespace photon
 	inline Vector4 operator* (const Vector4& a, const Vector4& b)
 	{
 		Vector4 r;
-		for (int i = 0; i < Vector4::ELEM_COUNT; ++i)
-			r.m[i] = a[i] * b[i];
+		r[0] = a[0] * b[0];
+		r[1] = a[1] * b[1];
+		r[2] = a[2] * b[2];
+		r[3] = a[3] * b[3];
 
 		return r;
 	}
 	inline Vector4 operator/ (const Vector4& a, const Vector4& b)
 	{
 		Vector4 r;
-		for (int i = 0; i < Vector4::ELEM_COUNT; ++i)
-			r.m[i] = a[i] / b[i];
+		r[0] = a[0] / b[0];
+		r[1] = a[1] / b[1];
+		r[2] = a[2] / b[2];
+		r[3] = a[3] / b[3];
 
 		return r;
 	}
@@ -94,16 +105,20 @@ namespace photon
 	inline Vector4 operator* (const Vector4& a, float b)
 	{
 		Vector4 r;
-		for (int i = 0; i < Vector4::ELEM_COUNT; ++i)
-			r.m[i] = a[i] * b;
+		r[0] = a[0] * b;
+		r[1] = a[1] * b;
+		r[2] = a[2] * b;
+		r[3] = a[3] * b;
 
 		return r;
 	}
 	inline Vector4 operator/ (const Vector4& a, float b)
 	{
 		Vector4 r;
-		for (int i = 0; i < Vector4::ELEM_COUNT; ++i)
-			r.m[i] = a[i] / b;
+		r[0] = a[0] / b;
+		r[1] = a[1] / b;
+		r[2] = a[2] / b;
+		r[3] = a[3] / b;
 
 		return r;
 	}

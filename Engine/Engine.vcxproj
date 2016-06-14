@@ -46,6 +46,7 @@
     <ClInclude Include="photon\Platform\Win32Platform.h" />
     <ClInclude Include="photon\Services\Assets.h" />
     <ClInclude Include="photon\Services\AssetsService.h" />
+    <ClInclude Include="photon\Services\GraphicsData.h" />
     <ClInclude Include="photon\Services\GraphicsService.h" />
     <ClInclude Include="photon\Services\MemoryService.h" />
     <ClInclude Include="photon\Services\MemoryStack.h" />

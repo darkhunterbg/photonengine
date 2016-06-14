@@ -13,17 +13,17 @@ namespace photon
 {
 	namespace gl
 	{
-		struct GLDepthStencilState
+		struct EXPORT GLDepthStencilState
 		{
 			bool depthEnabled;
 		};
-		struct GLRasterizationState
+		struct EXPORT GLRasterizationState
 		{
 			FillMode fillMode;
 			CullMode cullMode;
 		};
 
-		struct GLBlendingState
+		struct EXPORT GLBlendingState
 		{
 			BlendFactor source;
 			BlendFactor dest;

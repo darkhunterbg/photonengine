@@ -7,6 +7,10 @@
 
 #define _ALLOW_RTCc_IN_STL
 
+//Disable exceptions warning from msvc (we're not using exceptions)
+#pragma warning(disable:4530)
+#pragma warning(disable:4577)
+
 #include <intrin.h>
 
 #define BREAKPOINT() __halt()

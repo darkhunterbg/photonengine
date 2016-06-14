@@ -5,7 +5,7 @@
 namespace photon
 {
 	template <class T, unsigned int CAPACITY>
-	class Array
+	class EXPORT Array
 	{
 		DISABLE_COPY(Array);
 

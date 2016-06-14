@@ -55,7 +55,6 @@ namespace photon
 		void* StartUpdateVertexBuffer(VertexBufferHandler handler);
 		void EndUpdateVertexBuffer();
 
-
 		VertexBufferBindingHandler CreateVertexBufferBinding(const VertexBufferHandler* vertexBuffers, const VertexBufferLayout* layots, int buffersCount, IndexBufferHandler indexBuffer = IndexBufferHandler::Empty);
 		void DestroyVertexBufferBinding(VertexBufferBindingHandler vbb);
 		void UseVertexBufferBinding(VertexBufferBindingHandler vbb);

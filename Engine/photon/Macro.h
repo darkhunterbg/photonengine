@@ -29,6 +29,6 @@ T& operator=(const T&) = delete;
 #define ASSERT(expr) ((expr))
 #endif
 
-#if !defined(TEXT)
-#define TEXT(T) L##T
-#endif
+//#if !defined(TEXT)
+//#define TEXT(T) L##T
+//#endif
