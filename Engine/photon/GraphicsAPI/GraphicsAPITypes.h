@@ -1,11 +1,11 @@
 #pragma once
 
-#include "GraphicsAPI.h"
+#include "../Platform/Platform.h"
 
-#if GRAPHICS_API == OPENGL
+#if defined(OPENGL)
 #include "GLGraphicsAPITypes.h"
 #endif
-#if GRAPHICS_API == DIRECTX
+#if defined(DIRECTX)
 #include "DXGraphicsAPITypes.h"
 #endif
 

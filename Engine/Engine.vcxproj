@@ -47,6 +47,7 @@
     <ClInclude Include="photon\Services\Assets.h" />
     <ClInclude Include="photon\Services\AssetsService.h" />
     <ClInclude Include="photon\Services\GraphicsData.h" />
+    <ClInclude Include="photon\Services\GraphicsDevice.h" />
     <ClInclude Include="photon\Services\GraphicsService.h" />
     <ClInclude Include="photon\Services\MemoryService.h" />
     <ClInclude Include="photon\Services\MemoryStack.h" />
@@ -64,6 +65,7 @@
     <ClCompile Include="photon\Platform\Win32Game.cpp" />
     <ClCompile Include="photon\Platform\Win32Platform.cpp" />
     <ClCompile Include="photon\Services\AssetsService.cpp" />
+    <ClCompile Include="photon\Services\GraphicsDevice.cpp" />
     <ClCompile Include="photon\Services\GraphicsService.cpp" />
     <ClCompile Include="photon\Services\MemoryService.cpp" />
     <ClCompile Include="photon\Services\MemoryStack.cpp" />

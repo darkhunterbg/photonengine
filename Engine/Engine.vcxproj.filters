@@ -75,6 +75,9 @@
     <ClInclude Include="photon\Services\GraphicsData.h">
       <Filter>Services\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="photon\Services\GraphicsDevice.h">
+      <Filter>Services\Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Platform">
@@ -150,6 +153,9 @@
     </ClCompile>
     <ClCompile Include="photon\Math\Matrix.cpp">
       <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="photon\Services\GraphicsDevice.cpp">
+      <Filter>Services\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

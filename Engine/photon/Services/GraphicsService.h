@@ -4,11 +4,13 @@
 #include "MemoryStack.h"
 #include "GraphicsData.h"
 #include "../GraphicsAPI/GraphicsAPI.h"
+#include "../GraphicsAPI/GraphicsAPITypes.h"
 #include "../Utils/Array.h"
 
 
 namespace photon
 {
+	class GraphicsDevice;
 
 	class EXPORT GraphicsService
 	{
@@ -29,14 +31,8 @@ namespace photon
 		static const int MAX_DRAW_COMMANDS = 1024;
 
 		GraphicsAPI* api;
+		GraphicsDevice* device;
 
-		Array<ShaderProgram, MAX_SHADER_PROGRAMS> shaderPrograms;
-		Array<ShaderHandler, MAX_SHADERS> shaders;
-		Array<VertexBufferHandler, MAX_VERTEX_BUFFERS> vertexBuffers;
-		Array<VertexBufferBindingHandler, MAX_VERTEX_BUFFER_BINDINGS> vertexBufferBindings;
-		Array<UniformBufferHandler, MAX_UNIFORM_BUFFERS> uniformBuffers;
-		Array<IndexBufferHandler, MAX_INDEX_BUFFERS> indexBuffers;
-		Array<TextureHandler, MAX_TEXTURES> textures;
 
 		Array<TexturedMaterial, MAX_MATERIALS> materials;
 		Array<Gemoetry, MAX_GEOMETRIES> geometries;
@@ -47,7 +43,7 @@ namespace photon
 
 		SamplerHandler sampler;
 
-		GraphicsService(GraphicsAPI* api);
+		GraphicsService(GraphicsAPI* api, GraphicsDevice* device);
 		~GraphicsService();
 
 	

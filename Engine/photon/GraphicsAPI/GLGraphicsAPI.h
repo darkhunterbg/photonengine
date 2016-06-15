@@ -46,7 +46,7 @@ namespace photon
 		ShaderHandler CreateShader(ShaderType type, const char* code);
 		void DestroyShader(ShaderHandler shader);
 
-		ShaderProgramHandler CreateShaderProgram(ShaderHandler* shaders, int count);
+		ShaderProgramHandler CreateShaderProgram(const ShaderHandler* shaders, int count);
 		void DestoryShaderProgram(ShaderProgramHandler shaderProgram);
 		void UseShaderProgram(ShaderProgramHandler program);
 

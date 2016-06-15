@@ -79,7 +79,7 @@ namespace photon
 	{
 		glDeleteShader(handler.shader);
 	}
-	ShaderProgramHandler GLGraphicsAPI::CreateShaderProgram(ShaderHandler* shaders, int count)
+	ShaderProgramHandler GLGraphicsAPI::CreateShaderProgram(const ShaderHandler* shaders, int count)
 	{
 		ShaderProgramHandler  handler;
 		handler.program = glCreateProgram();

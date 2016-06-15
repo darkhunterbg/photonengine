@@ -6,11 +6,20 @@
 #include "../Alloc.h"
 
 #include "AssetsService.h"
+#include "../GraphicsAPI/GraphicsAPI.h"
+#include "GraphicsDevice.h"
 
 namespace photon
 {
 	GraphicsService* gl_GraphicsService = nullptr;
 
+	ShaderProgram program;
+	VertexBufferHandler vertexBuffer;
+	VertexBufferHandler instanceBuffer;
+	VertexBufferBindingHandler binding;
+	TextureHandler texture;
+	IndexBufferHandler indexBuffer;
+	UniformBufferHandler uniformBuffers[2];
 
 	struct Vertex {
 		Vector4 position;
@@ -26,8 +35,8 @@ namespace photon
 		0,1,3,2
 	};
 
-	GraphicsService::GraphicsService(GraphicsAPI* api) :
-		api(api)
+	GraphicsService::GraphicsService(GraphicsAPI* api, GraphicsDevice* device) :
+		api(api), device(device)
 	{
 		RasterizationStateHandler rs = api->CreateRasterizationState(FillMode::SOLID, CullMode::BACK_FACE);
 		api->SetRasterizationState(rs);
@@ -37,36 +46,11 @@ namespace photon
 
 		DepthStencilStateHandler dss = api->CreateDepthStencilState(true);
 		api->SetDepthStencilState(dss);
+
 	}
 	GraphicsService::~GraphicsService()
 	{
-		int count = shaders.Count();
-		for (int i = 0; i < count; ++i)
-			api->DestroyShader(shaders[i]);
 
-		count = shaderPrograms.Count();
-		for (int i = 0; i < count; ++i)
-			api->DestoryShaderProgram(shaderPrograms[i].handler);
-
-		count = vertexBuffers.Count();
-		for (int i = 0; i < count; ++i)
-			api->DestroyVertexBuffer(vertexBuffers[i]);
-
-		count = vertexBufferBindings.Count();
-		for (int i = 0; i < count; ++i)
-			api->DestroyVertexBufferBinding(vertexBufferBindings[i]);
-
-		count = uniformBuffers.Count();
-		for (int i = 0; i < count; ++i)
-			api->DestroyUniformBuffer(uniformBuffers[i]);
-
-		count = indexBuffers.Count();
-		for (int i = 0; i < count; ++i)
-			api->DestroyIndexBuffer(indexBuffers[i]);
-
-		count = textures.Count();
-		for (int i = 0; i < count; ++i)
-			api->DestroyTexture(textures[i]);
 	}
 
 	GraphicsService* GraphicsService::Initialize(GraphicsAPI* api, MemoryStack& stack)
@@ -74,38 +58,43 @@ namespace photon
 		ASSERT(gl_GraphicsService == nullptr);
 		ASSERT(api);
 
-		gl_GraphicsService = MEM_NEW(stack, GraphicsService)(api);
+		GraphicsDevice* device = MEM_NEW(stack, GraphicsDevice)(api);
+
+		gl_GraphicsService = MEM_NEW(stack, GraphicsService)(api, device);
 		gl_GraphicsService->InitializeTechniques();
 
-
 		VertexBufferLayout layouts[2];
+		VertexBufferHandler buffers[2];
 
-		gl_GraphicsService->indexBuffers.Add(gl_GraphicsService->api->CreateIndexBuffer(indices, 4, IndiceType::USHORT));
+		indexBuffer = gl_GraphicsService->device->CreateIndexBuffer(indices, 4, IndiceType::USHORT);
 
-		gl_GraphicsService->vertexBuffers.Add(gl_GraphicsService->api->CreateVertexBuffer(VertexBufferType::STATIC, vertices, 4, sizeof(Vertex)));
+		vertexBuffer = gl_GraphicsService->device->CreateVertexBuffer(VertexBufferType::STATIC, vertices, 4, sizeof(Vertex));
 		layouts[0].attributesCount = 2;
 		layouts[0].instance = 0;
 		VertexAttribute attr0[] = { { 0, VertexParamType::FLOAT4 },{ 1 , VertexParamType::FLOAT2 } };
 		layouts[0].attributes = attr0;
 
-		gl_GraphicsService->vertexBuffers.Add(gl_GraphicsService->api->CreateVertexBuffer(VertexBufferType::DYNAMIC, nullptr, 128, sizeof(Matrix)));
+		instanceBuffer = gl_GraphicsService->api->CreateVertexBuffer(VertexBufferType::DYNAMIC, nullptr, 128, sizeof(Matrix));
 		layouts[1].attributesCount = 4;
 		layouts[1].instance = 1;
 		VertexAttribute attr1[] = { { 2, VertexParamType::FLOAT4 },{ 3 , VertexParamType::FLOAT4 },{ 4 , VertexParamType::FLOAT4 } ,{ 5 , VertexParamType::FLOAT4 } };
 		layouts[1].attributes = attr1;
 
-		gl_GraphicsService->vertexBufferBindings.Add(
-			gl_GraphicsService->api->CreateVertexBufferBinding(&gl_GraphicsService->vertexBuffers[0], layouts, 2,
-				gl_GraphicsService->indexBuffers[0]));
+		buffers[0] = vertexBuffer;
+		buffers[1] = instanceBuffer;
+
+		binding = gl_GraphicsService->device->CreateVertexBufferBinding(buffers, layouts, 2, indexBuffer);
 
 
-		gl_GraphicsService->uniformBuffers.Add(gl_GraphicsService->api->CreateUniformBuffer(sizeof(Matrix), nullptr));
-		gl_GraphicsService->api->BindBufferToProgramBlock(gl_GraphicsService->shaderPrograms[0].handler, "VertexBlock", 0, gl_GraphicsService->uniformBuffers[0]);
+		uniformBuffers[0] =gl_GraphicsService->device->CreateUniformBuffer(sizeof(Matrix), nullptr);
+		gl_GraphicsService->api->BindBufferToProgramBlock(program.handler, "VertexBlock", 0, uniformBuffers[0]);
 
-		gl_GraphicsService->uniformBuffers.Add(gl_GraphicsService->api->CreateUniformBuffer(sizeof(Vector4), nullptr));
-		gl_GraphicsService->api->BindBufferToProgramBlock(gl_GraphicsService->shaderPrograms[0].handler, "FragmentBlock", 1, gl_GraphicsService->uniformBuffers[1]);
+		uniformBuffers[1] = gl_GraphicsService->device->CreateUniformBuffer(sizeof(Vector4), nullptr);
+		gl_GraphicsService->api->BindBufferToProgramBlock(program.handler, "FragmentBlock", 1, uniformBuffers[1]);
 
 		gl_GraphicsService->sampler = gl_GraphicsService->api->CreateSampler(MinMagFilter::LINEAR_MIPMAP_LINEAR, MinMagFilter::LINEAR, 16.0f);
+
+		texture = photon::gl_AssetsService->GetTextureAsset("texture.dds").texture;
 
 		return gl_GraphicsService;
 	}
@@ -113,6 +102,7 @@ namespace photon
 	{
 		ASSERT(gl_GraphicsService);
 
+		gl_GraphicsService->device->~GraphicsDevice();
 		gl_GraphicsService->~GraphicsService();
 		gl_GraphicsService = nullptr;
 	}
@@ -130,44 +120,25 @@ namespace photon
 		TextAsset fsText = gl_AssetsService->GetTextAsset("shader.f");
 		TextAsset gsText = gl_AssetsService->GetTextAsset("shader.g");
 
-		ShaderHandler vs = api->CreateShader(ShaderType::VERTEX_SHADER, vsText.text);
-		ShaderHandler fs = api->CreateShader(ShaderType::FRAGMENT_SHADER, fsText.text);
-		ShaderHandler gs = api->CreateShader(ShaderType::GEOMETRY_SHADER, gsText.text);
-
-		shaders.Add(vs);
-		shaders.Add(gs);
-		shaders.Add(fs);
+		ShaderHandler vs = device->CreateShader(ShaderType::VERTEX_SHADER, vsText.text);
+		ShaderHandler fs = device->CreateShader(ShaderType::FRAGMENT_SHADER, fsText.text);
+		ShaderHandler gs = device->CreateShader(ShaderType::GEOMETRY_SHADER, gsText.text);
 
 		ShaderHandler shaders[] = { vs, gs ,fs };
 
-		ShaderProgram program;
 		program.handler = api->CreateShaderProgram(shaders, 3);
 		program.samplersLocation[0] = api->GetProgramSamplerLocation(program.handler, "texSampler");
-		shaderPrograms.Add(program);
 	}
 
 	TextureHandler GraphicsService::LoadTexture(void* data, LoadTextureType type)
 	{
-		TextureHandler texture;
-		switch (type)
-		{
-		case LoadTextureType::Bitmap:
-			texture = api->LoadTextureBitmap(data);
-			break;
-		case LoadTextureType::DDS:
-			texture = api->LoadTextureDDS(data);
-		default:
-			break;
-		}
-		textures.Add(texture);
-		return texture;
+		return device->LoadTexture(data, type);
 	}
 
 	void GraphicsService::OnResize(int width, int height)
 	{
 		api->SetViewport({ 0,0,width,height });
 	}
-
 
 	void GraphicsService::ExecuteCommads()
 	{
@@ -185,17 +156,17 @@ namespace photon
 		*m = (view * proj);//.Transpose();
 		api->EndUpdateUniformBuffer();
 
-		api->UseShaderProgram(shaderPrograms[0].handler);
+		api->UseShaderProgram(program.handler);
 		api->UseUniformBuffer(uniformBuffers[0], 0);
 		api->UseUniformBuffer(uniformBuffers[1], 1);
-		api->UseVertexBufferBinding(vertexBufferBindings[0]);
+		api->UseVertexBufferBinding(binding);
 
 		api->SetTextureUnitSampler(0, sampler);
-		api->UseTexture(textures[0], 0, shaderPrograms[0].samplersLocation[0]);
+		api->UseTexture(texture, 0, program.samplersLocation[0]);
 
 		int commandsCount = commands.Count();
 
-		Matrix* instances = (Matrix*)api->StartUpdateVertexBuffer(vertexBuffers[1]);
+		Matrix* instances = (Matrix*)api->StartUpdateVertexBuffer(instanceBuffer);
 		for (int i = 0; i < commandsCount; ++i)
 		{
 			*(instances + i) = commands[i].worldMatrix;
@@ -209,7 +180,6 @@ namespace photon
 		commands.Clear();
 		buckets.Clear();
 	}
-
 
 	void GraphicsService::RenderObject(const Matrix& world)
 	{
