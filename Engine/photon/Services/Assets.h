@@ -17,6 +17,6 @@ namespace photon
 	struct EXPORT TextureAsset
 	{
 		AssetsHandler handler;
-		TextureHandler texture;
+		int textureID;
 	};
 }

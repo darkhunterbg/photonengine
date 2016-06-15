@@ -28,14 +28,16 @@ namespace photon
 		IndexBufferHandler indexBuffer;
 	};
 
-	struct EXPORT DrawCommand
+	struct EXPORT DrawInstancesData
 	{
-		Matrix worldMatrix;
+		Matrix worldMatrix[128];
+		int count ;
+		int textureID;
 	};
 
 	struct EXPORT DrawBucket
 	{
 		uint32_t key;
-		uint32_t commandID;
+		void* data;
 	};
 }

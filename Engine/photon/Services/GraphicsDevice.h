@@ -48,7 +48,9 @@ namespace photon
 
 		RasterizationStateHandler CreateRasterizationState(FillMode fillMode, CullMode cullMode);
 
-		TextureHandler LoadTexture(void* data, LoadTextureType type);
+		int LoadTexture(void* data, LoadTextureType type);
+
+		TextureHandler GetTexture(int textureID);
 
 	};
 }

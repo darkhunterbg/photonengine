@@ -17,7 +17,6 @@ namespace photon
 	VertexBufferHandler vertexBuffer;
 	VertexBufferHandler instanceBuffer;
 	VertexBufferBindingHandler binding;
-	TextureHandler texture;
 	IndexBufferHandler indexBuffer;
 	UniformBufferHandler uniformBuffers[2];
 
@@ -86,7 +85,7 @@ namespace photon
 		binding = gl_GraphicsService->device->CreateVertexBufferBinding(buffers, layouts, 2, indexBuffer);
 
 
-		uniformBuffers[0] =gl_GraphicsService->device->CreateUniformBuffer(sizeof(Matrix), nullptr);
+		uniformBuffers[0] = gl_GraphicsService->device->CreateUniformBuffer(sizeof(Matrix), nullptr);
 		gl_GraphicsService->api->BindBufferToProgramBlock(program.handler, "VertexBlock", 0, uniformBuffers[0]);
 
 		uniformBuffers[1] = gl_GraphicsService->device->CreateUniformBuffer(sizeof(Vector4), nullptr);
@@ -94,7 +93,6 @@ namespace photon
 
 		gl_GraphicsService->sampler = gl_GraphicsService->api->CreateSampler(MinMagFilter::LINEAR_MIPMAP_LINEAR, MinMagFilter::LINEAR, 16.0f);
 
-		texture = photon::gl_AssetsService->GetTextureAsset("texture.dds").texture;
 
 		return gl_GraphicsService;
 	}
@@ -130,7 +128,7 @@ namespace photon
 		program.samplersLocation[0] = api->GetProgramSamplerLocation(program.handler, "texSampler");
 	}
 
-	TextureHandler GraphicsService::LoadTexture(void* data, LoadTextureType type)
+	int GraphicsService::LoadTexture(void* data, LoadTextureType type)
 	{
 		return device->LoadTexture(data, type);
 	}
@@ -162,31 +160,60 @@ namespace photon
 		api->UseVertexBufferBinding(binding);
 
 		api->SetTextureUnitSampler(0, sampler);
-		api->UseTexture(texture, 0, program.samplersLocation[0]);
 
-		int commandsCount = commands.Count();
-
-		Matrix* instances = (Matrix*)api->StartUpdateVertexBuffer(instanceBuffer);
-		for (int i = 0; i < commandsCount; ++i)
+		int bucketsCount = buckets.Count();
+		for (int i = 0; i < bucketsCount; ++i)
 		{
-			*(instances + i) = commands[i].worldMatrix;
-		}
-		api->EndUpdateVertexBuffer();
+			DrawInstancesData* d = (DrawInstancesData*)buckets[i].data;
 
-		api->DrawIndexedInstanced(PrimitiveType::TRIANGLE_STRIP, photon::IndiceType::USHORT, 4, commandsCount);
+			int instancesCount = d->count;
+			TextureHandler texture = device->GetTexture(d->textureID);
+
+			api->UseTexture(texture, 0, program.samplersLocation[0]);
+
+			Matrix* instances = (Matrix*)api->StartUpdateVertexBuffer(instanceBuffer);
+
+			memcpy(instances, d->worldMatrix, sizeof(Matrix)*instancesCount);
+
+			api->EndUpdateVertexBuffer();
+
+			api->DrawIndexedInstanced(PrimitiveType::TRIANGLE_STRIP, photon::IndiceType::USHORT, 4, instancesCount);
+		}
 
 		api->ClearVertexBufferBinding();
 
-		commands.Clear();
 		buckets.Clear();
+		instancesData.Clear();
 	}
 
-	void GraphicsService::RenderObject(const Matrix& world)
+	void GraphicsService::RenderObject(const Matrix& world, int textureID)
 	{
-		DrawBucket& b = buckets.New();
-		b.commandID = commands.Count();
-		b.key = buckets.Count();
-		DrawCommand& c = commands.New();
-		c.worldMatrix = world;
+		DrawBucket* b = nullptr;
+
+		int count = buckets.Count();
+		for (int i = 0; i < count; ++i)
+		{
+			DrawInstancesData* d = (DrawInstancesData*)buckets[i].data;
+			if (d->textureID == textureID)
+			{
+				b = &buckets[i];
+				break;
+			}
+		}
+		if (b == nullptr)
+		{
+			b = &buckets.New();
+			DrawInstancesData* d = &instancesData.New();
+
+			d->count = 0;
+			d->textureID = textureID;
+			b->data = d;
+		}
+
+
+		DrawInstancesData* data = (DrawInstancesData*)b->data;
+		data->worldMatrix[data->count] = world;
+		++data->count;
+
 	}
 }

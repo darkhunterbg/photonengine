@@ -76,7 +76,7 @@ namespace photon
 			if (text::EndsWith(assetPath, "bmp"))
 				type = LoadTextureType::Bitmap;
 
-			asset->texture = gl_GraphicsService->LoadTexture(textures[handler].memory, type);
+			asset->textureID = gl_GraphicsService->LoadTexture(textures[handler].memory, type);
 			gl_MemoryService->FreePage(textures[handler].memory);
 			textures[handler].memory = nullptr;
 			textures[handler].memorySize = 0;

@@ -17,18 +17,10 @@ namespace photon
 		DISABLE_COPY(GraphicsService);
 
 	private:
-		static const int MAX_SHADER_PROGRAMS = 128;
-		static const int MAX_SHADERS = 128;
-		static const int MAX_VERTEX_BUFFERS = 128;
-		static const int MAX_VERTEX_BUFFER_BINDINGS = 128;
-		static const int MAX_UNIFORM_BUFFERS = 128;
-		static const int MAX_INDEX_BUFFERS = 128;
-		static const int MAX_TEXTURES = 128;
-
 		static const int MAX_MATERIALS = 2 << 4;
 		static const int MAX_GEOMETRIES = 2 << 4;
 
-		static const int MAX_DRAW_COMMANDS = 1024;
+		static const int MAX_DRAW_COMMANDS = 16;
 
 		GraphicsAPI* api;
 		GraphicsDevice* device;
@@ -38,7 +30,7 @@ namespace photon
 		Array<Gemoetry, MAX_GEOMETRIES> geometries;
 
 
-		Array<DrawCommand, MAX_DRAW_COMMANDS> commands;
+		Array<DrawInstancesData, MAX_DRAW_COMMANDS> instancesData;
 		Array<DrawBucket, MAX_DRAW_COMMANDS> buckets;
 
 		SamplerHandler sampler;
@@ -55,12 +47,12 @@ namespace photon
 		void ExecuteCommads();
 		void PresentFrame();
 
-		TextureHandler LoadTexture(void* data, LoadTextureType type);
+		int LoadTexture(void* data, LoadTextureType type);
 
 		void OnResize(int width, int height);
 
 
-		void RenderObject(const Matrix& world);
+		void RenderObject(const Matrix& world,int textureID);
 	};
 
 	EXPORT extern GraphicsService* gl_GraphicsService;

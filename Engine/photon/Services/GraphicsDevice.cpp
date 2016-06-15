@@ -81,7 +81,7 @@ namespace photon
 		return handler;
 	}
 
-	TextureHandler GraphicsDevice::LoadTexture(void* data, LoadTextureType type)
+	int GraphicsDevice::LoadTexture(void* data, LoadTextureType type)
 	{
 		TextureHandler texture;
 		switch (type)
@@ -95,6 +95,11 @@ namespace photon
 			break;
 		}
 		textures.Add(texture);
-		return texture;
+		return textures.Count() - 1;
+	}
+
+	TextureHandler GraphicsDevice::GetTexture(int textureID)
+	{
+		return textures[textureID];
 	}
 }
