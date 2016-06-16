@@ -6,11 +6,13 @@
 #include "../GraphicsAPI/GraphicsAPI.h"
 #include "../GraphicsAPI/GraphicsAPITypes.h"
 #include "../Utils/Array.h"
-#include "Effect.h"
 
 namespace photon
 {
 	class GraphicsDevice;
+	class TestEffect;
+	
+	
 
 	class EXPORT GraphicsService
 	{
@@ -20,20 +22,28 @@ namespace photon
 		static const int MAX_MATERIALS = 2 << 4;
 		static const int MAX_GEOMETRIES = 2 << 4;
 
-		static const int MAX_DRAW_COMMANDS = 16;
+		static const int MAX_BUCKETS = 1024;
+		static const int MAX_UNIQUE_INSTANCES = 128;
+	
+	
 
 		GraphicsAPI* api;
 		GraphicsDevice* device;
 
-		TestEffect effect;
+		TestEffect* effect;
 
+		MemoryStack* effectsMemStack;
+		MemoryStack* bucketsMemStack;
 
-		Array<TexturedMaterial, MAX_MATERIALS> materials;
-		Array<Gemoetry, MAX_GEOMETRIES> geometries;
+		//Array<TexturedMaterial, MAX_MATERIALS> materials;
+		//Array<Gemoetry, MAX_GEOMETRIES> geometries;
+		VertexBufferHandler instanceBuffer;
 
+		typedef Array<DrawInstancesData, MAX_UNIQUE_INSTANCES> DrawInstanceDataArray;
+		DrawInstanceDataArray* instancesData;
 
-		Array<DrawInstancesData, MAX_DRAW_COMMANDS> instancesData;
-		Array<DrawBucket, MAX_DRAW_COMMANDS> buckets;
+		typedef Array<DrawBucket, MAX_BUCKETS> DrawBucketArray;
+		DrawBucketArray* buckets;
 
 		SamplerHandler sampler;
 
@@ -42,6 +52,7 @@ namespace photon
 
 
 		void InitializeTechniques();
+		void InitializeBuckets();
 	public:
 		static GraphicsService* Initialize(GraphicsAPI* api, MemoryStack& stack);
 		static void Uninitialize();

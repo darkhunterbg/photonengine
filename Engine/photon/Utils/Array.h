@@ -13,8 +13,8 @@ namespace photon
 		T buffer[CAPACITY];
 		unsigned int used = 0;
 	public:
-		Array() = default;
-		~Array() = default;
+		Array() {}
+		~Array() {}
 
 		inline T& operator[](unsigned int index)
 		{

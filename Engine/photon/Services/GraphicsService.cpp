@@ -5,16 +5,19 @@
 #include "../Math/Matrix.h"
 #include "../Alloc.h"
 
+#include "MemoryService.h"
 #include "AssetsService.h"
 #include "../GraphicsAPI/GraphicsAPI.h"
 #include "GraphicsDevice.h"
+
+#include "Effect.h"
 
 namespace photon
 {
 	GraphicsService* gl_GraphicsService = nullptr;
 
 	VertexBufferHandler vertexBuffer;
-	VertexBufferHandler instanceBuffer;
+
 	VertexBufferBindingHandler binding;
 	IndexBufferHandler indexBuffer;
 
@@ -35,6 +38,9 @@ namespace photon
 	GraphicsService::GraphicsService(GraphicsAPI* api, GraphicsDevice* device) :
 		api(api), device(device)
 	{
+		effectsMemStack = MemoryStack::New(gl_MemoryService->AllocatePage(Megabytes(1)), Megabytes(1));
+		bucketsMemStack = MemoryStack::New(gl_MemoryService->AllocatePage(Megabytes(16)), Megabytes(16));
+
 		RasterizationStateHandler rs = api->CreateRasterizationState(FillMode::SOLID, CullMode::BACK_FACE);
 		api->SetRasterizationState(rs);
 
@@ -47,7 +53,8 @@ namespace photon
 	}
 	GraphicsService::~GraphicsService()
 	{
-
+		MemoryStack::Delete(effectsMemStack);
+		MemoryStack::Delete(bucketsMemStack);
 	}
 
 	GraphicsService* GraphicsService::Initialize(GraphicsAPI* api, MemoryStack& stack)
@@ -59,6 +66,7 @@ namespace photon
 
 		gl_GraphicsService = MEM_NEW(stack, GraphicsService)(api, device);
 		gl_GraphicsService->InitializeTechniques();
+		gl_GraphicsService->InitializeBuckets();
 
 		VertexBufferLayout layouts[2];
 		VertexBufferHandler buffers[2];
@@ -71,14 +79,14 @@ namespace photon
 		VertexAttribute attr0[] = { { 0, VertexParamType::FLOAT4 },{ 1 , VertexParamType::FLOAT2 } };
 		layouts[0].attributes = attr0;
 
-		instanceBuffer = gl_GraphicsService->api->CreateVertexBuffer(VertexBufferType::DYNAMIC, nullptr, 128, sizeof(Matrix));
+	
 		layouts[1].attributesCount = 4;
 		layouts[1].instance = 1;
 		VertexAttribute attr1[] = { { 2, VertexParamType::FLOAT4 },{ 3 , VertexParamType::FLOAT4 },{ 4 , VertexParamType::FLOAT4 } ,{ 5 , VertexParamType::FLOAT4 } };
 		layouts[1].attributes = attr1;
 
 		buffers[0] = vertexBuffer;
-		buffers[1] = instanceBuffer;
+		buffers[1] = gl_GraphicsService->instanceBuffer;
 
 		binding = gl_GraphicsService->device->CreateVertexBufferBinding(buffers, layouts, 2, indexBuffer);
 
@@ -101,10 +109,17 @@ namespace photon
 	{
 		api->SwapBuffers();
 	}
+	void GraphicsService::InitializeBuckets()
+	{
+		instancesData = MEM_NEW(*bucketsMemStack, DrawInstanceDataArray)();
+		buckets = MEM_NEW(*bucketsMemStack, DrawBucketArray)();
 
+		instanceBuffer = gl_GraphicsService->api->CreateVertexBuffer(VertexBufferType::DYNAMIC, nullptr, DrawInstancesData::MAX_INSTANCES, sizeof(Matrix));
+	
+	}
 	void GraphicsService::InitializeTechniques()
 	{
-		effect.Load(*api, *device);
+		effect = MEM_NEW(*effectsMemStack, TestEffect(api, device));
 	}
 
 	int GraphicsService::LoadTexture(void* data, LoadTextureType type)
@@ -125,34 +140,27 @@ namespace photon
 	{
 		api->ClearFrameBuffer({ 0,0,0.4f, 1 }, 1.0f);
 
-		Vector4* v = (Vector4*)api->StartUpdateUniformBuffer(effect.fragmentBlock);
-		*v = { 1,1,1,1 };
-		api->EndUpdateUniformBuffer();
-
-		Matrix* m = (Matrix*)api->StartUpdateUniformBuffer(effect.vertexBlock);
+		effect->UpdateFragmentBlock( { 1,1,1,1 });
 
 		Matrix view = Matrix::LookAtRH({ 0,0, 10 ,0 }, { 0,0,0,0 }, { 0,1,0,0 });
 		Matrix proj = Matrix::PerspectiveRH(PI_OVER_4, 1.0f, 0.01f, 10.0f);
 
-		*m = (view * proj);//.Transpose();
-		api->EndUpdateUniformBuffer();
+		effect->UpdateVertexBlock(view * proj);
+		effect->Bind();
 
-		api->UseShaderProgram(effect.program);
-		api->UseUniformBuffer(effect.vertexBlock, 0);
-		api->UseUniformBuffer(effect.fragmentBlock, 1);
 		api->UseVertexBufferBinding(binding);
 
-		api->SetTextureUnitSampler(0, sampler);
+		api->SetTextureUnitSampler(effect->TEX_SAMPLER_TEX_UNIT, sampler);
 
-		int bucketsCount = buckets.Count();
+		int bucketsCount = buckets->Count();
 		for (int i = 0; i < bucketsCount; ++i)
 		{
-			DrawInstancesData* d = (DrawInstancesData*)buckets[i].data;
+			DrawInstancesData* d = (DrawInstancesData*)buckets->Get(i).data;
 
 			int instancesCount = d->count;
 			TextureHandler texture = device->GetTexture(d->textureID);
 
-			api->UseTexture(texture, 0, effect.texSampler);
+			effect->SetTexSampler( texture);
 
 			Matrix* instances = (Matrix*)api->StartUpdateVertexBuffer(instanceBuffer);
 
@@ -165,28 +173,28 @@ namespace photon
 
 		api->ClearVertexBufferBinding();
 
-		buckets.Clear();
-		instancesData.Clear();
+		buckets->Clear();
+		instancesData->Clear();
 	}
 
 	void GraphicsService::RenderObject(const Matrix& world, int textureID)
 	{
 		DrawBucket* b = nullptr;
 
-		int count = buckets.Count();
+		int count = buckets->Count();
 		for (int i = 0; i < count; ++i)
 		{
-			DrawInstancesData* d = (DrawInstancesData*)buckets[i].data;
+			DrawInstancesData* d = (DrawInstancesData*)buckets->Get(i).data;
 			if (d->textureID == textureID)
 			{
-				b = &buckets[i];
+				b = &buckets->Get(i);
 				break;
 			}
 		}
 		if (b == nullptr)
 		{
-			b = &buckets.New();
-			DrawInstancesData* d = &instancesData.New();
+			b = &buckets->New();
+			DrawInstancesData* d = &instancesData->New();
 
 			d->count = 0;
 			d->textureID = textureID;

@@ -30,7 +30,9 @@ namespace photon
 
 	struct EXPORT DrawInstancesData
 	{
-		Matrix worldMatrix[128];
+		static const int MAX_INSTANCES = 1024;
+
+		Matrix worldMatrix[MAX_INSTANCES];
 		int count ;
 		int textureID;
 	};

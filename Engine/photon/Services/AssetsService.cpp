@@ -104,6 +104,8 @@ namespace photon
 
 			asset->shaderID = gl_GraphicsService->LoadShader(asset->type, text);
 
+			gl_MemoryService->FreePage(shaders[handler].memory);
+
 		}
 
 		return *asset;
