@@ -83,5 +83,30 @@ namespace photon
 		}
 		return *asset;
 	}
+	ShaderAsset& AssetsService::GetShaderAsset(const char* assetPath)
+	{
+		ShaderAsset* asset = GetExistingAsset(assetPath, shaders);
+
+		if (!asset)
+		{
+			AssetsHandler handler = NewAsset(assetPath, shaders);
+			asset = &shaders[handler].asset;
+			asset->handler = handler;
+
+			char* text = (char*)shaders[handler].memory;
+
+			if (text::EndsWith(assetPath, ".v"))
+				asset->type = ShaderType::VERTEX_SHADER;
+			if (text::EndsWith(assetPath, ".g"))
+				asset->type = ShaderType::GEOMETRY_SHADER;
+			if (text::EndsWith(assetPath, ".f"))
+				asset->type = ShaderType::FRAGMENT_SHADER;
+
+			asset->shaderID = gl_GraphicsService->LoadShader(asset->type, text);
+
+		}
+
+		return *asset;
+	}
 
 }

@@ -19,4 +19,11 @@ namespace photon
 		AssetsHandler handler;
 		int textureID;
 	};
+
+	struct EXPORT ShaderAsset
+	{
+		AssetsHandler handler;
+		int shaderID;
+		ShaderType type;
+	};
 }

@@ -6,7 +6,7 @@
 #include "../GraphicsAPI/GraphicsAPI.h"
 #include "../GraphicsAPI/GraphicsAPITypes.h"
 #include "../Utils/Array.h"
-
+#include "Effect.h"
 
 namespace photon
 {
@@ -25,6 +25,8 @@ namespace photon
 		GraphicsAPI* api;
 		GraphicsDevice* device;
 
+		TestEffect effect;
+
 
 		Array<TexturedMaterial, MAX_MATERIALS> materials;
 		Array<Gemoetry, MAX_GEOMETRIES> geometries;
@@ -38,7 +40,7 @@ namespace photon
 		GraphicsService(GraphicsAPI* api, GraphicsDevice* device);
 		~GraphicsService();
 
-	
+
 		void InitializeTechniques();
 	public:
 		static GraphicsService* Initialize(GraphicsAPI* api, MemoryStack& stack);
@@ -47,12 +49,12 @@ namespace photon
 		void ExecuteCommads();
 		void PresentFrame();
 
+		int LoadShader(ShaderType type, const char* code);
 		int LoadTexture(void* data, LoadTextureType type);
 
 		void OnResize(int width, int height);
 
-
-		void RenderObject(const Matrix& world,int textureID);
+		void RenderObject(const Matrix& world, int textureID);
 	};
 
 	EXPORT extern GraphicsService* gl_GraphicsService;

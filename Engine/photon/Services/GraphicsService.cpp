@@ -13,12 +13,10 @@ namespace photon
 {
 	GraphicsService* gl_GraphicsService = nullptr;
 
-	ShaderProgram program;
 	VertexBufferHandler vertexBuffer;
 	VertexBufferHandler instanceBuffer;
 	VertexBufferBindingHandler binding;
 	IndexBufferHandler indexBuffer;
-	UniformBufferHandler uniformBuffers[2];
 
 	struct Vertex {
 		Vector4 position;
@@ -84,13 +82,6 @@ namespace photon
 
 		binding = gl_GraphicsService->device->CreateVertexBufferBinding(buffers, layouts, 2, indexBuffer);
 
-
-		uniformBuffers[0] = gl_GraphicsService->device->CreateUniformBuffer(sizeof(Matrix), nullptr);
-		gl_GraphicsService->api->BindBufferToProgramBlock(program.handler, "VertexBlock", 0, uniformBuffers[0]);
-
-		uniformBuffers[1] = gl_GraphicsService->device->CreateUniformBuffer(sizeof(Vector4), nullptr);
-		gl_GraphicsService->api->BindBufferToProgramBlock(program.handler, "FragmentBlock", 1, uniformBuffers[1]);
-
 		gl_GraphicsService->sampler = gl_GraphicsService->api->CreateSampler(MinMagFilter::LINEAR_MIPMAP_LINEAR, MinMagFilter::LINEAR, 16.0f);
 
 
@@ -106,7 +97,6 @@ namespace photon
 	}
 
 
-
 	void GraphicsService::PresentFrame()
 	{
 		api->SwapBuffers();
@@ -114,23 +104,16 @@ namespace photon
 
 	void GraphicsService::InitializeTechniques()
 	{
-		TextAsset vsText = gl_AssetsService->GetTextAsset("shader.v");
-		TextAsset fsText = gl_AssetsService->GetTextAsset("shader.f");
-		TextAsset gsText = gl_AssetsService->GetTextAsset("shader.g");
-
-		ShaderHandler vs = device->CreateShader(ShaderType::VERTEX_SHADER, vsText.text);
-		ShaderHandler fs = device->CreateShader(ShaderType::FRAGMENT_SHADER, fsText.text);
-		ShaderHandler gs = device->CreateShader(ShaderType::GEOMETRY_SHADER, gsText.text);
-
-		ShaderHandler shaders[] = { vs, gs ,fs };
-
-		program.handler = api->CreateShaderProgram(shaders, 3);
-		program.samplersLocation[0] = api->GetProgramSamplerLocation(program.handler, "texSampler");
+		effect.Load(*api, *device);
 	}
 
 	int GraphicsService::LoadTexture(void* data, LoadTextureType type)
 	{
 		return device->LoadTexture(data, type);
+	}
+	int GraphicsService::LoadShader(ShaderType type, const char* code)
+	{
+		return device->LoadShader(type, code);
 	}
 
 	void GraphicsService::OnResize(int width, int height)
@@ -142,11 +125,11 @@ namespace photon
 	{
 		api->ClearFrameBuffer({ 0,0,0.4f, 1 }, 1.0f);
 
-		Vector4* v = (Vector4*)api->StartUpdateUniformBuffer(uniformBuffers[1]);
+		Vector4* v = (Vector4*)api->StartUpdateUniformBuffer(effect.fragmentBlock);
 		*v = { 1,1,1,1 };
 		api->EndUpdateUniformBuffer();
 
-		Matrix* m = (Matrix*)api->StartUpdateUniformBuffer(uniformBuffers[0]);
+		Matrix* m = (Matrix*)api->StartUpdateUniformBuffer(effect.vertexBlock);
 
 		Matrix view = Matrix::LookAtRH({ 0,0, 10 ,0 }, { 0,0,0,0 }, { 0,1,0,0 });
 		Matrix proj = Matrix::PerspectiveRH(PI_OVER_4, 1.0f, 0.01f, 10.0f);
@@ -154,9 +137,9 @@ namespace photon
 		*m = (view * proj);//.Transpose();
 		api->EndUpdateUniformBuffer();
 
-		api->UseShaderProgram(program.handler);
-		api->UseUniformBuffer(uniformBuffers[0], 0);
-		api->UseUniformBuffer(uniformBuffers[1], 1);
+		api->UseShaderProgram(effect.program);
+		api->UseUniformBuffer(effect.vertexBlock, 0);
+		api->UseUniformBuffer(effect.fragmentBlock, 1);
 		api->UseVertexBufferBinding(binding);
 
 		api->SetTextureUnitSampler(0, sampler);
@@ -169,7 +152,7 @@ namespace photon
 			int instancesCount = d->count;
 			TextureHandler texture = device->GetTexture(d->textureID);
 
-			api->UseTexture(texture, 0, program.samplersLocation[0]);
+			api->UseTexture(texture, 0, effect.texSampler);
 
 			Matrix* instances = (Matrix*)api->StartUpdateVertexBuffer(instanceBuffer);
 

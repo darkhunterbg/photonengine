@@ -33,6 +33,7 @@ namespace photon
 
 		Array<AssetEntry<TextureAsset>, MAX_ASSET_TYPE> textures;
 		Array<AssetEntry<TextAsset>, MAX_ASSET_TYPE> texts;
+		Array<AssetEntry<ShaderAsset>, MAX_ASSET_TYPE> shaders;
 
 		AssetsService(size_t scratchMemorySize);
 		~AssetsService();
@@ -84,6 +85,7 @@ namespace photon
 
 		TextAsset& GetTextAsset(const char* assetPath);
 		TextureAsset& GetTextureAsset(const char* assetPath);
+		ShaderAsset& GetShaderAsset(const char* assetPath);
 
 
 		void SetRoot(const TCHAR* root);

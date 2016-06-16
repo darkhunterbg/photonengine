@@ -39,7 +39,6 @@ namespace photon
 		GraphicsDevice(GraphicsAPI* api);
 		~GraphicsDevice();
 
-		ShaderHandler CreateShader(ShaderType shader,const char* shaderCode);
 		ShaderProgramHandler CreateShaderProgram(const ShaderHandler* shaders, int count);
 		VertexBufferHandler CreateVertexBuffer(VertexBufferType type, const void* vertices, size_t verticesCount, int vertexSize);
 		VertexBufferBindingHandler CreateVertexBufferBinding(const VertexBufferHandler* vertexBuffers, const VertexBufferLayout* layots, int buffersCount, IndexBufferHandler indexBuffer = IndexBufferHandler::Empty);
@@ -49,8 +48,10 @@ namespace photon
 		RasterizationStateHandler CreateRasterizationState(FillMode fillMode, CullMode cullMode);
 
 		int LoadTexture(void* data, LoadTextureType type);
+		int LoadShader(ShaderType type, const char* shaderCode);
 
 		TextureHandler GetTexture(int textureID);
+		ShaderHandler GetShader(int shaderID);
 
 	};
 }

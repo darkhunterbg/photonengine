@@ -43,13 +43,7 @@ namespace photon
 			api->DestroySampler(samplers[i]);
 	}
 
-	
-	ShaderHandler GraphicsDevice::CreateShader(ShaderType shader, const char* shaderCode)
-	{
-		ShaderHandler handler = api->CreateShader(shader, shaderCode);
-		shaders.Add(handler);
-		return handler;
-	}
+
 	ShaderProgramHandler GraphicsDevice::CreateShaderProgram(const ShaderHandler* shaders, int count)
 	{
 		ShaderProgramHandler handler = api->CreateShaderProgram(shaders, count);
@@ -96,6 +90,16 @@ namespace photon
 		}
 		textures.Add(texture);
 		return textures.Count() - 1;
+	}
+	int GraphicsDevice::LoadShader(ShaderType type, const char* shaderCode)
+	{
+		ShaderHandler handler = api->CreateShader(type, shaderCode);
+		shaders.Add(handler);
+		return shaders.Count() - 1;
+	}
+	ShaderHandler GraphicsDevice::GetShader(int shaderID)
+	{
+		return shaders[shaderID];
 	}
 
 	TextureHandler GraphicsDevice::GetTexture(int textureID)
