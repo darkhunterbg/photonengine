@@ -24,8 +24,7 @@ namespace photon
 	};
 	struct EXPORT Gemoetry
 	{
-		VertexBufferBindingHandler vertexBuffer;
-		IndexBufferHandler indexBuffer;
+		VertexBufferBindingHandler vertexBufferBinding;
 	};
 
 	struct EXPORT DrawInstancesData
@@ -35,6 +34,7 @@ namespace photon
 		Matrix worldMatrix[MAX_INSTANCES];
 		int count ;
 		int textureID;
+		int geometryID;
 	};
 
 	struct EXPORT DrawBucket

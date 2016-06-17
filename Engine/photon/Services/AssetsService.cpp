@@ -2,6 +2,7 @@
 #include "MemoryService.h"
 #include "../Text.h"
 #include "../Alloc.h"
+#include "GraphicsDevice.h"
 
 namespace photon
 {
@@ -76,7 +77,7 @@ namespace photon
 			if (text::EndsWith(assetPath, "bmp"))
 				type = LoadTextureType::Bitmap;
 
-			asset->textureID = gl_GraphicsService->LoadTexture(textures[handler].memory, type);
+			asset->textureID = gl_GraphicsService->GetDevice().LoadTexture(textures[handler].memory, type);
 			gl_MemoryService->FreePage(textures[handler].memory);
 			textures[handler].memory = nullptr;
 			textures[handler].memorySize = 0;
@@ -102,7 +103,7 @@ namespace photon
 			if (text::EndsWith(assetPath, ".f"))
 				asset->type = ShaderType::FRAGMENT_SHADER;
 
-			asset->shaderID = gl_GraphicsService->LoadShader(asset->type, text);
+			asset->shaderID = gl_GraphicsService->GetDevice().LoadShader(asset->type, text);
 
 			gl_MemoryService->FreePage(shaders[handler].memory);
 

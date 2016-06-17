@@ -50,24 +50,14 @@ namespace photon
 		shaderPrograms.Add(handler);
 		return handler;
 	}
-	VertexBufferHandler GraphicsDevice::CreateVertexBuffer(VertexBufferType type,const void* vertices, size_t verticesCount,int vertexSize)
-	{
-		VertexBufferHandler handler = api->CreateVertexBuffer(type, vertices, verticesCount, vertexSize);
-		vertexBuffers.Add(handler);
-		return handler;
-	}
+
 	VertexBufferBindingHandler GraphicsDevice::CreateVertexBufferBinding(const VertexBufferHandler* vertexBuffers, const VertexBufferLayout* layots, int buffersCount, IndexBufferHandler indexBuffer )
 	{
 		VertexBufferBindingHandler handler = api->CreateVertexBufferBinding(vertexBuffers, layots, buffersCount, indexBuffer);
 		vertexBufferBindings.Add(handler);
 		return handler;
 	}
-	IndexBufferHandler GraphicsDevice::CreateIndexBuffer(const void* indices, size_t indicesCount, IndiceType indiceType)
-	{
-		IndexBufferHandler handler = api->CreateIndexBuffer(indices, indicesCount, indiceType);
-		indexBuffers.Add(handler);
-		return handler;
-	}
+	
 	UniformBufferHandler GraphicsDevice::CreateUniformBuffer(size_t bufferSize, void* bufferValue)
 	{
 		UniformBufferHandler handler = api->CreateUniformBuffer(bufferSize, bufferValue);
@@ -97,13 +87,33 @@ namespace photon
 		shaders.Add(handler);
 		return shaders.Count() - 1;
 	}
+	int GraphicsDevice::LoadVertexBuffer(VertexBufferType type, const void* vertices, size_t verticesCount, int vertexSize)
+	{
+		VertexBufferHandler handler = api->CreateVertexBuffer(type, vertices, verticesCount, vertexSize);
+		vertexBuffers.Add(handler);
+		return vertexBuffers.Count()-1;
+	}
+	int GraphicsDevice::LoadIndexBuffer(const void* indices, size_t indicesCount, IndiceType indiceType)
+	{
+		IndexBufferHandler handler = api->CreateIndexBuffer(indices, indicesCount, indiceType);
+		indexBuffers.Add(handler);
+		return indexBuffers.Count() - 1;
+	}
+
 	ShaderHandler GraphicsDevice::GetShader(int shaderID)
 	{
 		return shaders[shaderID];
 	}
-
 	TextureHandler GraphicsDevice::GetTexture(int textureID)
 	{
 		return textures[textureID];
+	}
+	VertexBufferHandler GraphicsDevice::GetVertexBuffer(int vertexBufferID)
+	{
+		return vertexBuffers[vertexBufferID];
+	}
+	IndexBufferHandler GraphicsDevice::GetIndexBuffer(int indexBufferID)
+	{
+		return indexBuffers[indexBufferID];
 	}
 }

@@ -9,7 +9,7 @@
 
 namespace photon
 {
-	class GraphicsDevice
+	class EXPORT GraphicsDevice
 	{
 		DISABLE_COPY(GraphicsDevice);
 
@@ -40,18 +40,21 @@ namespace photon
 		~GraphicsDevice();
 
 		ShaderProgramHandler CreateShaderProgram(const ShaderHandler* shaders, int count);
-		VertexBufferHandler CreateVertexBuffer(VertexBufferType type, const void* vertices, size_t verticesCount, int vertexSize);
+		
 		VertexBufferBindingHandler CreateVertexBufferBinding(const VertexBufferHandler* vertexBuffers, const VertexBufferLayout* layots, int buffersCount, IndexBufferHandler indexBuffer = IndexBufferHandler::Empty);
-		IndexBufferHandler CreateIndexBuffer(const void* indices, size_t indicesCount, IndiceType indiceType);
+
 		UniformBufferHandler CreateUniformBuffer(size_t bufferSize, void* bufferValue);
 
 		RasterizationStateHandler CreateRasterizationState(FillMode fillMode, CullMode cullMode);
 
 		int LoadTexture(void* data, LoadTextureType type);
 		int LoadShader(ShaderType type, const char* shaderCode);
+		int LoadVertexBuffer(VertexBufferType type, const void* vertices, size_t verticesCount, int vertexSize);
+		int LoadIndexBuffer(const void* indices, size_t indicesCount, IndiceType indiceType);
 
 		TextureHandler GetTexture(int textureID);
 		ShaderHandler GetShader(int shaderID);
-
+		VertexBufferHandler GetVertexBuffer(int vertexBufferID);
+		IndexBufferHandler GetIndexBuffer(int indexBufferID);
 	};
 }

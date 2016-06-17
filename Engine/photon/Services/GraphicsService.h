@@ -6,6 +6,7 @@
 #include "../GraphicsAPI/GraphicsAPI.h"
 #include "../GraphicsAPI/GraphicsAPITypes.h"
 #include "../Utils/Array.h"
+#include "GraphicsDevice.h"
 
 namespace photon
 {
@@ -36,7 +37,7 @@ namespace photon
 		MemoryStack* bucketsMemStack;
 
 		//Array<TexturedMaterial, MAX_MATERIALS> materials;
-		//Array<Gemoetry, MAX_GEOMETRIES> geometries;
+		Array<Gemoetry, MAX_GEOMETRIES> geometries;
 		VertexBufferHandler instanceBuffer;
 
 		typedef Array<DrawInstancesData, MAX_UNIQUE_INSTANCES> DrawInstanceDataArray;
@@ -57,15 +58,16 @@ namespace photon
 		static GraphicsService* Initialize(GraphicsAPI* api, MemoryStack& stack);
 		static void Uninitialize();
 
+		int CreateGeometry(int vb, int ib, VertexBufferLayout layout);
+
 		void ExecuteCommads();
 		void PresentFrame();
 
-		int LoadShader(ShaderType type, const char* code);
-		int LoadTexture(void* data, LoadTextureType type);
+		GraphicsDevice& GetDevice();
 
 		void OnResize(int width, int height);
 
-		void RenderObject(const Matrix& world, int textureID);
+		void RenderObject(const Matrix& world,int geometryID, int textureID);
 	};
 
 	EXPORT extern GraphicsService* gl_GraphicsService;

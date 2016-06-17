@@ -16,24 +16,6 @@ namespace photon
 {
 	GraphicsService* gl_GraphicsService = nullptr;
 
-	VertexBufferHandler vertexBuffer;
-
-	VertexBufferBindingHandler binding;
-	IndexBufferHandler indexBuffer;
-
-	struct Vertex {
-		Vector4 position;
-		float texCoordX;
-		float texCoordY;
-	} vertices[] = {
-		{{-1.0f, -1.f, 0.0f, 1.0f}, 0.0f, 1.0f },
-		{{ 1.f, -1.f, 0.0f, 1.0f }, 1.0f, 1.0f },
-		{{ 1.f,  1.f, 0.0f, 1.0f }, 1.0f, 0.0f },
-		{{ -1.f,  1.f, 0.0f, 1.0f }, 0.0f, 0.0f },
-	};
-	unsigned short indices[] = {
-		0,1,3,2
-	};
 
 	GraphicsService::GraphicsService(GraphicsAPI* api, GraphicsDevice* device) :
 		api(api), device(device)
@@ -42,7 +24,7 @@ namespace photon
 		char buffer[1024];
 		api->GetVersion(buffer, 1024);
 		Platform::DebugLog("API: %s", buffer);
-		
+
 		api->GetDeviceName(buffer, 1024);
 		Platform::DebugLog("Device: %s", buffer);
 
@@ -76,30 +58,7 @@ namespace photon
 		gl_GraphicsService->InitializeTechniques();
 		gl_GraphicsService->InitializeBuckets();
 
-		VertexBufferLayout layouts[2];
-		VertexBufferHandler buffers[2];
-
-		indexBuffer = gl_GraphicsService->device->CreateIndexBuffer(indices, 4, IndiceType::USHORT);
-
-		vertexBuffer = gl_GraphicsService->device->CreateVertexBuffer(VertexBufferType::STATIC, vertices, 4, sizeof(Vertex));
-		layouts[0].attributesCount = 2;
-		layouts[0].instance = 0;
-		VertexAttribute attr0[] = { { 0, VertexParamType::FLOAT4 },{ 1 , VertexParamType::FLOAT2 } };
-		layouts[0].attributes = attr0;
-
-	
-		layouts[1].attributesCount = 4;
-		layouts[1].instance = 1;
-		VertexAttribute attr1[] = { { 2, VertexParamType::FLOAT4 },{ 3 , VertexParamType::FLOAT4 },{ 4 , VertexParamType::FLOAT4 } ,{ 5 , VertexParamType::FLOAT4 } };
-		layouts[1].attributes = attr1;
-
-		buffers[0] = vertexBuffer;
-		buffers[1] = gl_GraphicsService->instanceBuffer;
-
-		binding = gl_GraphicsService->device->CreateVertexBufferBinding(buffers, layouts, 2, indexBuffer);
-
 		gl_GraphicsService->sampler = gl_GraphicsService->api->CreateSampler(MinMagFilter::LINEAR_MIPMAP_LINEAR, MinMagFilter::LINEAR, 16.0f);
-
 
 		return gl_GraphicsService;
 	}
@@ -123,20 +82,16 @@ namespace photon
 		buckets = MEM_NEW(*bucketsMemStack, DrawBucketArray)();
 
 		instanceBuffer = gl_GraphicsService->api->CreateVertexBuffer(VertexBufferType::DYNAMIC, nullptr, DrawInstancesData::MAX_INSTANCES, sizeof(Matrix));
-	
+
 	}
 	void GraphicsService::InitializeTechniques()
 	{
 		effect = MEM_NEW(*effectsMemStack, TestEffect(api, device));
 	}
 
-	int GraphicsService::LoadTexture(void* data, LoadTextureType type)
+	GraphicsDevice& GraphicsService::GetDevice()
 	{
-		return device->LoadTexture(data, type);
-	}
-	int GraphicsService::LoadShader(ShaderType type, const char* code)
-	{
-		return device->LoadShader(type, code);
+		return *device;
 	}
 
 	void GraphicsService::OnResize(int width, int height)
@@ -144,19 +99,38 @@ namespace photon
 		api->SetViewport({ 0,0,width,height });
 	}
 
+	int GraphicsService::CreateGeometry(int vb, int ib, VertexBufferLayout layout)
+	{
+		Gemoetry& g = geometries.New();
+		VertexBufferHandler vertexBuffer = device->GetVertexBuffer(vb);
+		IndexBufferHandler indexBuffer = device->GetIndexBuffer(ib);
+
+		VertexBufferHandler vba[] = { vertexBuffer,instanceBuffer };
+		VertexBufferLayout layouts[2];
+
+		layouts[0] = layout;
+
+		layouts[1].attributesCount = 4;
+		layouts[1].instance = 1;
+		VertexAttribute attr1[] = { { 2, VertexParamType::FLOAT4 },{ 3 , VertexParamType::FLOAT4 },{ 4 , VertexParamType::FLOAT4 } ,{ 5 , VertexParamType::FLOAT4 } };
+		layouts[1].attributes = attr1;
+
+		g.vertexBufferBinding = device->CreateVertexBufferBinding(vba, layouts, 2, indexBuffer);
+
+		return geometries.Count() - 1;
+	}
+
 	void GraphicsService::ExecuteCommads()
 	{
 		api->ClearFrameBuffer({ 0,0,0.4f, 1 }, 1.0f);
 
-		effect->UpdateFragmentBlock( { 1,1,1,1 });
+		effect->UpdateFragmentBlock({ 1,1,1,1 });
 
 		Matrix view = Matrix::LookAtRH({ 0,0, 10 ,0 }, { 0,0,0,0 }, { 0,1,0,0 });
 		Matrix proj = Matrix::PerspectiveRH(PI_OVER_4, 1.0f, 0.01f, 10.0f);
 
 		effect->UpdateVertexBlock(view * proj);
 		effect->Bind();
-
-		api->UseVertexBufferBinding(binding);
 
 		api->SetTextureUnitSampler(effect->TEX_SAMPLER_TEX_UNIT, sampler);
 
@@ -165,10 +139,14 @@ namespace photon
 		{
 			DrawInstancesData* d = (DrawInstancesData*)buckets->Get(i).data;
 
+			VertexBufferBindingHandler binding = geometries[d->geometryID].vertexBufferBinding;
+			api->UseVertexBufferBinding(binding);
+
+
 			int instancesCount = d->count;
 			TextureHandler texture = device->GetTexture(d->textureID);
 
-			effect->SetTexSampler( texture);
+			effect->SetTexSampler(texture);
 
 			Matrix* instances = (Matrix*)api->StartUpdateVertexBuffer(instanceBuffer);
 
@@ -185,7 +163,7 @@ namespace photon
 		instancesData->Clear();
 	}
 
-	void GraphicsService::RenderObject(const Matrix& world, int textureID)
+	void GraphicsService::RenderObject(const Matrix& world, int geometryID, int textureID)
 	{
 		DrawBucket* b = nullptr;
 
@@ -193,7 +171,7 @@ namespace photon
 		for (int i = 0; i < count; ++i)
 		{
 			DrawInstancesData* d = (DrawInstancesData*)buckets->Get(i).data;
-			if (d->textureID == textureID)
+			if (d->textureID == textureID && d->geometryID == geometryID)
 			{
 				b = &buckets->Get(i);
 				break;
@@ -206,6 +184,7 @@ namespace photon
 
 			d->count = 0;
 			d->textureID = textureID;
+			d->geometryID = geometryID;
 			b->data = d;
 		}
 

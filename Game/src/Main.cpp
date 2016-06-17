@@ -10,7 +10,7 @@
 #include <photon\Text.h>
 #include <photon\Types.h>
 
-#include "TestScene.cpp"
+#include "TestScene.h"
 
 #include <locale.h>
 
