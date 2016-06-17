@@ -38,6 +38,8 @@ namespace photon
 		static size_t GetFileSize(FileHandler file);
 		static size_t ReadFromFile(FileHandler file, void* buffer, size_t bufferSize);
 
+		static void DebugLog(const char* msg,...);
+
 	} typedef Platform;
 }
 #endif

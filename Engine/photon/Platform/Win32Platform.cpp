@@ -1,4 +1,5 @@
 #include "../Platform/Platform.h"
+#include <cstdio>
 
 #if PLATFORM == WINDOWS
 
@@ -104,6 +105,19 @@ namespace photon
 		BOOL result = ReadFile(file.handle, buffer, bufferSize, &totalReadBytes, nullptr);
 
 		return (result) ? (size_t)totalReadBytes : -1;
+	}
+
+	void Win32Platfrom::DebugLog(const char* format,...)
+	{
+		char buffer[4096];
+
+		va_list argptr;
+		va_start(argptr, format);
+		vsprintf_s(buffer, format, argptr);
+		va_end(argptr);
+
+		OutputDebugStringA(buffer);
+		OutputDebugStringA("\n");
 	}
 }
 

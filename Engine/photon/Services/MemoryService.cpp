@@ -60,6 +60,8 @@ namespace photon
 
 		lastPage = page;
 
+		//Platform::DebugLog("Allocated %d KB",page->size/1024);
+
 		return page->memoryPtr;
 	}
 

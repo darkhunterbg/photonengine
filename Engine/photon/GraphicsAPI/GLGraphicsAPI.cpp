@@ -2,6 +2,7 @@
 
 #include "../Platform/Platform.h"
 
+
 #if GRAPHICS_API == OPENGL
 
 #include "../Services/MemoryStack.h"
@@ -9,6 +10,8 @@
 #include "../Text.h"
 
 #include "OpenGL.h"
+
+#include <cstdio>
 
 
 #include "../Math/Vector.h"
@@ -23,6 +26,8 @@ namespace photon
 		ASSERT(error == GL_NONE);
 	}
 
+	
+
 	GLGraphicsAPI::GLGraphicsAPI(GLAPIParam apiParam)
 	{
 		this->context = Platform::GLCreateContext(apiParam.createParam);
@@ -32,6 +37,20 @@ namespace photon
 	GLGraphicsAPI::~GLGraphicsAPI()
 	{
 		Platform::GLDestroyContext(context);
+	}
+
+	void GLGraphicsAPI::GetVersion(char* outBuffer,int bufferSize)
+	{
+		const char* version =(const char*)glGetString(GL_VERSION);
+		const char* vendor = (const char*)glGetString(GL_VENDOR);
+
+		sprintf_s(outBuffer, bufferSize, "%s OpenGL %s", vendor, version);
+	}
+	void GLGraphicsAPI::GetDeviceName(char* outBuffer, int bufferSize)
+	{
+		const char* renderer = (const char*)glGetString(GL_RENDERER);
+
+		sprintf_s(outBuffer, bufferSize, renderer);
 	}
 
 	GLGraphicsAPI* GLGraphicsAPI::InitializeAPI(MemoryStack& stack, GraphicsAPIParam apiParam)

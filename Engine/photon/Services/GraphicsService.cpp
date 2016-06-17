@@ -38,6 +38,14 @@ namespace photon
 	GraphicsService::GraphicsService(GraphicsAPI* api, GraphicsDevice* device) :
 		api(api), device(device)
 	{
+
+		char buffer[1024];
+		api->GetVersion(buffer, 1024);
+		Platform::DebugLog("API: %s", buffer);
+		
+		api->GetDeviceName(buffer, 1024);
+		Platform::DebugLog("Device: %s", buffer);
+
 		effectsMemStack = MemoryStack::New(gl_MemoryService->AllocatePage(Megabytes(1)), Megabytes(1));
 		bucketsMemStack = MemoryStack::New(gl_MemoryService->AllocatePage(Megabytes(16)), Megabytes(16));
 

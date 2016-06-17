@@ -40,6 +40,9 @@ namespace photon
 		static GLGraphicsAPI* InitializeAPI(MemoryStack& stack, GraphicsAPIParam apiParam);
 		static void UninitializeAPI(GLGraphicsAPI* api);
 
+		void GetVersion(char* outBuffer,int bufferSize);
+		void GetDeviceName(char* outBuffer, int bufferSize);
+
 		void SwapBuffers();
 		void ClearFrameBuffer(const Vector4& color, float depth);
 
