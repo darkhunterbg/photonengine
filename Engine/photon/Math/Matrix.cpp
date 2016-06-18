@@ -28,9 +28,9 @@ namespace photon
 		r[1][2] = -zAxis.y;
 		r[2][2] = -zAxis.z;
 		r[3] = {
-			-Vector4::Dot(xAxis,position),
-			-Vector4::Dot(yAxis,position),
-			-Vector4::Dot(zAxis,position),
+			Vector4::Dot(xAxis,position),
+			Vector4::Dot(yAxis,position),
+			Vector4::Dot(zAxis,position),
 			1
 		};
 
@@ -47,8 +47,8 @@ namespace photon
 		r[0][0] = xScale;
 		r[1][1] = yScale;
 		r[2][2] = farPlane / (nearPlane - farPlane);
-		r[3][2] = -1;
-		r[2][3] = (farPlane * nearPlane) / (nearPlane - farPlane);
+		r[2][3] = -1;
+		r[3][2] = (farPlane * nearPlane) / (nearPlane - farPlane);
 		return r;
 	}
 }

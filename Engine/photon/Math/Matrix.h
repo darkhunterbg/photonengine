@@ -117,10 +117,12 @@ namespace photon
 		Matrix r;
 		for (int i = 0; i < Matrix::ELEM_COUNT; ++i)
 		{
-			r.m[i][0] = Vector4::Dot(a[i], b[0]);
-			r.m[i][1] = Vector4::Dot(a[i], b[1]);
-			r.m[i][2] = Vector4::Dot(a[i], b[2]);
-			r.m[i][3] = Vector4::Dot(a[i], b[3]);
+			for (int j = 0; j < Matrix::ELEM_COUNT; ++j)
+			{
+				Vector4 c = { b[0][j],b[1][j],b[2][j],b[3][j] };
+
+				r[i][j] = Vector4::Dot(a[i], c);
+			}
 		}
 
 
