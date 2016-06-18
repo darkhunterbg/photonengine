@@ -41,7 +41,7 @@ namespace photon
 		TestEffect(GraphicsAPI* api, GraphicsDevice* device);
 		~TestEffect() = default;
 
-		void UpdateVertexBlock( const Matrix& matrix);
+		void UpdateVertexBlock( const Matrix& view , const Matrix& proj);
 		void UpdateFragmentBlock( const Vector4& vector);
 		void Bind();
 		void SetTexSampler(TextureHandler texture);

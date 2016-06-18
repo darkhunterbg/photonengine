@@ -160,16 +160,20 @@ namespace photon
 
 	void GraphicsService::ExecuteCommads()
 	{
-		i += 1.0f;
+		i += 0.1f;
 
 		api->ClearFrameBuffer({ 0,0,0.4f, 1 }, 1.0f);
 
 		effect->UpdateFragmentBlock({ 1,1,1,1 });
 
-		Matrix view = Matrix::LookAtRH({ 0,0,i,0 }, { 0,0,0,0 }, { 0,1,0,0 });
+		Matrix view = Matrix::LookAtRH({ 0,0,5.0f,0 }, { 0,0,0,0 }, { 0,1,0,0 });
 		Matrix proj = Matrix::PerspectiveRH(PI_OVER_4, 1.4f, 0.01f, 10.0f);
 
-		effect->UpdateVertexBlock((view* proj).Transpose());
+		Matrix wvp = view.Transpose() ;
+		Vector4 v = { -1.0f, -1.f, -1.0f, 1.0f };
+		Vector4 pos = wvp.Transpose() * v;
+
+		effect->UpdateVertexBlock(view, proj);
 		effect->Bind();
 
 		api->SetTextureUnitSampler(effect->TEX_SAMPLER_TEX_UNIT, sampler);

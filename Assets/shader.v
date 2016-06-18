@@ -10,9 +10,11 @@ in vec2 uv;
 layout(location = 2)
 in mat4 world;
 
+
 layout( std140, binding = 0 ) uniform VertexBlock
 {
-	mat4 vp;
+	mat4 view;
+	mat4 proj;
 };
 
 
@@ -21,7 +23,7 @@ out vec2 texCoord;
 void main()
 {
 	texCoord = uv ;
-	mat4  wvp =  vp;
-	gl_Position =   wvp  * pos ;
+	mat4  wvp =  world * transpose( view ) * proj;
+	gl_Position =   ( transpose( wvp ) ) * pos;
 
 }

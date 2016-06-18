@@ -18,6 +18,6 @@ void main()
 {
 	vec3 texColor = texture(texSampler, uv).rgb;
 	colorBuffer = color;
-	colorBuffer.rgb = texColor;
+	colorBuffer.rgb =  texColor;//* gl_FragCoord.w;
 	
 }

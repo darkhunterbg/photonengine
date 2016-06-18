@@ -23,17 +23,18 @@ namespace photon
 
 		program = api->CreateShaderProgram(shaders, 3);
 
-		vertexBlock = device->CreateUniformBuffer(sizeof(Matrix), nullptr);
+		vertexBlock = device->CreateUniformBuffer(sizeof(Matrix)* 2, nullptr);
 		fragmentBlock = device->CreateUniformBuffer(sizeof(Vector4), nullptr);
 		api->BindBufferToProgramBlock(program, "VertexBlock", 0, vertexBlock);
 		api->BindBufferToProgramBlock(program, "FragmentBlock", 1, fragmentBlock);
 		texSampler = api->GetProgramSamplerLocation(program, "texSampler");
 	}
 
-	void TestEffect::UpdateVertexBlock(const Matrix& matrix)
+	void TestEffect::UpdateVertexBlock(const Matrix& view, const Matrix& proj)
 	{
 		Matrix* m = (Matrix*)api->StartUpdateUniformBuffer(vertexBlock);
-		*m = matrix;
+		*m = view;
+		*(m + 1) = proj;
 		api->EndUpdateUniformBuffer();
 	}
 	void TestEffect::UpdateFragmentBlock( const Vector4& vector)

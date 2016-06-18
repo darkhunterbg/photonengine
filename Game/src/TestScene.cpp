@@ -11,10 +11,10 @@
 using namespace photon;
 
 Vertex vertices[] = {
-   { { -1.0f, -1.f, -1.0f, 1.0f }, 0.0f, 1.0f },
-   { { 1.f, -1.f, -1.0f, 1.0f }, 1.0f, 1.0f },
-   { { 1.f,  1.f, -1.0f, 1.0f }, 1.0f, 0.0f },
-   { { -1.f,  1.f, -1.0f, 1.0f }, 0.0f, 0.0f },
+   { { -1.0f, -1.f, 0.0f, 1.0f }, 0.0f, 1.0f },
+   { { 1.f, -1.f, 0.0f, 1.0f }, 1.0f, 1.0f },
+   { { 1.f,  1.f, 0.0f, 1.0f }, 1.0f, 0.0f },
+   { { -1.f,  1.f, 0.0f, 1.0f }, 0.0f, 0.0f },
 };
 Indice indices[] = {
 	0,1,3,2
@@ -46,7 +46,7 @@ void TestScene::Update()
 
 	Matrix t = Matrix::RotationY(i);// *Matrix::RotationX(i);
 
-	m = Matrix::Translation({ 0,0, 0.0f, 0.0f });
+	m = Matrix::Translation({ 0.0f, 0.0f, 0.0f });// .Transpose();
 	//Matrix n = t.Transpose() * (Matrix::Translation({ 0,0,-1.0f })).Transpose();
 	gl_GraphicsService->RenderGeometry(m, geometry, t0);
 	//m = t*(Matrix::Translation({ 0,0,1.0f }) * Matrix::RotationY(PI)).Transpose();
