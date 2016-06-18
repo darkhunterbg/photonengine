@@ -1,5 +1,6 @@
 #include <photon\Services\Scene.h>
 #include <photon\Services\AssetsService.h>
+#include <photon\Services\Vertex.h>
 
 #include <photon\Math\Matrix.h>
 #include <photon\Math\Vector.h>
@@ -8,11 +9,7 @@
 
 using namespace photon;
 
-struct Vertex {
-	Vector4 position;
-	float texCoordX;
-	float texCoordY;
-} vertices[] = {
+ Vertex vertices[] = {
 	{ { -1.0f, -1.f, 0.0f, 1.0f }, 0.0f, 1.0f },
 	{ { 1.f, -1.f, 0.0f, 1.0f }, 1.0f, 1.0f },
 	{ { 1.f,  1.f, 0.0f, 1.0f }, 1.0f, 0.0f },
@@ -30,15 +27,10 @@ void TestScene::Initialize()
 	//photon::TextureAsset& texture = photon::gl_AssetsService->GetTextureAsset("texture.dds");
 	//photon::TextureAsset& texture = photon::gl_AssetsService->GetTextureAsset("texture.bmp");
 
-	VertexBufferLayout layout;
-	layout.attributesCount = 2;
-	layout.instance = 0;
-	VertexAttribute attr0[] = { { 0, VertexParamType::FLOAT4 },{ 1 , VertexParamType::FLOAT2 } };
-	layout.attributes = attr0;
 
-	int ib = gl_GraphicsService->GetDevice().LoadIndexBuffer(indices, 4, IndiceType::USHORT);
-	int vb = gl_GraphicsService->GetDevice().LoadVertexBuffer(VertexBufferType::STATIC, vertices, 4, sizeof(Vertex));
-	geometry = gl_GraphicsService->CreateGeometry(vb, ib, layout);
+	int ib = gl_GraphicsService->CreateIndexBuffer(indices, 4);
+	int vb = gl_GraphicsService->CreateVertexBuffer(VertexType::VERTEX, vertices, 4);
+	geometry = gl_GraphicsService->CreateGeometry(vb, ib, VertexType::VERTEX);
 }
 
 void TestScene::Update()

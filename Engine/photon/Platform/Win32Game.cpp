@@ -80,8 +80,8 @@ namespace photon
 		photon::Win32Platfrom::Initialize();
 
 		photon::MemoryService::Initialize();
-		void* memory = photon::gl_MemoryService->AllocatePage(Megabytes(1));
-		memStack = photon::MemoryStack::New(memory, Megabytes(1));
+		void* memory = photon::gl_MemoryService->AllocatePage(Megabytes(16));
+		memStack = photon::MemoryStack::New(memory, Megabytes(16));
 
 		photon::AssetsService::Initialize(Megabytes(4), *memStack);
 		gl_AssetsService->SetRoot(assetsPath);

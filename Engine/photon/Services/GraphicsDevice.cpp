@@ -65,7 +65,7 @@ namespace photon
 		return handler;
 	}
 
-	int GraphicsDevice::LoadTexture(void* data, LoadTextureType type)
+	int GraphicsDevice::CreateTexture(void* data, LoadTextureType type)
 	{
 		TextureHandler texture;
 		switch (type)
@@ -81,19 +81,19 @@ namespace photon
 		textures.Add(texture);
 		return textures.Count() - 1;
 	}
-	int GraphicsDevice::LoadShader(ShaderType type, const char* shaderCode)
+	int GraphicsDevice::CreateShader(ShaderType type, const char* shaderCode)
 	{
 		ShaderHandler handler = api->CreateShader(type, shaderCode);
 		shaders.Add(handler);
 		return shaders.Count() - 1;
 	}
-	int GraphicsDevice::LoadVertexBuffer(VertexBufferType type, const void* vertices, size_t verticesCount, int vertexSize)
+	int GraphicsDevice::CreateVertexBuffer(VertexBufferType type, const void* vertices, size_t verticesCount, int vertexSize)
 	{
 		VertexBufferHandler handler = api->CreateVertexBuffer(type, vertices, verticesCount, vertexSize);
 		vertexBuffers.Add(handler);
 		return vertexBuffers.Count()-1;
 	}
-	int GraphicsDevice::LoadIndexBuffer(const void* indices, size_t indicesCount, IndiceType indiceType)
+	int GraphicsDevice::CreateIndexBuffer(const void* indices, size_t indicesCount, IndiceType indiceType)
 	{
 		IndexBufferHandler handler = api->CreateIndexBuffer(indices, indicesCount, indiceType);
 		indexBuffers.Add(handler);

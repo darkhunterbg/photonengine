@@ -81,6 +81,9 @@
     <ClInclude Include="photon\Services\Effect.h">
       <Filter>Services\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="photon\Services\Vertex.h">
+      <Filter>Services\Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Platform">

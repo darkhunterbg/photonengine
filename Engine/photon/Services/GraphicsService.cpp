@@ -55,6 +55,7 @@ namespace photon
 		GraphicsDevice* device = MEM_NEW(stack, GraphicsDevice)(api);
 
 		gl_GraphicsService = MEM_NEW(stack, GraphicsService)(api, device);
+		gl_GraphicsService->InitializeVertexDescriptions();
 		gl_GraphicsService->InitializeTechniques();
 		gl_GraphicsService->InitializeBuckets();
 
@@ -76,12 +77,25 @@ namespace photon
 	{
 		api->SwapBuffers();
 	}
+
+	void GraphicsService::InitializeVertexDescriptions()
+	{
+		VertexDescription vd;
+		vd.size = sizeof(Vertex);
+		vd.layout.instance = 0;
+		vd.layout.AddAttribute({ 0, VertexParamType::FLOAT4 });
+		vd.layout.AddAttribute({ 1, VertexParamType::FLOAT2 });
+
+		vertexDescriptions.Add(vd);
+	}
 	void GraphicsService::InitializeBuckets()
 	{
-		instancesData = MEM_NEW(*bucketsMemStack, DrawInstanceDataArray)();
-		buckets = MEM_NEW(*bucketsMemStack, DrawBucketArray)();
-
 		instanceBuffer = gl_GraphicsService->api->CreateVertexBuffer(VertexBufferType::DYNAMIC, nullptr, DrawInstancesData::MAX_INSTANCES, sizeof(Matrix));
+		instanceBufferLayout.instance = 1;
+		instanceBufferLayout.AddAttribute({ 2, VertexParamType::FLOAT4 });
+		instanceBufferLayout.AddAttribute({ 3, VertexParamType::FLOAT4 });
+		instanceBufferLayout.AddAttribute({ 4, VertexParamType::FLOAT4 });
+		instanceBufferLayout.AddAttribute({ 5, VertexParamType::FLOAT4 });
 
 	}
 	void GraphicsService::InitializeTechniques()
@@ -89,17 +103,31 @@ namespace photon
 		effect = MEM_NEW(*effectsMemStack, TestEffect(api, device));
 	}
 
-	GraphicsDevice& GraphicsService::GetDevice()
-	{
-		return *device;
-	}
 
 	void GraphicsService::OnResize(int width, int height)
 	{
 		api->SetViewport({ 0,0,width,height });
 	}
 
-	int GraphicsService::CreateGeometry(int vb, int ib, VertexBufferLayout layout)
+	int GraphicsService::CreateTexture(void* data, LoadTextureType type)
+	{
+		return device->CreateTexture(data, type);
+	}
+	int GraphicsService::CreateShader(ShaderType type, const char* shaderCode)
+	{
+		return device->CreateShader(type, shaderCode);
+	}
+	int GraphicsService::CreateVertexBuffer(VertexType vertexType, const void* vertices, size_t verticesCount)
+	{
+		const VertexDescription& vb = vertexDescriptions[(int)vertexType];
+		return device->CreateVertexBuffer(VertexBufferType::STATIC, vertices, verticesCount, vb.size);
+	}
+	int GraphicsService::CreateIndexBuffer(const void* indices, size_t indicesCount)
+	{
+		return device->CreateIndexBuffer(indices, indicesCount, IndiceType::USHORT);
+	}
+
+	int GraphicsService::CreateGeometry(int vb, int ib, VertexType vertexType)
 	{
 		Gemoetry& g = geometries.New();
 		VertexBufferHandler vertexBuffer = device->GetVertexBuffer(vb);
@@ -108,12 +136,9 @@ namespace photon
 		VertexBufferHandler vba[] = { vertexBuffer,instanceBuffer };
 		VertexBufferLayout layouts[2];
 
-		layouts[0] = layout;
+		layouts[0] = vertexDescriptions[(int)vertexType].layout;
+		layouts[1] = instanceBufferLayout;
 
-		layouts[1].attributesCount = 4;
-		layouts[1].instance = 1;
-		VertexAttribute attr1[] = { { 2, VertexParamType::FLOAT4 },{ 3 , VertexParamType::FLOAT4 },{ 4 , VertexParamType::FLOAT4 } ,{ 5 , VertexParamType::FLOAT4 } };
-		layouts[1].attributes = attr1;
 
 		g.vertexBufferBinding = device->CreateVertexBufferBinding(vba, layouts, 2, indexBuffer);
 
@@ -134,10 +159,10 @@ namespace photon
 
 		api->SetTextureUnitSampler(effect->TEX_SAMPLER_TEX_UNIT, sampler);
 
-		int bucketsCount = buckets->Count();
+		int bucketsCount = buckets.Count();
 		for (int i = 0; i < bucketsCount; ++i)
 		{
-			DrawInstancesData* d = (DrawInstancesData*)buckets->Get(i).data;
+			DrawInstancesData* d = (DrawInstancesData*)buckets[i].data;
 
 			VertexBufferBindingHandler binding = geometries[d->geometryID].vertexBufferBinding;
 			api->UseVertexBufferBinding(binding);
@@ -159,35 +184,35 @@ namespace photon
 
 		api->ClearVertexBufferBinding();
 
-		buckets->Clear();
-		instancesData->Clear();
+		buckets.Clear();
+		instancesData.Clear();
 	}
 
 	void GraphicsService::RenderObject(const Matrix& world, int geometryID, int textureID)
 	{
 		DrawBucket* b = nullptr;
 
-		int count = buckets->Count();
+		int count = buckets.Count();
 		for (int i = 0; i < count; ++i)
 		{
-			DrawInstancesData* d = (DrawInstancesData*)buckets->Get(i).data;
-			if (d->textureID == textureID && d->geometryID == geometryID)
+			DrawInstancesData* d = (DrawInstancesData*)buckets[i].data;
+			if (d->textureID == textureID && d->geometryID == geometryID &&
+				d->count < d->MAX_INSTANCES)
 			{
-				b = &buckets->Get(i);
+				b = &buckets[i];
 				break;
 			}
 		}
 		if (b == nullptr)
 		{
-			b = &buckets->New();
-			DrawInstancesData* d = &instancesData->New();
+			b = &buckets.New();
+			DrawInstancesData* d = &instancesData.New();
 
 			d->count = 0;
 			d->textureID = textureID;
 			d->geometryID = geometryID;
 			b->data = d;
 		}
-
 
 		DrawInstancesData* data = (DrawInstancesData*)b->data;
 		data->worldMatrix[data->count] = world;

@@ -54,6 +54,7 @@
     <ClInclude Include="photon\Services\MemoryStack.h" />
     <ClInclude Include="photon\Services\Scene.h" />
     <ClInclude Include="photon\Services\SceneService.h" />
+    <ClInclude Include="photon\Services\Vertex.h" />
     <ClInclude Include="photon\Text.h" />
     <ClInclude Include="photon\Types.h" />
     <ClInclude Include="photon\Utils\Array.h" />

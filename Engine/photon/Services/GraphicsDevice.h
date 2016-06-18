@@ -9,9 +9,12 @@
 
 namespace photon
 {
-	class EXPORT GraphicsDevice
+	class GraphicsService;
+
+	class  GraphicsDevice
 	{
 		DISABLE_COPY(GraphicsDevice);
+
 
 	private:
 		static const int MAX_SHADER_PROGRAMS = 128;
@@ -24,6 +27,7 @@ namespace photon
 		static const int MAX_SAMPLERS = 16;
 		static const int MAX_STATES = 16;
 
+
 		Array<ShaderProgramHandler, MAX_SHADER_PROGRAMS> shaderPrograms;
 		Array<ShaderHandler, MAX_SHADERS> shaders;
 		Array<VertexBufferHandler, MAX_VERTEX_BUFFERS> vertexBuffers;
@@ -35,7 +39,7 @@ namespace photon
 
 		GraphicsAPI* api;
 
-	public :
+	public:
 		GraphicsDevice(GraphicsAPI* api);
 		~GraphicsDevice();
 
@@ -47,14 +51,16 @@ namespace photon
 
 		RasterizationStateHandler CreateRasterizationState(FillMode fillMode, CullMode cullMode);
 
-		int LoadTexture(void* data, LoadTextureType type);
-		int LoadShader(ShaderType type, const char* shaderCode);
-		int LoadVertexBuffer(VertexBufferType type, const void* vertices, size_t verticesCount, int vertexSize);
-		int LoadIndexBuffer(const void* indices, size_t indicesCount, IndiceType indiceType);
-
 		TextureHandler GetTexture(int textureID);
 		ShaderHandler GetShader(int shaderID);
 		VertexBufferHandler GetVertexBuffer(int vertexBufferID);
 		IndexBufferHandler GetIndexBuffer(int indexBufferID);
+
+		int CreateTexture(void* data, LoadTextureType type);
+		int CreateShader(ShaderType type, const char* shaderCode);
+		int CreateVertexBuffer(VertexBufferType type, const void* vertices, size_t verticesCount, int vertexSize);
+		int CreateIndexBuffer(const void* indices, size_t indicesCount, IndiceType indiceType);
+
+		
 	};
 }

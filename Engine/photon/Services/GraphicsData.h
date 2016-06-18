@@ -12,6 +12,8 @@ namespace photon
 		DDS,
 	};
 
+
+
 	struct EXPORT ShaderProgram
 	{
 		ShaderProgramHandler handler;
@@ -35,6 +37,7 @@ namespace photon
 		int count ;
 		int textureID;
 		int geometryID;
+
 	};
 
 	struct EXPORT DrawBucket
