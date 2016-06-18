@@ -18,21 +18,13 @@ namespace photon
 		Vector4 yAxis = Vector4::Cross(zAxis, xAxis);
 
 		Matrix r = {};
-		r[0][0] = xAxis.x;
-		r[1][0] = xAxis.y;
-		r[2][0] = xAxis.z;
-		r[0][1] = yAxis.x;
-		r[1][1] = yAxis.y;
-		r[2][1] = yAxis.z;
-		r[0][2] = -zAxis.x;
-		r[1][2] = -zAxis.y;
-		r[2][2] = -zAxis.z;
-		r[3] = {
-			-Vector4::Dot(xAxis,position),
-			-Vector4::Dot(yAxis,position),
-			-Vector4::Dot(zAxis,position),
-			1
-		};
+		r[0] = xAxis;
+		r[1] = yAxis;
+		r[2] = zAxis;
+		r[0][3] = -Vector4::Dot(xAxis, position);
+		r[1][3] = -Vector4::Dot(yAxis, position);
+		r[2][3] = -Vector4::Dot(zAxis, position);
+		r[3][3] = 1;
 
 
 		return r;

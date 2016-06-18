@@ -46,7 +46,7 @@ void TestScene::Update()
 
 	Matrix t = Matrix::RotationY(i);// *Matrix::RotationX(i);
 
-	m = Matrix::Translation({ 0.0f, 0.0f, 0.0f });// .Transpose();
+	m = Matrix::Translation({ 1.0f, 0.0f, 0.0f }) ;
 	//Matrix n = t.Transpose() * (Matrix::Translation({ 0,0,-1.0f })).Transpose();
 	gl_GraphicsService->RenderGeometry(m, geometry, t0);
 	//m = t*(Matrix::Translation({ 0,0,1.0f }) * Matrix::RotationY(PI)).Transpose();

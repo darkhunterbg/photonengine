@@ -169,11 +169,7 @@ namespace photon
 		Matrix view = Matrix::LookAtRH({ 0,0,5.0f,0 }, { 0,0,0,0 }, { 0,1,0,0 });
 		Matrix proj = Matrix::PerspectiveRH(PI_OVER_4, 1.4f, 0.01f, 10.0f);
 
-		Matrix wvp = view.Transpose() ;
-		Vector4 v = { -1.0f, -1.f, -1.0f, 1.0f };
-		Vector4 pos = wvp.Transpose() * v;
-
-		effect->UpdateVertexBlock(view, proj);
+		effect->UpdateVertexBlock(view , proj);
 		effect->Bind();
 
 		api->SetTextureUnitSampler(effect->TEX_SAMPLER_TEX_UNIT, sampler);
@@ -237,7 +233,7 @@ namespace photon
 		}
 
 		DrawInstancesData* data = (DrawInstancesData*)b->data;
-		data->worldMatrix[data->count] = world;
+		data->worldMatrix[data->count] = world.Transpose();
 		++data->count;
 
 	}

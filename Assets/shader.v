@@ -23,7 +23,7 @@ out vec2 texCoord;
 void main()
 {
 	texCoord = uv ;
-	mat4  wvp =  world * transpose( view ) * proj;
-	gl_Position =   ( transpose( wvp ) ) * pos;
+	mat4  pvw =  proj * view * world;
+	gl_Position =   pvw * pos;
 
 }

@@ -33,8 +33,8 @@ namespace photon
 	void TestEffect::UpdateVertexBlock(const Matrix& view, const Matrix& proj)
 	{
 		Matrix* m = (Matrix*)api->StartUpdateUniformBuffer(vertexBlock);
-		*m = view;
-		*(m + 1) = proj;
+		*m = view.Transpose();
+		*(m + 1) = proj.Transpose();
 		api->EndUpdateUniformBuffer();
 	}
 	void TestEffect::UpdateFragmentBlock( const Vector4& vector)
