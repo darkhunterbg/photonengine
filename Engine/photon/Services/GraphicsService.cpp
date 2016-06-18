@@ -122,13 +122,16 @@ namespace photon
 		const VertexDescription& vb = vertexDescriptions[(int)vertexType];
 		return device->CreateVertexBuffer(VertexBufferType::STATIC, vertices, verticesCount, vb.size);
 	}
-	int GraphicsService::CreateIndexBuffer(const void* indices, size_t indicesCount)
+	int GraphicsService::CreateIndexBuffer(const Indice* indices, size_t indicesCount)
 	{
 		return device->CreateIndexBuffer(indices, indicesCount, IndiceType::USHORT);
 	}
 
-	int GraphicsService::CreateGeometry(int vb, int ib, VertexType vertexType)
+	GeometryHandler GraphicsService::CreateGeometry(int vb, int ib, VertexType vertexType)
 	{
+		ASSERT(vb);
+		ASSERT(ib);
+
 		Gemoetry& g = geometries.New();
 		VertexBufferHandler vertexBuffer = device->GetVertexBuffer(vb);
 		IndexBufferHandler indexBuffer = device->GetIndexBuffer(ib);
@@ -139,10 +142,18 @@ namespace photon
 		layouts[0] = vertexDescriptions[(int)vertexType].layout;
 		layouts[1] = instanceBufferLayout;
 
-
 		g.vertexBufferBinding = device->CreateVertexBufferBinding(vba, layouts, 2, indexBuffer);
 
-		return geometries.Count() - 1;
+		return geometries.Count();
+	}
+	MaterialHandler GraphicsService::CreateMaterial(int diffuseTextureID)
+	{
+		ASSERT(diffuseTextureID);
+
+		Material& m = materials.New();
+		m.diffuse = device->GetTexture(diffuseTextureID);
+
+		return materials.Count();
 	}
 
 	void GraphicsService::ExecuteCommads()
@@ -164,14 +175,14 @@ namespace photon
 		{
 			DrawInstancesData* d = (DrawInstancesData*)buckets[i].data;
 
-			VertexBufferBindingHandler binding = geometries[d->geometryID].vertexBufferBinding;
+			VertexBufferBindingHandler binding = geometries[d->geometry - 1].vertexBufferBinding;
 			api->UseVertexBufferBinding(binding);
 
+			TextureHandler texture = materials[d->material - 1].diffuse;;
+			effect->SetTexSampler(texture);
 
 			int instancesCount = d->count;
-			TextureHandler texture = device->GetTexture(d->textureID);
 
-			effect->SetTexSampler(texture);
 
 			Matrix* instances = (Matrix*)api->StartUpdateVertexBuffer(instanceBuffer);
 
@@ -188,15 +199,18 @@ namespace photon
 		instancesData.Clear();
 	}
 
-	void GraphicsService::RenderObject(const Matrix& world, int geometryID, int textureID)
+	void GraphicsService::RenderGeometry(const Matrix& world, GeometryHandler geometry, MaterialHandler material)
 	{
+		ASSERT(geometry);
+		ASSERT(material);
+
 		DrawBucket* b = nullptr;
 
 		int count = buckets.Count();
 		for (int i = 0; i < count; ++i)
 		{
 			DrawInstancesData* d = (DrawInstancesData*)buckets[i].data;
-			if (d->textureID == textureID && d->geometryID == geometryID &&
+			if (d->material == material && d->geometry == geometry &&
 				d->count < d->MAX_INSTANCES)
 			{
 				b = &buckets[i];
@@ -209,8 +223,8 @@ namespace photon
 			DrawInstancesData* d = &instancesData.New();
 
 			d->count = 0;
-			d->textureID = textureID;
-			d->geometryID = geometryID;
+			d->material = material;
+			d->geometry = geometry;
 			b->data = d;
 		}
 

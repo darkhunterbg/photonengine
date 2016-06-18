@@ -38,7 +38,7 @@ namespace photon
 		static const int MAX_VERTEX_DESCRIPTIONS = 8;
 		Array<VertexDescription, MAX_VERTEX_DESCRIPTIONS> vertexDescriptions;
 
-		//Array<TexturedMaterial, MAX_MATERIALS> materials;
+		Array<Material, MAX_MATERIALS> materials;
 		Array<Gemoetry, MAX_GEOMETRIES> geometries;
 
 		VertexBufferHandler instanceBuffer;
@@ -59,11 +59,13 @@ namespace photon
 		static GraphicsService* Initialize(GraphicsAPI* api, MemoryStack& stack);
 		static void Uninitialize();
 
-		int CreateGeometry(int vb, int ib, VertexType vertexType);
+		GeometryHandler CreateGeometry(int vb, int ib, VertexType vertexType);
+		MaterialHandler CreateMaterial(int diffuseTextureID);
+
 		int CreateTexture(void* data, LoadTextureType type);
 		int CreateShader(ShaderType type, const char* shaderCode);
 		int CreateVertexBuffer(VertexType vertexType, const void* vertices, size_t verticesCount);
-		int CreateIndexBuffer(const void* indices, size_t indicesCount);
+		int CreateIndexBuffer(const Indice* indices, size_t indicesCount);
 
 		void ExecuteCommads();
 		void PresentFrame();
@@ -71,7 +73,7 @@ namespace photon
 
 		void OnResize(int width, int height);
 
-		void RenderObject(const Matrix& world, int geometryID, int textureID);
+		void RenderGeometry(const Matrix& world, GeometryHandler geometry, MaterialHandler material);
 	};
 
 	EXPORT extern GraphicsService* gl_GraphicsService;

@@ -26,7 +26,7 @@ namespace photon
 
 	};
 
-	struct VertexBufferLayout
+	struct EXPORT VertexBufferLayout
 	{
 		static const int MAX_ATTRIBUTES = 8;
 

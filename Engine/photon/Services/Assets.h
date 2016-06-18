@@ -19,6 +19,15 @@ namespace photon
 		AssetsHandler handler;
 		int textureID;
 	};
+	
+	struct EXPORT MaterialAsset
+	{
+		AssetsHandler handler;
+
+		int diffuseTextureID;
+
+		MaterialHandler material;
+	};
 
 	struct EXPORT ShaderAsset
 	{

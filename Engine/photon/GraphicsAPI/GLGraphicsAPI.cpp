@@ -26,7 +26,7 @@ namespace photon
 		ASSERT(error == GL_NONE);
 	}
 
-	
+
 
 	GLGraphicsAPI::GLGraphicsAPI(GLAPIParam apiParam)
 	{
@@ -39,9 +39,9 @@ namespace photon
 		Platform::GLDestroyContext(context);
 	}
 
-	void GLGraphicsAPI::GetVersion(char* outBuffer,int bufferSize)
+	void GLGraphicsAPI::GetVersion(char* outBuffer, int bufferSize)
 	{
-		const char* version =(const char*)glGetString(GL_VERSION);
+		const char* version = (const char*)glGetString(GL_VERSION);
 		const char* vendor = (const char*)glGetString(GL_VENDOR);
 
 		sprintf_s(outBuffer, bufferSize, "%s OpenGL %s", vendor, version);
@@ -488,17 +488,19 @@ namespace photon
 	RasterizationStateHandler GLGraphicsAPI::CreateRasterizationState(FillMode fillMode, CullMode cullMode)
 	{
 		RasterizationStateHandler handler;
-		handler.id = rasterizationStates.Count();
+
 		rasterizationStates.Add({ fillMode,cullMode });
+		handler.id = rasterizationStates.Count();
+
 		return handler;
 	}
 	void GLGraphicsAPI::DestroyRasterizationState(RasterizationStateHandler handler)
 	{
-		rasterizationStates.Remove(handler.id);
+		rasterizationStates.Remove(handler.id - 1);
 	}
 	void GLGraphicsAPI::SetRasterizationState(RasterizationStateHandler handler)
 	{
-		gl::GLRasterizationState& state = rasterizationStates[handler.id];
+		gl::GLRasterizationState& state = rasterizationStates[handler.id - 1];
 
 		if (state.cullMode != CullMode::NONE)
 		{
@@ -519,17 +521,19 @@ namespace photon
 	BlendStateHandler GLGraphicsAPI::CreateBlendState(bool enabled, BlendFactor source, BlendFactor dest)
 	{
 		BlendStateHandler handler;
-		handler.id = blendStates.Count();
+
 		blendStates.Add({ source,dest,enabled });
+		handler.id = blendStates.Count();
+
 		return handler;
 	}
 	void GLGraphicsAPI::DestroyBlendState(BlendStateHandler handler)
 	{
-		blendStates.Remove(handler.id);
+		blendStates.Remove(handler.id - 1);
 	}
 	void GLGraphicsAPI::SetBlendState(BlendStateHandler handler)
 	{
-		gl::GLBlendingState& state = blendStates[handler.id];
+		gl::GLBlendingState& state = blendStates[handler.id - 1];
 
 		if (state.enabled)
 		{
@@ -545,17 +549,19 @@ namespace photon
 	DepthStencilStateHandler GLGraphicsAPI::CreateDepthStencilState(bool depthEnabled)
 	{
 		DepthStencilStateHandler handler;
-		handler.id = depthStencilStates.Count();
+
 		depthStencilStates.Add({ depthEnabled });
+		handler.id = depthStencilStates.Count();
+
 		return handler;
 	}
 	void GLGraphicsAPI::DestroyDepthStencilState(DepthStencilStateHandler handler)
 	{
-		depthStencilStates.Remove(handler.id);
+		depthStencilStates.Remove(handler.id - 1);
 	}
 	void GLGraphicsAPI::SetDepthStencilState(DepthStencilStateHandler handler)
 	{
-		gl::GLDepthStencilState& state = depthStencilStates[handler.id];
+		gl::GLDepthStencilState& state = depthStencilStates[handler.id - 1];
 
 		if (state.depthEnabled)
 		{
@@ -599,7 +605,7 @@ namespace photon
 	}
 	void GLGraphicsAPI::SetTextureUnitSampler(uint32_t textureUnit, SamplerHandler handler)
 	{
-		glBindSampler( textureUnit, handler.id);
+		glBindSampler(textureUnit, handler.id);
 	}
 	void GLGraphicsAPI::ClearTextureUnitSampler(uint32_t textureUnit)
 	{

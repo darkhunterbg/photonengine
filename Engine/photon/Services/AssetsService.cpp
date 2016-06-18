@@ -96,6 +96,8 @@ namespace photon
 
 			char* text = (char*)shaders[handler].memory;
 
+			asset->type = (ShaderType )-1;
+
 			if (text::EndsWith(assetPath, ".v"))
 				asset->type = ShaderType::VERTEX_SHADER;
 			if (text::EndsWith(assetPath, ".g"))
@@ -103,10 +105,31 @@ namespace photon
 			if (text::EndsWith(assetPath, ".f"))
 				asset->type = ShaderType::FRAGMENT_SHADER;
 
+			ASSERT(asset->type != (ShaderType)-1);
+
 			asset->shaderID = gl_GraphicsService->CreateShader(asset->type, text);
 
 			gl_MemoryService->FreePage(shaders[handler].memory);
 
+		}
+
+		return *asset;
+	}
+
+	MaterialAsset& AssetsService::GetMaterialAsset(const char* assetPath)
+	{
+		MaterialAsset* asset = GetExistingAsset(assetPath, materials);
+
+		if (!asset)
+		{
+			AssetsHandler handler = NewAsset(assetPath, materials);
+			asset = &materials[handler].asset;
+			asset->handler = handler;
+			asset->diffuseTextureID = GetTextureAsset(assetPath).textureID;
+			asset->material = gl_GraphicsService->CreateMaterial(asset->diffuseTextureID);
+
+
+			gl_MemoryService->FreePage(shaders[handler].memory);
 		}
 
 		return *asset;

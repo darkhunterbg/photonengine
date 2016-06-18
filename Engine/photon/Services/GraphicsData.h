@@ -12,18 +12,15 @@ namespace photon
 		DDS,
 	};
 
-
-
-	struct EXPORT ShaderProgram
-	{
-		ShaderProgramHandler handler;
-		uint32_t samplersLocation[4];
-	};
-
-	struct EXPORT TexturedMaterial
+	typedef unsigned short Indice;
+	
+	typedef int MaterialHandler;
+	struct EXPORT Material
 	{
 		TextureHandler diffuse;
 	};
+
+	typedef int GeometryHandler;
 	struct EXPORT Gemoetry
 	{
 		VertexBufferBindingHandler vertexBufferBinding;
@@ -35,8 +32,8 @@ namespace photon
 
 		Matrix worldMatrix[MAX_INSTANCES];
 		int count ;
-		int textureID;
-		int geometryID;
+		MaterialHandler material;
+		GeometryHandler geometry;
 
 	};
 
